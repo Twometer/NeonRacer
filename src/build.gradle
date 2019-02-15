@@ -7,10 +7,17 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+ext.mainClass = "neonracer.NeonRacerMain"
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task execute(type: JavaExec) {
+    main = mainClass
+    classpath = sourceSets.main.runtimeClasspath
 }
