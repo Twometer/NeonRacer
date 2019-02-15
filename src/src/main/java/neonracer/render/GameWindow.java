@@ -1,7 +1,10 @@
 package neonracer.render;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWFramebufferSizeCallbackI;
 import org.lwjgl.opengl.GL;
+
+import java.util.Objects;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -33,6 +36,11 @@ public class GameWindow {
         if (window == NULL)
             throw new RuntimeException("Failed to create GLFW window");
 
+        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
+            this.width = width;
+            this.height = height;
+        });
+
         glfwMakeContextCurrent(window);
 
         GL.createCapabilities();
@@ -43,16 +51,23 @@ public class GameWindow {
         glfwDestroyWindow(window);
 
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
 
-    public void update() {
+    void update() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    public boolean shouldClose() {
+    boolean shouldClose() {
         return glfwWindowShouldClose(window);
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

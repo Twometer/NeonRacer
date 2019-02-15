@@ -14,12 +14,12 @@ public class NeonRacerMain {
         Log.i("LWJGL Version " + Version.getVersion());
 
         GameWindow gameWindow = new GameWindow(800, 600, "Neon Racer");
-        MasterRenderer masterRenderer = new MasterRenderer(gameWindow);
-
         gameWindow.create();
 
+        MasterRenderer masterRenderer = new MasterRenderer(gameWindow);
         masterRenderer.startLoop();
 
+        // When the loop exits, the program was closed, so shut down here
         Log.i("Shutting down...");
         gameWindow.destroy();
     }

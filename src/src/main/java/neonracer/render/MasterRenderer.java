@@ -1,7 +1,6 @@
 package neonracer.render;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 
 public class MasterRenderer {
 
@@ -12,14 +11,21 @@ public class MasterRenderer {
     }
 
     public void startLoop() {
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        setup();
         while (!window.shouldClose()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // TODO: Rendering
-
+            render();
             window.update();
         }
+    }
+
+    private void setup() {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+    }
+
+    private void render() {
+
     }
 
 }
