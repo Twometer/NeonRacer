@@ -7,13 +7,27 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-ext.mainClass = "neonracer.NeonRacerMain"
+project.ext.mainClass = "neonracer.NeonRacerMain"
+project.ext.lwjglVersion = "3.2.1"
+project.ext.lwjglNatives = "natives-windows"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation "org.lwjgl:lwjgl:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-glfw:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-openal:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-opengl:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-stb:$lwjglVersion"
+
+    runtimeOnly "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
