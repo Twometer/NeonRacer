@@ -1,7 +1,6 @@
 package neonracer.render;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWFramebufferSizeCallbackI;
 import org.lwjgl.opengl.GL;
 
 import java.util.Objects;
@@ -10,6 +9,9 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+/**
+ * Abstraction layer over the GLFW functions
+ */
 public class GameWindow {
 
     private int width;
@@ -26,6 +28,9 @@ public class GameWindow {
         this.title = title;
     }
 
+    /**
+     * Initializes GLFW, creates the window and sets the OpenGL context
+     */
     public void create() {
         GLFWErrorCallback.createPrint(System.err).set();
 
@@ -46,6 +51,9 @@ public class GameWindow {
         GL.createCapabilities();
     }
 
+    /**
+     * Cleans up all native resources used by the window
+     */
     public void destroy() {
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
@@ -54,11 +62,19 @@ public class GameWindow {
         Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
 
+    /**
+     * Swaps back and front buffer and does event/message pumping
+     */
     void update() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    /**
+     * Used by the renderer to determine when to exit the render loop
+     *
+     * @return Whether the user requested the window to close
+     */
     boolean shouldClose() {
         return glfwWindowShouldClose(window);
     }

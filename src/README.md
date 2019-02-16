@@ -8,6 +8,6 @@
 
 4. Create a run configuration that executes the tasks `build execute`
 
-   
+Be sure to check the `Create directories for empty content roots automatically` box because it is annoying to create the directories yourself.
 
 **NOTE: Please submit code changes using pull requests, and do not commit directly into the master branch.**
