@@ -1,5 +1,6 @@
 package neonracer.gl;
 
+import neonracer.util.Log;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;
@@ -39,9 +40,11 @@ class Loader {
 
             glShaderSource(vertexShaderId, vertexShaderCode);
             glCompileShader(vertexShaderId);
+            checkShaderError(vertexShaderId);
 
             glShaderSource(fragmentShaderId, fragmentShaderCode);
             glCompileShader(fragmentShaderId);
+            checkShaderError(fragmentShaderId);
 
             int programId = glCreateProgram();
             glAttachShader(programId, vertexShaderId);
@@ -58,6 +61,12 @@ class Loader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void checkShaderError(int shaderId) {
+        String log = glGetShaderInfoLog(shaderId);
+        if (log.length() > 0)
+            Log.e(log);
     }
 
     /**
