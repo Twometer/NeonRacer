@@ -2,7 +2,7 @@
 
 1. Clone the repository
 
-2. Run `gradlew` to build the gradle project. (Make sure it is running to completion. If the cmd window closes after half a second, you do not have java installed.)
+2. Run `gradlew` to build the gradle project. (Make sure it runs to completion. If the cmd window closes after a very short time, you probably don't have java installed.)
 
 3. Load gradle project into IntelliJ (**using File -> Open**)
 
