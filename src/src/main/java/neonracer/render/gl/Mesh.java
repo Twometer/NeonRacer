@@ -1,4 +1,4 @@
-package neonracer.gl;
+package neonracer.render.gl;
 
 import org.lwjgl.system.MemoryUtil;
 

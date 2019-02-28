@@ -1,4 +1,4 @@
-package neonracer.gl;
+package neonracer.render.gl;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;

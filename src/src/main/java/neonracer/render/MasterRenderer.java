@@ -1,8 +1,8 @@
 package neonracer.render;
 
-import neonracer.gl.Mesh;
-import neonracer.gl.Model;
-import neonracer.shaders.SimpleShader;
+import neonracer.render.gl.Mesh;
+import neonracer.render.gl.Model;
+import neonracer.render.shaders.SimpleShader;
 import org.joml.Matrix4f;
 
 import static org.lwjgl.opengl.GL11.*;

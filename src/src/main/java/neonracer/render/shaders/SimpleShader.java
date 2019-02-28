@@ -1,6 +1,6 @@
-package neonracer.shaders;
+package neonracer.render.shaders;
 
-import neonracer.gl.Shader;
+import neonracer.render.gl.Shader;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
