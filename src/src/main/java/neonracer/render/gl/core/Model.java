@@ -1,10 +1,14 @@
-package neonracer.render.gl;
+package neonracer.render.gl.core;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+/**
+ * A model is a mesh that has been uploaded
+ * to the GPU and is ready for rendering
+ */
 public class Model {
 
     private int vao;

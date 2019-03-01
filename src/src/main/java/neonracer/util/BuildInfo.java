@@ -1,0 +1,39 @@
+package neonracer.util;
+
+import neonracer.resource.ResourceLoader;
+
+import java.io.IOException;
+import java.util.Properties;
+
+public class BuildInfo {
+
+    private static final String PROPERTIES_PATH = "build_info.properties";
+
+    private static final String KEY_NAME = "product.name";
+
+    private static final String KEY_VERSION = "product.version";
+
+    private static Properties properties;
+
+    public static String getGameTitle() {
+        ensureLoaded();
+        return properties.getProperty(KEY_NAME);
+    }
+
+    public static String getGameVersion() {
+        ensureLoaded();
+        return properties.getProperty(KEY_VERSION);
+    }
+
+    private static void ensureLoaded() {
+        if (properties == null) {
+            properties = new Properties();
+            try {
+                properties.load(ResourceLoader.openReader(PROPERTIES_PATH));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+}

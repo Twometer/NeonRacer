@@ -1,15 +1,16 @@
 package neonracer.render;
 
-import neonracer.render.gl.Mesh;
-import neonracer.render.gl.Model;
-import neonracer.render.shaders.SimpleShader;
+import neonracer.core.GameContext;
+import neonracer.render.gl.core.Mesh;
+import neonracer.render.gl.core.Model;
+import neonracer.render.gl.shaders.SimpleShader;
 import org.joml.Matrix4f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class MasterRenderer {
 
-    private GameWindow window;
+    private GameContext context;
 
     private SimpleShader simpleShader;
 
@@ -17,15 +18,15 @@ public class MasterRenderer {
 
     private Matrix4f projectionMatrix;
 
-    public MasterRenderer(GameWindow window) {
-        this.window = window;
+    public MasterRenderer(GameContext context) {
+        this.context = context;
     }
 
     public void startLoop() {
         setup();
-        while (!window.shouldClose()) {
+        while (!context.getGameWindow().shouldClose()) {
             render();
-            window.update();
+            context.getGameWindow().update();
         }
         destroy();
     }
@@ -47,13 +48,13 @@ public class MasterRenderer {
         testModel = Model.create(rect);
         rect.destroy();
 
-        projectionMatrix = new Matrix4f().setOrtho2D(0, window.getWidth(), window.getHeight(), 0);
+        projectionMatrix = new Matrix4f().setOrtho2D(0, context.getGameWindow().getWidth(), context.getGameWindow().getHeight(), 0);
 
     }
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glViewport(0, 0, window.getWidth(), window.getHeight());
+        glViewport(0, 0, context.getGameWindow().getWidth(), context.getGameWindow().getHeight());
 
         simpleShader.bind();
         simpleShader.setProjectionMatrix(projectionMatrix);

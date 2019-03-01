@@ -1,37 +1,64 @@
 package neonracer.model.car;
 
-import neonracer.render.gl.Texture;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import neonracer.core.GameContext;
+import neonracer.render.gl.core.Texture;
+import neonracer.resource.IData;
 
 /**
  * Defines car properties. There are different car
  * models the user can choose from, and each one has
  * different properties.
  */
-public class CarModel {
+public class Car implements IData {
 
+    @JsonProperty
     private String id;
 
+    @JsonProperty
     private String name;
 
+    @JsonProperty("desc")
     private String description;
+
+    @JsonProperty("color_texture")
+    private String colorTexturePath;
 
     private Texture colorTexture;
 
+    @JsonProperty("glow_texture")
+    private String glowTexturePath;
+
     private Texture glowTexture;
 
+    @JsonProperty
     private float acceleration;
 
+    @JsonProperty("brake_strength")
     private float brakeStrength;
 
+    @JsonProperty
     private float aerodynamics;
 
+    @JsonProperty
     private float friction;
 
+    @JsonProperty
     private float horsepower;
 
+    @JsonProperty
     private float weight;
 
+    @JsonProperty("primary_ability")
+    private String primaryAbilityId;
+
     private Ability primaryAbility;
+
+    @Override
+    public void initialize(GameContext context) {
+        colorTexture = context.getTextureManager().getTexture(colorTexturePath);
+        glowTexture = context.getTextureManager().getTexture(glowTexturePath);
+    }
 
     public String getId() {
         return id;

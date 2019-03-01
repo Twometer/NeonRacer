@@ -1,4 +1,6 @@
-package neonracer.render.gl;
+package neonracer.render.gl.core;
+
+import neonracer.render.gl.GlLoader;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -13,14 +15,14 @@ public class Texture {
 
     private int height;
 
-    Texture(int textureId, int width, int height) {
+    public Texture(int textureId, int width, int height) {
         this.textureId = textureId;
         this.width = width;
         this.height = height;
     }
 
     public static Texture create(String name) {
-        return Loader.loadTexture(normalizePath(name));
+        return GlLoader.loadTexture(normalizePath(name));
     }
 
     /**

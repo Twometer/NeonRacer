@@ -1,5 +1,6 @@
-package neonracer.render.gl;
+package neonracer.render.gl.shaders;
 
+import neonracer.render.gl.GlLoader;
 import neonracer.util.Log;
 
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
@@ -13,10 +14,10 @@ public abstract class Shader {
 
     private int programId;
 
-    public Shader(String name) {
+    Shader(String name) {
         String vertexPath = normalizePath(name + VERT_SHADER_EXT);
         String fragmentPath = normalizePath(name + FRAG_SHADER_EXT);
-        programId = Loader.loadShader(vertexPath, fragmentPath);
+        programId = GlLoader.loadShader(vertexPath, fragmentPath);
         initialize();
         Log.i(String.format("Loaded shader '%s'", name));
     }
