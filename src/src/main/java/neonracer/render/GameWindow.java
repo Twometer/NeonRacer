@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
- * Abstraction layer over the GLFW functions
+ * Abstraction layer over GLFW functions
  */
 public class GameWindow {
 

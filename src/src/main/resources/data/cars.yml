@@ -1,0 +1,12 @@
+- id: "test_car"
+  name: "Test car"
+  desc: "This car is used for testing"
+  color_texture: "test.png"
+  glow_texture: "test.png"
+  primary_ability: ""
+  acceleration: 0
+  brake_strength: 0
+  aerodynamics: 0
+  friction: 0
+  horsepower: 0
+  weight: 0

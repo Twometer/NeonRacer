@@ -1,4 +1,4 @@
-package neonracer.gl;
+package neonracer.render.gl.core;
 
 import neonracer.render.GameWindow;
 
@@ -6,6 +6,10 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+/**
+ * Wrapper class for OpenGL
+ * frame buffer objects
+ */
 public class Fbo {
 
     private GameWindow gameWindow;

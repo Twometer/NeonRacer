@@ -1,15 +1,13 @@
-package neonracer.gl;
+package neonracer.render.gl;
 
+import neonracer.render.gl.core.Texture;
+import neonracer.resource.ResourceLoader;
 import neonracer.util.Log;
 import org.lwjgl.BufferUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
@@ -18,7 +16,7 @@ import static org.lwjgl.opengl.GL20.*;
  * This class handles loading of resources to OpenGL,
  * such as textures and shaders
  */
-class Loader {
+public class GlLoader {
 
     private static final int BYTES_PER_PIXEL = 4;
 
@@ -30,13 +28,13 @@ class Loader {
      * @param fragPath Virtual path to the fragment shader
      * @return The OpenGL id of the shader program
      */
-    static int loadShader(String vertPath, String fragPath) {
+    public static int loadShader(String vertPath, String fragPath) {
         try {
             int vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
             int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
-            String vertexShaderCode = loadString(vertPath);
-            String fragmentShaderCode = loadString(fragPath);
+            String vertexShaderCode = ResourceLoader.loadString(vertPath);
+            String fragmentShaderCode = ResourceLoader.loadString(fragPath);
 
             glShaderSource(vertexShaderId, vertexShaderCode);
             glCompileShader(vertexShaderId);
@@ -75,9 +73,9 @@ class Loader {
      * @param path The virtual path to the image file
      * @return A texture object containing all relevant information about the texture
      */
-    static Texture loadTexture(String path) {
+    public static Texture loadTexture(String path) {
         try {
-            BufferedImage image = loadImage(path);
+            BufferedImage image = ResourceLoader.loadImage(path);
             ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL);
             for (int y = 0; y < image.getHeight(); y++) {
                 for (int x = 0; x < image.getWidth(); x++) {
@@ -103,39 +101,6 @@ class Loader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Loads a string from a file embedded in the jar resources
-     *
-     * @param path The path to the file
-     * @return The contents of the file
-     * @throws IOException Will be thrown if the file does not exist, or the reading fails for any other reason.
-     */
-    private static String loadString(String path) throws IOException {
-        InputStream stream = Loader.class.getClassLoader().getResourceAsStream(path);
-        if (stream == null)
-            throw new IOException(String.format("Failed to load '%s' from resources", path));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null)
-            builder.append(line).append("\n");
-        return builder.toString();
-    }
-
-    /**
-     * Loads an image from a file embedded in the jar resources
-     *
-     * @param path The path to the image
-     * @return The image
-     * @throws IOException Will be thrown if the file does not exist, or the image decoding fails
-     */
-    private static BufferedImage loadImage(String path) throws IOException {
-        InputStream stream = Loader.class.getClassLoader().getResourceAsStream(path);
-        if (stream == null)
-            throw new IOException(String.format("Failed to load '%s' from resources", path));
-        return ImageIO.read(stream);
     }
 
 }

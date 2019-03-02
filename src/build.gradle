@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'neonracer'
-version '1.0-SNAPSHOT'
+version '0.1.0'
 
 sourceCompatibility = 1.8
 
@@ -22,6 +22,8 @@ dependencies {
     implementation "org.lwjgl:lwjgl-opengl:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-stb:$lwjglVersion"
     implementation 'org.joml:joml:1.9.12'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
     runtimeOnly "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"

@@ -1,9 +1,13 @@
-package neonracer.gl;
+package neonracer.render.gl.core;
 
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 
+/**
+ * A mesh is a collection of vertices, colors and
+ * textures coordinates stored in CPU memory (RAM)
+ */
 public class Mesh {
 
     private FloatBuffer vertices;
