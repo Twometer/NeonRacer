@@ -61,7 +61,7 @@ Ein `Track` definiert eine Rennstrecke.
   - Eine Node der Rennstrecke hat eine Position (`x` und `y`), eine Breite (`w`) und ein Material (`mat`). `w` und `mat` werden zwischen zwei Nodes linear interpoliert.
   - Die Start- bzw. Ziellinie befindet sich bei der ersten definierten Node. Die Autos starten hinter der Startlinie in Richtung der definierten Strecke.
 - `entities`: Entities sind Objekte, mit denen der Benutzer interagieren kann, wie z.B. Items oder Autos. Manche Entities wie Items werden von vorneherein in der Strecke platziert.
-  - Eine `Entity` hat eine Position (`x` und `y`)
+  - Eine `Entity` hat eine Position (`x` und `y`). Diese Position definiert den Mittelpunkt der Entity.
 
 ## Cars (`cars.yml`)
 
