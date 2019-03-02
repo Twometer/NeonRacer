@@ -1,8 +1,20 @@
 # Storage System
 
-This document defines the how maps, entities etc. are stored.
+In diesem Dokument wird defniniert, wie Spieldaten gespeichert werden.
 
-## Materials
+Das Speicherformat für diese Daten ist `YAML`.
+
+## Allgemein
+
+### Ressourcen-Pfad
+
+Der Ressourcen-Pfad (resource path) ist ein Pfad innerhalb der Ressourcenstruktur der JAR-Datei, z.B. `data/tracks.yml`.
+
+### Texturen
+
+Texturen werden referenziert, indem der relative Ressourcen-Pfad **innerhalb des `textures/` Ordner** angegeben wird.
+
+## Material (`materials.yml`)
 ```yaml
 - id: "grass"
   texture: ""
@@ -12,13 +24,13 @@ This document defines the how maps, entities etc. are stored.
   grip: 0
 ```
 
-Defines all materials that can be used in map definitions.
+Ein `Material` ist eine Art von Untergrund auf einer Rennstrecke (z.B. Straße, Schlamm, etc.). Alle Materialien, die in Streckendefinitionen verwendet werden können, werden hier definiert.
 
-- `Id`: Used for referencing the material
-- `Texture`: A tileable background texture for rendering this material.
-- `Grip`: How well the tire can grab onto the surface. Required for the physics engine.
+- `id`: Ein Identifier, der benutzt wird, um das `Material` später zu referenzieren.
+- `texture`: Eine tileable Hintergrundtextur, die zum Rendern des Materials benutzt wird.
+- `grip`:  Definiert, wie viel Halt der Reifen auf diesem Material hat.
 
-## Track
+## Track (`tracks.yml`)
 
 ```yaml
 id: ""
@@ -36,19 +48,20 @@ objects:
   - {type: "lamp", x: 10, y: 50, collision: false, intensity: 0.6}
 ```
 
-- `Id`: A unique identifier to reference this map later on
-- `Name` and `Thumbnail`: Will be displayed in the map selector GUI.
-- `BaseMaterial`: What material should be used outside of the track.
+Ein `Track` definiert eine Rennstrecke.
 
-- `Path`: A set of nodes that defines the race track. This path will be [spline-interpolated](https://gist.github.com/lecho/7627739). 
-  - A node in the race track has a center point `X` and `Y` and a track width `W`. The `Mat` property defines the material of the track at this node. This will be interpolated as well.
-- `Entities`: Entities are interactable objects with control code behind them, such as items that can be collected etc.
-  - An `Entity` has a `X` and `Y` position
-- `Objects`: Objects are decorative things that can be placed into the world such as lamps, houses etc. They do not have individual handling. One can define whether cars should be able to collide with this object or not.
+- `id`: Ein Identifier, der benutzt wird, um die Strecke später zu referenzieren.
+- `name`, `desc`  and `thumbnail`: Wird dem Benutzer in der Streckenauswahl-UI angezeigt
+- `base_material`: Das Material, das außerhalb der eigentlichen Rennstrecke benutzt werden soll.
+- `path`: Eine Liste von Nodes, die die Rennstrecke definiert. Dieser Pfad wird spline-interpoliert.
+  - Eine Node der Rennstrecke hat eine Position (`x` und `y`), eine Breite (`w`) und ein Material (`mat`). `w` und `mat` werden zwischen zwei Nodes linear interpoliert.
+- `entities`: Entities sind Objekte, mit denen der Benutzer interagieren kann, wie z.B. Items oder Autos. Manche Entities wie Items werden von vorneherein in der Strecke platziert.
+  - Eine `Entity` hat eine Position (`x` und `y`)
+- `objects`: Objekte sind dekorative Elemente, die in der Strecke plaziert werden können, wie z.B. Lichtquellen, Häuser etc. Sie haben keinen Handler-Code, es ist jedoch möglich, festzulegen, ob Autos mit ihnen kollidieren können oder nicht.
 
-**Note:** The coordinate system is defined so that `0|0` is at the center of the map. Also, with camera rotation `0`, positive Y is up, and positive X is to the right.
+**Hinweis:** Das Koordinatensystem ist so definiert, dass `0|0` im Mittelpunkt der Strecke ist. Wenn die Kamerarotation `0` ist,  dann zeigt die Y-Achse nach oben, und die X-Achse nach rechts.
 
-## Cars
+## Cars (`cars.yml`)
 
 ```yaml
 - id: ""
@@ -66,8 +79,10 @@ objects:
 - ...
 ```
 
-- `Id`: Used for referencing the car
-- `Name`: This name will be displayed to the user in the car selector UI
-- `Desc`: Description that is displayed to the user in the car selector UI
-- `ColorTexture`: The texture that is used to draw the car itself
-- `GlowTexture`: The texture that only contains the glowing parts of the color texture.
+- `id`: Used for referencing the car
+- `name` und `desc`: Wird dem Benutzer auf der UI angezeigt
+- `color_texture`: Eine Textur, mit der das Auto selbst gerendert wird.
+- `glow_texture`: Eine Textur, die nur die hellen ("glühenden") Bereiche des Autos enthält.
+- `primary_ability`: TODO
+- Alle weiteren Parameter werden von der Physik-Engine benötigt.
+
