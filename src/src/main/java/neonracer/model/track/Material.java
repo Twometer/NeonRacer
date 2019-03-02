@@ -20,7 +20,7 @@ public class Material implements IData {
     private Texture texture;
 
     @JsonProperty
-    private int grip;
+    private float grip;
 
     @Override
     public void initialize(GameContext context) {
@@ -35,7 +35,7 @@ public class Material implements IData {
         return texture;
     }
 
-    public int getGrip() {
+    public float getGrip() {
         return grip;
     }
 }
