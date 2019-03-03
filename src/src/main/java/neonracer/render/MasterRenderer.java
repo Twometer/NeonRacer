@@ -1,70 +1,71 @@
 package neonracer.render;
 
 import neonracer.core.GameContext;
+import neonracer.model.track.Track;
 import neonracer.render.engine.Camera;
-import neonracer.render.gl.core.Mesh;
-import neonracer.render.gl.core.Model;
-import neonracer.render.gl.shaders.SimpleShader;
+import neonracer.render.engine.renderers.IRenderer;
+import neonracer.render.engine.renderers.TrackRenderer;
+import neonracer.util.Log;
+import org.joml.Matrix4f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class MasterRenderer {
 
-    private GameContext context;
+    private RenderContext renderContext;
+
+    private GameContext gameContext;
 
     private Camera camera;
 
-    private SimpleShader simpleShader;
-
-    private Model testModel;
+    private IRenderer[] renderers = new IRenderer[]{
+            new TrackRenderer()
+    };
 
     public MasterRenderer(GameContext context) {
-        this.context = context;
+        this.renderContext = new RenderContext();
+        this.gameContext = context;
         this.camera = new Camera(context);
     }
 
     public void startLoop() {
         setup();
-        while (!context.getGameWindow().shouldClose()) {
+        while (!gameContext.getGameWindow().shouldClose()) {
             render();
-            context.getGameWindow().update();
+            gameContext.getGameWindow().update();
         }
         destroy();
     }
 
     private void setup() {
+        Log.i("Initializing renderer...");
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        simpleShader = new SimpleShader();
 
-        Mesh rect = new Mesh(4);
-        rect.putVertex(0.5f, 0.5f);
-        rect.putColor(1.0f, 0.0f, 0.0f);
+        this.camera.setZoomFactor(0.05f);
 
-        rect.putVertex(0.5f,-0.5f);
-        rect.putColor(0.0f, 1.0f, 0.0f);
+        Track testTrack = gameContext.getDataManager().getTrack("test_track");
+        gameContext.getGameState().setCurrentTrack(testTrack);
 
-        rect.putVertex(-0.5f,0.5f);
-        rect.putColor(0.0f, 0.0f, 1.0f);
+        renderContext.setGuiMatrix(new Matrix4f());
 
-        rect.putVertex(-0.5f,-0.5f);
-        rect.putColor(1.0f, 1.0f, 0.0f);
-
-        testModel = Model.create(rect, GL_TRIANGLE_STRIP);
-        rect.destroy();
+        for (IRenderer renderer : renderers)
+            renderer.setup(gameContext);
+        Log.i("Initialization completed");
     }
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glViewport(0, 0, context.getGameWindow().getWidth(), context.getGameWindow().getHeight());
-        simpleShader.bind();
-        simpleShader.setProjectionMatrix(camera.calculateMatrix());
-        testModel.draw();
-        simpleShader.unbind();
+        glViewport(0, 0, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight());
+
+        renderContext.setWorldMatrix(camera.calculateMatrix());
+
+        for (IRenderer renderer : renderers)
+            renderer.render(renderContext, gameContext);
     }
 
     private void destroy() {
-        testModel.destroy();
-        simpleShader.destroy();
+        for (IRenderer renderer : renderers)
+            renderer.destroy(gameContext);
     }
 
 }

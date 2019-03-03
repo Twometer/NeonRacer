@@ -1,8 +1,8 @@
 package neonracer.core;
 
 import neonracer.render.GameWindow;
-import neonracer.resource.DataManager;
 import neonracer.render.gl.TextureManager;
+import neonracer.resource.DataManager;
 import neonracer.util.BuildInfo;
 
 public class GameContextFactory {
@@ -11,7 +11,8 @@ public class GameContextFactory {
         GameWindow gameWindow = new GameWindow(800, 600, BuildInfo.getGameTitle());
         TextureManager textureManager = new TextureManager();
         DataManager dataManager = new DataManager();
-        return new GameContext(gameWindow, textureManager, dataManager);
+        GameState gameState = new GameState();
+        return new GameContext(gameWindow, textureManager, dataManager, gameState);
     }
 
 }

@@ -3,6 +3,9 @@ package neonracer.model.track;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import neonracer.core.GameContext;
 import neonracer.model.entity.Entity;
+import neonracer.render.engine.models.ModelBuilderFactory;
+import neonracer.render.engine.models.ModelType;
+import neonracer.render.gl.core.Model;
 import neonracer.render.gl.core.Texture;
 import neonracer.resource.IData;
 
@@ -39,12 +42,15 @@ public class Track implements IData {
     @JsonProperty
     private List<Entity> entities;
 
+    private Model model;
+
     @Override
     public void initialize(GameContext context) {
         thumbnail = context.getTextureManager().getTexture(thumbnailPath);
         baseMaterial = context.getDataManager().getMaterial(baseMaterialId);
         for (Node node : path)
             node.initialize(context);
+        model = ModelBuilderFactory.<Track>getModelBuilder(ModelType.TRACK).build(this);
     }
 
     public String getId() {
@@ -73,5 +79,9 @@ public class Track implements IData {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public Model getModel() {
+        return model;
     }
 }
