@@ -2,27 +2,35 @@ package neonracer.render.engine.renderers;
 
 import neonracer.core.GameContext;
 import neonracer.render.RenderContext;
-import neonracer.render.gl.shaders.SimpleShader;
+import neonracer.render.gl.core.Texture;
+import neonracer.render.gl.shaders.WorldShader;
+
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 public class TrackRenderer implements IRenderer {
 
-    private SimpleShader simpleShader;
+    private WorldShader worldShader;
 
     @Override
     public void setup(GameContext context) {
-        simpleShader = new SimpleShader();
+        worldShader = new WorldShader();
     }
 
     @Override
     public void render(RenderContext renderContext, GameContext gameContext) {
-        simpleShader.bind();
-        simpleShader.setProjectionMatrix(renderContext.getWorldMatrix());
+        worldShader.bind();
+        worldShader.setProjectionMatrix(renderContext.getWorldMatrix());
+        Texture texture = gameContext.getGameState().getCurrentTrack().getBaseMaterial().getTexture();
+        glActiveTexture(GL_TEXTURE0);
+        texture.bind();
         gameContext.getGameState().getCurrentTrack().getModel().draw();
-        simpleShader.unbind();
+        texture.unbind();
+        worldShader.unbind();
     }
 
     @Override
     public void destroy(GameContext context) {
-        simpleShader.destroy();
+        worldShader.destroy();
     }
 }

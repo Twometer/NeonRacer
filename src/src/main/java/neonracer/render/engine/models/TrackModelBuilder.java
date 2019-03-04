@@ -33,9 +33,11 @@ public class TrackModelBuilder implements IModelBuilder<Track> {
             Vector2f n = spline.getNormal(t).normalize(0.5f * width);
 
             mesh.putVertex(vec.x + n.x, vec.y + n.y);
+            mesh.putTexCoord(vec.x + n.x, vec.y + n.y);
             mesh.putColor(1.0f, 1.0f, 1.0f);
 
             mesh.putVertex(vec.x - n.x, vec.y - n.y);
+            mesh.putTexCoord(vec.x - n.x, vec.y - n.y);
             mesh.putColor(1.0f, 1.0f, 1.0f);
         }
 

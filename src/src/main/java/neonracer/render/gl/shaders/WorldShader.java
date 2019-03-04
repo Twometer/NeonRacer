@@ -8,12 +8,12 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
-public class SimpleShader extends Shader {
+public class WorldShader extends Shader {
 
     private int projectionMatrix;
 
-    public SimpleShader() {
-        super("simple");
+    public WorldShader() {
+        super("world");
     }
 
     @Override
