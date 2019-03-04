@@ -9,11 +9,11 @@ public class TextureManager {
 
     private Map<String, Texture> map = new HashMap<>();
 
-    public Texture getTexture(String name) {
-        Texture mapTexture = map.get(name);
+    public Texture getTexture(String path) {
+        Texture mapTexture = map.get(path);
         if (mapTexture == null) {
-            mapTexture = Texture.create(name);
-            map.put(name, mapTexture);
+            mapTexture = Texture.create(path);
+            map.put(path, mapTexture);
             return mapTexture;
         } else return mapTexture;
     }

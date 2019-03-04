@@ -1,8 +1,8 @@
 - id: "test_car"
   name: "Test car"
   desc: "This car is used for testing"
-  color_texture: "test.png"
-  glow_texture: "test.png"
+  color_texture: "textures/test.png"
+  glow_texture: "textures/test.png"
   primary_ability: ""
   acceleration: 0
   brake_strength: 0

@@ -1,7 +1,7 @@
 - id: "test_track"
   name: "Test track"
   desc: "This track is used for testing"
-  thumbnail: "test.png"
+  thumbnail: "textures/test.png"
   base_material: "grass"
   path:
     - {x: 0, y: 0, w: 1, mat: "street"}
