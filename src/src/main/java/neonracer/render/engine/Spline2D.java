@@ -55,7 +55,7 @@ public class Spline2D {
 
     public Vector2f interpolate(float t) {
         recalculate();
-        Segment segment = toSegment(t);
+        Segment segment = getSegment(t);
         return interpolate(segment.getIndex(), segment.getT());
     }
 
@@ -85,7 +85,7 @@ public class Spline2D {
 
     public Vector2f getNormal(float t) {
         recalculate();
-        Segment segment = toSegment(t);
+        Segment segment = getSegment(t);
         return getTangent(segment.getIndex(), segment.getT()).perpendicular();
     }
 
@@ -116,7 +116,7 @@ public class Spline2D {
                 tangents.get(to).mul(h4, new Vector2f()));
     }
 
-    private Segment toSegment(float t) {
+    public Segment getSegment(float t) {
         float numPoints = closed ? points.size() : points.size() - 1;
         float fSeg = t * numPoints;
         int idx = (int) fSeg;
@@ -167,7 +167,7 @@ public class Spline2D {
         return p2.sub(p1, new Vector2f()).mul(curvature);
     }
 
-    private class Segment {
+    public class Segment {
 
         private int index;
 
@@ -178,11 +178,11 @@ public class Spline2D {
             this.t = t;
         }
 
-        int getIndex() {
+        public int getIndex() {
             return index;
         }
 
-        float getT() {
+        public float getT() {
             return t;
         }
     }

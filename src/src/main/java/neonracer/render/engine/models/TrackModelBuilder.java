@@ -24,9 +24,13 @@ public class TrackModelBuilder implements IModelBuilder<Track> {
         Mesh mesh = new Mesh(TRACK_SAMPLES * 2 + 2);
 
         float sampleRate = 1 / (float) 1 / TRACK_SAMPLES;
-        for (float i = 0; i <= 1.0f; i += sampleRate) {
-            Vector2f vec = spline.interpolate(i);
-            Vector2f n = spline.getNormal(i).normalize(0.5f);
+        for (float t = 0; t <= 1.0f; t += sampleRate) {
+            Spline2D.Segment segment = spline.getSegment(t);
+            float widthFrom = track.getPath().get(segment.getIndex()).getTrackWidth();
+            float widthTo = track.getPath().get(segment.getIndex() == points.size() - 1 ? 0 : segment.getIndex() + 1).getTrackWidth();
+            float width = widthFrom * (1 - segment.getT()) + widthTo * segment.getT();
+            Vector2f vec = spline.interpolate(t);
+            Vector2f n = spline.getNormal(t).normalize(0.5f * width);
 
             mesh.putVertex(vec.x + n.x, vec.y + n.y);
             mesh.putColor(1.0f, 1.0f, 1.0f);

@@ -14,14 +14,14 @@ public class Node implements IData {
 
     private Vector2f position;
 
-    private int trackWidth;
+    private float trackWidth;
 
     private String materialId;
 
     private Material material;
 
     @JsonCreator
-    public Node(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("w") int trackWidth, @JsonProperty("mat") String materialId) {
+    public Node(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("w") float trackWidth, @JsonProperty("mat") String materialId) {
         this.position = new Vector2f(x, y);
         this.trackWidth = trackWidth;
         this.materialId = materialId;
@@ -36,7 +36,7 @@ public class Node implements IData {
         return position;
     }
 
-    public int getTrackWidth() {
+    public float getTrackWidth() {
         return trackWidth;
     }
 
