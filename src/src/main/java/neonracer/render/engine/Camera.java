@@ -24,6 +24,14 @@ public class Camera {
         this.centerPoint = centerPoint;
     }
 
+    public Vector2f getCenterPoint() {
+        return centerPoint;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
     public void translate(float x, float y) {
         this.centerPoint.add(x, y);
     }

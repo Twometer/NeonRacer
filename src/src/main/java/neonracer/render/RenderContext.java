@@ -1,12 +1,23 @@
 package neonracer.render;
 
+import neonracer.render.engine.Camera;
 import org.joml.Matrix4f;
 
 public class RenderContext {
 
+    private Camera camera;
+
     private Matrix4f worldMatrix;
 
     private Matrix4f guiMatrix;
+
+    RenderContext(Camera camera) {
+        this.camera = camera;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
 
     public Matrix4f getWorldMatrix() {
         return worldMatrix;

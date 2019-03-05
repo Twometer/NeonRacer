@@ -17,17 +17,15 @@ public class MasterRenderer {
 
     private GameContext gameContext;
 
-    private Camera camera;
-
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
             new DebugRenderer()
     };
 
     public MasterRenderer(GameContext context) {
-        this.renderContext = new RenderContext();
         this.gameContext = context;
-        this.camera = new Camera(context);
+        Camera camera = new Camera(context);
+        this.renderContext = new RenderContext(camera);
     }
 
     public void startLoop() {
@@ -43,7 +41,7 @@ public class MasterRenderer {
         Log.i("Initializing renderer...");
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-        this.camera.setZoomFactor(0.05f);
+        renderContext.getCamera().setZoomFactor(0.05f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
@@ -59,7 +57,7 @@ public class MasterRenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight());
 
-        renderContext.setWorldMatrix(camera.calculateMatrix());
+        renderContext.setWorldMatrix(renderContext.getCamera().calculateMatrix());
         renderContext.getGuiMatrix().setOrtho2D(0.0f, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight(), 0.0f);
 
         for (IRenderer renderer : renderers)
