@@ -5,7 +5,7 @@ import neonracer.render.gl.core.Texture;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextureManager {
+public class TextureProvider {
 
     private Map<String, Texture> map = new HashMap<>();
 

@@ -2,8 +2,7 @@ package neonracer.render.gl.core;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * A model is a mesh that has been uploaded
@@ -69,6 +68,7 @@ public class Model {
         glDeleteBuffers(vertexBuffer);
         glDeleteBuffers(colorBuffer);
         glDeleteBuffers(texCoordBuffer);
+        glDeleteVertexArrays(vao);
     }
 
     public void draw() {

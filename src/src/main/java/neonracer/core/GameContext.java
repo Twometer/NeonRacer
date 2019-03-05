@@ -1,7 +1,7 @@
 package neonracer.core;
 
 import neonracer.render.GameWindow;
-import neonracer.render.gl.TextureManager;
+import neonracer.render.gl.TextureProvider;
 import neonracer.resource.DataManager;
 
 import java.io.IOException;
@@ -10,15 +10,15 @@ public class GameContext {
 
     private GameWindow gameWindow;
 
-    private TextureManager textureManager;
+    private TextureProvider textureProvider;
 
     private DataManager dataManager;
 
     private GameState gameState;
 
-    GameContext(GameWindow gameWindow, TextureManager textureManager, DataManager dataManager, GameState gameState) {
+    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState) {
         this.gameWindow = gameWindow;
-        this.textureManager = textureManager;
+        this.textureProvider = textureProvider;
         this.dataManager = dataManager;
         this.gameState = gameState;
     }
@@ -36,8 +36,8 @@ public class GameContext {
         return gameWindow;
     }
 
-    public TextureManager getTextureManager() {
-        return textureManager;
+    public TextureProvider getTextureProvider() {
+        return textureProvider;
     }
 
     public DataManager getDataManager() {

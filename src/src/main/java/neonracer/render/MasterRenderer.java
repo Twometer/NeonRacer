@@ -3,6 +3,7 @@ package neonracer.render;
 import neonracer.core.GameContext;
 import neonracer.model.track.Track;
 import neonracer.render.engine.Camera;
+import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
 import neonracer.util.Log;
@@ -19,7 +20,8 @@ public class MasterRenderer {
     private Camera camera;
 
     private IRenderer[] renderers = new IRenderer[]{
-            new TrackRenderer()
+            new TrackRenderer(),
+            new DebugRenderer()
     };
 
     public MasterRenderer(GameContext context) {
@@ -58,6 +60,7 @@ public class MasterRenderer {
         glViewport(0, 0, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight());
 
         renderContext.setWorldMatrix(camera.calculateMatrix());
+        renderContext.getGuiMatrix().setOrtho2D(0.0f, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight(), 0.0f);
 
         for (IRenderer renderer : renderers)
             renderer.render(renderContext, gameContext);

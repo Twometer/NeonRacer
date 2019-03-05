@@ -79,7 +79,7 @@ public class GlLoader {
             ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL);
             for (int y = 0; y < image.getHeight(); y++) {
                 for (int x = 0; x < image.getWidth(); x++) {
-                    Color color = new Color(image.getRGB(x, y));
+                    Color color = new Color(image.getRGB(x, y), true);
                     buffer.put((byte) color.getRed());
                     buffer.put((byte) color.getGreen());
                     buffer.put((byte) color.getBlue());

@@ -46,7 +46,7 @@ public class Track implements IData {
 
     @Override
     public void initialize(GameContext context) {
-        thumbnail = context.getTextureManager().getTexture(thumbnailPath);
+        thumbnail = context.getTextureProvider().getTexture(thumbnailPath);
         baseMaterial = context.getDataManager().getMaterial(baseMaterialId);
         for (Node node : path)
             node.initialize(context);
