@@ -1,9 +1,11 @@
 package neonracer.render;
 
 import neonracer.core.GameContext;
+import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.render.engine.Camera;
 import neonracer.render.engine.renderers.DebugRenderer;
+import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
 import neonracer.util.Log;
@@ -19,6 +21,7 @@ public class MasterRenderer {
 
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
+            new EntityRenderer(),
             new DebugRenderer()
     };
 
@@ -39,12 +42,17 @@ public class MasterRenderer {
 
     private void setup() {
         Log.i("Initializing renderer...");
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         renderContext.getCamera().setZoomFactor(0.05f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
+        EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0]);
+        gameContext.getGameState().setPlayerEntity(playerEntity);
+        gameContext.getGameState().getEntities().add(playerEntity);
 
         renderContext.setGuiMatrix(new Matrix4f());
 

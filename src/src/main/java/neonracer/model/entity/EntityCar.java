@@ -9,8 +9,8 @@ public class EntityCar extends Entity {
 
     private Car car;
 
-    public EntityCar(String type, float x, float y, float rotation, Car car) {
-        super(type, x, y, rotation);
+    public EntityCar(float x, float y, float rotation, Car car) {
+        super("car", x, y, rotation);
         this.car = car;
     }
 

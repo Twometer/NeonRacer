@@ -10,7 +10,7 @@ import neonracer.util.Log;
 
 import java.io.IOException;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
@@ -41,8 +41,6 @@ public class FontRenderer {
         if (textModel != null)
             textModel.destroy();
         textModel = build(text, fontSize, x, y);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         fontShader.bind();
         fontShader.setProjectionMatrix(renderContext.getGuiMatrix());
         glActiveTexture(GL_TEXTURE0);
@@ -50,7 +48,6 @@ public class FontRenderer {
         textModel.draw();
         fontFace.getFontTexture().unbind();
         fontShader.unbind();
-        glDisable(GL_BLEND);
     }
 
     public void destroy() {
