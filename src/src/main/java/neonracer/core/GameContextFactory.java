@@ -1,5 +1,6 @@
 package neonracer.core;
 
+import neonracer.phys.PhysicsEngine;
 import neonracer.render.GameWindow;
 import neonracer.render.gl.TextureProvider;
 import neonracer.resource.DataManager;
@@ -12,7 +13,9 @@ public class GameContextFactory {
         TextureProvider textureProvider = new TextureProvider();
         DataManager dataManager = new DataManager();
         GameState gameState = new GameState();
-        return new GameContext(gameWindow, textureProvider, dataManager, gameState);
+        PhysicsEngine physicsEngine = new PhysicsEngine();
+        Timer timer = new Timer(30);
+        return new GameContext(gameWindow, textureProvider, dataManager, gameState, physicsEngine, timer);
     }
 
 }
