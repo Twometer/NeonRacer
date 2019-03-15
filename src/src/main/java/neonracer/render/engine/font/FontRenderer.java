@@ -16,6 +16,8 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 public class FontRenderer {
 
+    private GameContext gameContext;
+
     private FontShader fontShader;
 
     private String fontFaceName;
@@ -29,6 +31,7 @@ public class FontRenderer {
     }
 
     public void setup(GameContext context) {
+        this.gameContext = context;
         fontShader = new FontShader();
         try {
             fontFace = FontFace.load(context, fontFaceName);
@@ -38,6 +41,7 @@ public class FontRenderer {
     }
 
     public void draw(RenderContext renderContext, String text, float x, float y, float fontSize) {
+        fontSize *= gameContext.getGameWindow().getScale();
         if (textModel != null)
             textModel.destroy();
         textModel = build(text, fontSize, x, y);
@@ -48,6 +52,10 @@ public class FontRenderer {
         textModel.draw();
         fontFace.getFontTexture().unbind();
         fontShader.unbind();
+    }
+
+    public float getLineHeight(float fontSize) {
+        return 50f * fontSize * gameContext.getGameWindow().getScale();
     }
 
     public void destroy() {

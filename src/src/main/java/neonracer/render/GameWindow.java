@@ -23,6 +23,10 @@ public class GameWindow {
 
     private long window;
 
+    private float scaleX;
+
+    private float scaleY;
+
     public GameWindow(int width, int height, String title) {
         this.width = width;
         this.height = height;
@@ -54,6 +58,15 @@ public class GameWindow {
         });
 
         glfwMakeContextCurrent(window);
+
+        float[] x = new float[1];
+        float[] y = new float[1];
+        glfwGetWindowContentScale(window, x, y);
+        scaleX = x[0];
+        scaleY = y[0];
+
+        if (scaleX > 1.0f)
+            setSize((int) (width * scaleX), (int) (height * scaleY));
 
         GL.createCapabilities();
     }
@@ -93,4 +106,15 @@ public class GameWindow {
     public int getHeight() {
         return height;
     }
+
+    public float getScale() {
+        return (scaleX + scaleY) / 2;
+    }
+
+    private void setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        glfwSetWindowSize(window, width, height);
+    }
+
 }
