@@ -2,41 +2,31 @@ package neonracer.core;
 
 public class Timer {
 
-    private static final long NS_PER_SECOND = 10000000L;
-    private static final long MAX_NS_PER_UPDATE = 10000000L;
-    private float ticksPerSecond;
-    private long lastTime;
-    private int ticks;
-    private float partialTicks;
-    private float timeScale;
-    private float passedTime;
+    private final int tickTime;
 
-    Timer(float ticksPerSecond) {
-        this.timeScale = 1.0f;
-        this.passedTime = 0.0f;
-        this.ticksPerSecond = ticksPerSecond;
-        this.lastTime = System.nanoTime();
+    private int ticks;
+
+    private float deltaTime;
+
+    private long lastTick = System.currentTimeMillis();
+
+    Timer(int ticksPerSecond) {
+        this.tickTime = 1000 / ticksPerSecond;
+    }
+
+    public void update() {
+        long now = System.currentTimeMillis();
+        ticks = (int) ((now - lastTick) / tickTime);
+        deltaTime = ((now - lastTick) / (float)tickTime) - ticks;
+        if (ticks > 0)
+            lastTick = now;
     }
 
     public int getTicks() {
         return ticks;
     }
 
-    public float getPartialTicks() {
-        return partialTicks;
+    public float getDeltaTime() {
+        return deltaTime;
     }
-
-    public void onFrame() {
-        long now = System.nanoTime();
-        long passedNs = now - this.lastTime;
-        this.lastTime = now;
-        if (passedNs < 0L) passedNs = 0L;
-        if (passedNs > MAX_NS_PER_UPDATE) passedNs = MAX_NS_PER_UPDATE;
-        this.passedTime += passedNs * this.timeScale * this.ticksPerSecond / NS_PER_SECOND;
-        this.ticks = (int) this.passedTime;
-        if (this.ticks > 100) this.ticks = 100;
-        this.passedTime -= this.ticks;
-        this.partialTicks = this.passedTime;
-    }
-
 }
