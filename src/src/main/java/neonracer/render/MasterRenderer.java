@@ -35,7 +35,7 @@ public class MasterRenderer {
         setup();
         while (!gameContext.getGameWindow().shouldClose()) {
             render();
-            gameContext.getTimer().onFrame();
+            //gameContext.getTimer().onFrame();
             for (int i = 0; i < gameContext.getTimer().getTicks(); i++)
                 gameContext.getPhysicsEngine().onTick();
             gameContext.getGameWindow().update();
