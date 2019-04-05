@@ -3,6 +3,7 @@ package neonracer.phys;
 import neonracer.core.GameContext;
 import neonracer.core.GameState;
 import neonracer.model.entity.EntityCar;
+import neonracer.phys.Box2DImplementation;
 import org.joml.Vector2f;
 
 public class PhysicsEngine {
@@ -13,6 +14,8 @@ public class PhysicsEngine {
     private float y = 0.005f;
     private Vector2f v = new Vector2f(x,y);;
 
+    private float omega = 1;
+
     public void initialize(GameContext gameContext) {
         this.gameContext = gameContext;
     }
@@ -20,10 +23,18 @@ public class PhysicsEngine {
     public void onTick() {
         GameState gameState = gameContext.getGameState();
         EntityCar playerEntity = gameState.getPlayerEntity();
-        Vector2f player = new Vector2f(playerEntity.getPosition());;
-        playerEntity.setPosition(player.add(v));
-        float rot = playerEntity.getRotation();
-        playerEntity.setRotation(rot+1f);
+        playerEntity.setPosition(updatePosition(playerEntity.getPosition()));
+        playerEntity.setRotation(updateRotation(playerEntity.getRotation()));
+    }
+
+    private Vector2f updatePosition(Vector2f curr)
+    {
+        return curr.add(v);
+    }
+
+    private float updateRotation(float curr)
+    {
+        return curr+omega;
     }
 
 }
