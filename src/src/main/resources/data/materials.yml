@@ -1,9 +1,9 @@
 - id: "grass"
-  texture: "test.png"
+  texture: "textures/test.png"
   grip: 0
 - id: "dirt"
-  texture: "test.png"
+  texture: "textures/test.png"
   grip: 0
 - id: "street"
-  texture: "test.png"
+  texture: "textures/test.png"
   grip: 0

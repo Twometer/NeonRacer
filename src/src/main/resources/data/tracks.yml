@@ -1,11 +1,12 @@
 - id: "test_track"
   name: "Test track"
   desc: "This track is used for testing"
-  thumbnail: "test.png"
+  thumbnail: "textures/test.png"
   base_material: "grass"
   path:
-    - {x: 0, y: 0, w: 20, mat: "street"}
-    - {x: 0, y: 100, w: 20, mat: "street"}
-    - {x: 100, y: 100, w: 20, mat: "dirt"}
+    - {x: 0, y: 0, w: 1, mat: "street"}
+    - {x: 0, y: 5, w: 1.5, mat: "street"}
+    - {x: 5, y: 5, w: 1, mat: "dirt"}
+    - {x: 8, y: 0, w: 1.5, mat: "dirt"}
   entities:
     - {type: "item", x: 5, y: 0, r: 0}
