@@ -23,7 +23,7 @@ public class TrackModelBuilder implements IModelBuilder<Track> {
 
         Mesh mesh = new Mesh(TRACK_SAMPLES * 2 + 2);
 
-        float sampleRate = 1 / (float) 1 / TRACK_SAMPLES;
+        float sampleRate = 1.0f / TRACK_SAMPLES;
         for (float t = 0; t <= 1.0f; t += sampleRate) {
             Spline2D.Segment segment = spline.getSegment(t);
             float widthFrom = track.getPath().get(segment.getIndex()).getTrackWidth();
