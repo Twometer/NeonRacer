@@ -48,6 +48,14 @@ public class Fbo {
         return colorTexture;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void destroy() {
         glDeleteFramebuffers(framebuffer);
         glDeleteTextures(colorTexture);
