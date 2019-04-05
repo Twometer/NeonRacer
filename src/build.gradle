@@ -43,8 +43,3 @@ jar {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
-
-task execute(type: JavaExec) {
-    main = mainClass
-    classpath = sourceSets.main.runtimeClasspath
-}
