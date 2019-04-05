@@ -27,19 +27,22 @@ public class PhysicsEngine {
     public void onTick() {
         GameState gameState = gameContext.getGameState();
         EntityCar playerEntity = gameState.getPlayerEntity();
-        playerEntity.setPosition(box2DImplementation.currentPosition());//updatePosition(playerEntity.getPosition()));
+        playerEntity.setPosition(updatePosition(playerEntity.getPosition()));//updatePosition(playerEntity.getPosition()));
         playerEntity.setRotation(updateRotation(playerEntity.getRotation()));
         box2DImplementation.step(1.0f / 60f,8,10);
     }
 
     private Vector2f updatePosition(Vector2f curr)
     {
-        return curr.add(v);
+        Vector2f vel = new Vector2f(box2DImplementation.currentVelocity());
+        vel.mul(150f/600f);
+        curr.add(vel);
+        return curr;
     }
 
     private float updateRotation(float curr)
     {
-        return curr+omega;
+        return curr-box2DImplementation.currentAngularVelocity();
     }
 
 }
