@@ -56,8 +56,8 @@ public class Car implements IData {
 
     @Override
     public void initialize(GameContext context) {
-        colorTexture = context.getTextureManager().getTexture(colorTexturePath);
-        glowTexture = context.getTextureManager().getTexture(glowTexturePath);
+        colorTexture = context.getTextureProvider().getTexture(colorTexturePath);
+        glowTexture = context.getTextureProvider().getTexture(glowTexturePath);
     }
 
     public String getId() {

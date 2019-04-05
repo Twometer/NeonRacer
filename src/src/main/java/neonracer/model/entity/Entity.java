@@ -45,6 +45,14 @@ public abstract class Entity {
         return rotation;
     }
 
+    public void setPosition(Vector2f position) {
+        this.position = position;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
+
     public abstract Texture getColorTexture();
 
     public abstract Texture getGlowTexture();

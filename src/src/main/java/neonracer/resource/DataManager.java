@@ -6,6 +6,7 @@ import neonracer.core.GameContext;
 import neonracer.model.car.Car;
 import neonracer.model.track.Material;
 import neonracer.model.track.Track;
+import neonracer.util.Log;
 
 import java.io.IOException;
 
@@ -22,14 +23,18 @@ public class DataManager {
     private Car[] cars;
 
     public void load(GameContext context) throws IOException {
+        Log.i("Loading resources...");
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         materials = read(mapper, PATH_MATERIALS, Material[].class);
         tracks = read(mapper, PATH_TRACKS, Track[].class);
         cars = read(mapper, PATH_CARS, Car[].class);
 
+        Log.i("Initializing resources...");
         initialize(context, materials);
         initialize(context, tracks);
         initialize(context, cars);
+
+        Log.i("Resource loading completed");
     }
 
     private <T> T read(ObjectMapper mapper, String file, Class<T> clazz) throws IOException {

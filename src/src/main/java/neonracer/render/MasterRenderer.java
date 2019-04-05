@@ -1,70 +1,84 @@
 package neonracer.render;
 
 import neonracer.core.GameContext;
-import neonracer.render.gl.core.Mesh;
-import neonracer.render.gl.core.Model;
-import neonracer.render.gl.shaders.SimpleShader;
+import neonracer.model.entity.EntityCar;
+import neonracer.model.track.Track;
+import neonracer.render.engine.Camera;
+import neonracer.render.engine.RenderPass;
+import neonracer.render.engine.renderers.DebugRenderer;
+import neonracer.render.engine.renderers.EntityRenderer;
+import neonracer.render.engine.renderers.IRenderer;
+import neonracer.render.engine.renderers.TrackRenderer;
+import neonracer.util.Log;
 import org.joml.Matrix4f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class MasterRenderer {
 
-    private GameContext context;
+    private RenderContext renderContext;
 
-    private SimpleShader simpleShader;
+    private GameContext gameContext;
 
-    private Model testModel;
-
-    private Matrix4f projectionMatrix;
+    private IRenderer[] renderers = new IRenderer[]{
+            new TrackRenderer(),
+            new EntityRenderer(),
+            new DebugRenderer()
+    };
 
     public MasterRenderer(GameContext context) {
-        this.context = context;
+        this.gameContext = context;
+        Camera camera = new Camera(context);
+        this.renderContext = new RenderContext(camera);
     }
 
     public void startLoop() {
         setup();
-        while (!context.getGameWindow().shouldClose()) {
+        while (!gameContext.getGameWindow().shouldClose()) {
             render();
-            context.getGameWindow().update();
+            gameContext.getTimer().update();
+            for (int i = 0; i < gameContext.getTimer().getTicks(); i++)
+                gameContext.getPhysicsEngine().onTick();
+            gameContext.getGameWindow().update();
         }
         destroy();
     }
 
     private void setup() {
+        Log.i("Initializing renderer...");
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        simpleShader = new SimpleShader();
 
-        Mesh rect = new Mesh(3);
-        rect.putVertex(0.0f, 0.0f);
-        rect.putColor(1.0f, 0.0f, 1.0f);
+        renderContext.getCamera().setZoomFactor(0.05f);
 
-        rect.putVertex(150.0f, 0.0f);
-        rect.putColor(0.0f, 1.0f, 1.0f);
+        Track testTrack = gameContext.getDataManager().getTrack("test_track");
+        gameContext.getGameState().setCurrentTrack(testTrack);
+        EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0]);
+        gameContext.getGameState().setPlayerEntity(playerEntity);
+        gameContext.getGameState().getEntities().add(playerEntity);
 
-        rect.putVertex(75f, 150.0f);
-        rect.putColor(1.0f, 1.0f, 0.0f);
+        renderContext.setGuiMatrix(new Matrix4f());
 
-        testModel = Model.create(rect);
-        rect.destroy();
-
-        projectionMatrix = new Matrix4f().setOrtho2D(0, context.getGameWindow().getWidth(), context.getGameWindow().getHeight(), 0);
-
+        for (IRenderer renderer : renderers)
+            renderer.setup(gameContext);
+        Log.i("Initialization completed");
     }
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glViewport(0, 0, context.getGameWindow().getWidth(), context.getGameWindow().getHeight());
+        glViewport(0, 0, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight());
 
-        simpleShader.bind();
-        simpleShader.setProjectionMatrix(projectionMatrix);
-        testModel.draw();
-        simpleShader.unbind();
+        renderContext.setWorldMatrix(renderContext.getCamera().calculateMatrix());
+        renderContext.getGuiMatrix().setOrtho2D(0.0f, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight(), 0.0f);
+
+        for (IRenderer renderer : renderers)
+            renderer.render(renderContext, gameContext, RenderPass.COLOR);
     }
 
     private void destroy() {
-        testModel.destroy();
-        simpleShader.destroy();
+        for (IRenderer renderer : renderers)
+            renderer.destroy(gameContext);
     }
 
 }
