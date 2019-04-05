@@ -21,6 +21,7 @@ dependencies {
     implementation "org.lwjgl:lwjgl-openal:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-opengl:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-stb:$lwjglVersion"
+    implementation "org.jbox2d:jbox2d-library:2.2.1.1"
     implementation 'org.joml:joml:1.9.12'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
