@@ -4,6 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.render.engine.Camera;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
@@ -35,7 +36,7 @@ public class MasterRenderer {
         setup();
         while (!gameContext.getGameWindow().shouldClose()) {
             render();
-            gameContext.getTimer().onFrame();
+            gameContext.getTimer().update();
             for (int i = 0; i < gameContext.getTimer().getTicks(); i++)
                 gameContext.getPhysicsEngine().onTick();
             gameContext.getGameWindow().update();
@@ -72,7 +73,7 @@ public class MasterRenderer {
         renderContext.getGuiMatrix().setOrtho2D(0.0f, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight(), 0.0f);
 
         for (IRenderer renderer : renderers)
-            renderer.render(renderContext, gameContext);
+            renderer.render(renderContext, gameContext, RenderPass.COLOR);
     }
 
     private void destroy() {

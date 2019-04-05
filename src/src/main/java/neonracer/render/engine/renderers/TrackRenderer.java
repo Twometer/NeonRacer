@@ -2,6 +2,7 @@ package neonracer.render.engine.renderers;
 
 import neonracer.core.GameContext;
 import neonracer.render.RenderContext;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.gl.core.Texture;
 import neonracer.render.gl.shaders.WorldShader;
 
@@ -18,7 +19,8 @@ public class TrackRenderer implements IRenderer {
     }
 
     @Override
-    public void render(RenderContext renderContext, GameContext gameContext) {
+    public void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass) {
+        if (renderPass != RenderPass.COLOR) return;
         worldShader.bind();
         worldShader.setProjectionMatrix(renderContext.getWorldMatrix());
         Texture texture = gameContext.getGameState().getCurrentTrack().getBaseMaterial().getTexture();

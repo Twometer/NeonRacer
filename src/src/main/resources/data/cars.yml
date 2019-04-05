@@ -2,7 +2,7 @@
   name: "Test car"
   desc: "This car is used for testing"
   color_texture: "textures/testcar.png"
-  glow_texture: "textures/testcar.png"
+  glow_texture: "textures/testcar-glow.png"
   primary_ability: ""
   acceleration: 0
   brake_strength: 0

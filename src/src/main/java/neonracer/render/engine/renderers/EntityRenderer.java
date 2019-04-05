@@ -3,6 +3,7 @@ package neonracer.render.engine.renderers;
 import neonracer.core.GameContext;
 import neonracer.model.entity.Entity;
 import neonracer.render.RenderContext;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.gl.core.Model;
@@ -32,12 +33,12 @@ public class EntityRenderer implements IRenderer {
     }
 
     @Override
-    public void render(RenderContext renderContext, GameContext gameContext) {
+    public void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass) {
         List<Entity> entities = gameContext.getGameState().getEntities();
         entityShader.bind();
         entityShader.setProjectionMatrix(renderContext.getWorldMatrix());
         for (Entity entity : entities) {
-            Texture texture = entity.getColorTexture();
+            Texture texture = renderPass == RenderPass.GLOW ? entity.getGlowTexture() : entity.getColorTexture();
             texture.bind();
             float width = texture.getWidth() / 150.0f;
             float height = texture.getHeight() / 150.0f;

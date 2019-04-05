@@ -2,6 +2,7 @@ package neonracer.render.engine.renderers;
 
 import neonracer.core.GameContext;
 import neonracer.render.RenderContext;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.font.FontRenderer;
 import neonracer.util.BuildInfo;
 
@@ -22,7 +23,8 @@ public class DebugRenderer implements IRenderer {
 
 
     @Override
-    public void render(RenderContext renderContext, GameContext gameContext) {
+    public void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass) {
+        if (renderPass != RenderPass.COLOR) return;
         float lh = fontRenderer.getLineHeight(0.3f);
         fontRenderer.draw(renderContext, BuildInfo.getGameTitle() + " v" + BuildInfo.getGameVersion(), 0.0f, 0.0f, 0.3f);
         fontRenderer.draw(renderContext, "fps=" + fps, 0.0f, lh, 0.3f);
