@@ -2,6 +2,7 @@ package neonracer.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import neonracer.core.GameContext;
 import neonracer.model.car.Car;
 import neonracer.phys.PhysEntity;
 import neonracer.render.gl.core.Texture;
@@ -10,14 +11,18 @@ public class EntityCar extends PhysEntity {
 
     private Car car;
 
-    public EntityCar(float x, float y, float rotation, Car car) {
-        super("car", x, y, rotation);
+    public EntityCar(float x, float y, float rotation, Car car, GameContext gameContext) {
+        super("car", x, y, rotation, gameContext);
         this.car = car;
     }
 
     @JsonCreator
     public EntityCar(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {
-        super(type, x, y, rotation);
+        super(type, x, y, rotation, null);
+    }
+
+    public EntityCar( String type,  float x,  float y,  float rotation, GameContext gameContext) {
+        super(type, x, y, rotation, gameContext);
     }
 
     public Car getCar() {
@@ -34,8 +39,8 @@ public class EntityCar extends PhysEntity {
         return car.getGlowTexture();
     }
 
-    public float getEntityWidth() { return car.getCarWidth(); }
+    public float getEntityWidth() { return 1; }//car.getCarWidth(); } NPE!!!!!
 
-    public float getEntityLength() { return car.getCarLength(); }
+    public float getEntityLength() { return 1; }//car.getCarLength(); }
 
 }

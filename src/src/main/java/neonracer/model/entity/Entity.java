@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import neonracer.core.GameContext;
 import neonracer.render.gl.core.Texture;
 import org.joml.Vector2f;
 
@@ -20,13 +21,13 @@ import org.joml.Vector2f;
 )
 public abstract class Entity {
 
+    private GameContext gameContext;
+
     private String type;
 
     private Vector2f position;
 
     private float rotation;
-
-    private boolean physState = false;
 
     @JsonCreator
     public Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {
@@ -35,12 +36,11 @@ public abstract class Entity {
         this.rotation = rotation;
     }
 
-    @JsonCreator
-    public Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation, @JsonProperty("phys") boolean physState) {
+    public Entity( String type,  float x,  float y,  float rotation, GameContext gameContext) {
+        this.gameContext = gameContext;
         this.type = type;
         this.position = new Vector2f(x, y);
         this.rotation = rotation;
-        this.physState = physState;
     }
 
     public String getType() {
@@ -54,8 +54,6 @@ public abstract class Entity {
     public float getRotation() {
         return rotation;
     }
-
-    public boolean getPhysState() { return physState; }
 
     public void setPosition(Vector2f position) {
         this.position = position;

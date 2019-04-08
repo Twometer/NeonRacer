@@ -87,10 +87,9 @@ public class MasterRenderer {
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
-        EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0]);
+        EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0], gameContext);
         gameContext.getGameState().setPlayerEntity(playerEntity);
         gameContext.getGameState().getEntities().add(playerEntity);
-        gameContext.getPhysicsEngine().getPhysEntities().add(playerEntity); //bitte für weitere PhysEntities auch hinzufügen oder anders handlen!!
 
         renderContext.setGuiMatrix(new Matrix4f());
 

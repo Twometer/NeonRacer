@@ -1,40 +1,43 @@
 package neonracer.phys;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import neonracer.core.GameContext;
 import neonracer.model.entity.Entity;
 import neonracer.render.gl.core.Texture;
 import org.joml.Vector2f;
 
 public abstract class PhysEntity extends Entity {
 
-    public PhysEntity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation)
-    {
-        super(type, x, y, rotation, true);
-    }
-
-    @Override
-    public abstract Texture getColorTexture();
-
-    @Override
-    public abstract Texture getGlowTexture();
+    private PhysicsEngine physicsEngine;
 
     private Box2DImplementation box2DImplementation ;
 
-    public void initialisePhysics(Box2DImplementation box2DImplementation)
+    public PhysEntity(String type, float x, float y, float rotation)
     {
-        this.box2DImplementation = box2DImplementation;
-        box2DImplementation.createEntity(getPosition().mul(1f / 150f), getEntityWidth() / 150f, getEntityLength() / 150f);
+        super(type, x, y, rotation);
     }
+
+    public PhysEntity(String type, float x, float y, float rotation, GameContext gameContext)
+    {
+        super(type, x, y, rotation, gameContext);
+        this.physicsEngine = gameContext.getPhysicsEngine();
+        this.box2DImplementation = physicsEngine.getBox2DImplementation();
+        box2DImplementation.createEntity(getPosition(), getEntityWidth(), getEntityLength());
+    }
+
+    public abstract Texture getColorTexture();
+
+    public abstract Texture getGlowTexture();
 
     public void updatePhysState()
     {
-        int test = box2DImplementation.testTest();
-        //setPosition(getPosition().add(box2DImplementation.currentVelocity().mul(150f)));
-        //setRotation(getRotation() + box2DImplementation.currentAngularVelocity());
+        Vector2f newPos = new Vector2f();
+        getPosition().add(box2DImplementation.currentVelocity(),newPos);
+        setPosition(newPos);
+        setRotation(getRotation() + box2DImplementation.currentAngularVelocity());
     }
 
-    public float getEntityWidth() { return 0f; }
+    public abstract float getEntityWidth();
 
-    public float getEntityLength() { return 0f; }
+    public abstract float getEntityLength();
 
 }

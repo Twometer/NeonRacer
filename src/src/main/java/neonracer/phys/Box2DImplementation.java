@@ -21,7 +21,7 @@ public class Box2DImplementation {
 
     public Box2DImplementation()
     {
-        world = new World(new Vec2(0,-0.1f));
+        world = new World(new Vec2(0,-0.02f));
         world.setWarmStarting(true);
         world.setContinuousPhysics(true);
     }
@@ -58,15 +58,12 @@ public class Box2DImplementation {
 
     public Vector2f currentVelocity()
     {
-        Vector2f vec = new Vector2f(1,1);
-        //Transform xf = body.getTransform();
-        return vec;//Vec2toVector2f(xf.p);
+        Transform xf = body.getTransform();
+        return Vec2toVector2f(xf.p);
     }
 
     public float currentAngularVelocity()
     {
         return body.getAngle();
     }
-
-    public int testTest() {return 0;};
 }

@@ -16,32 +16,30 @@ public class PhysicsEngine {
 
     private Box2DImplementation box2DImplementation;
 
-    private List<PhysEntity> physEntities = new ArrayList<>();
+    private List<Entity> entities;
 
     private float tickRate = 20;
 
     public void initialize(GameContext gameContext) {
         this.gameContext = gameContext;
         box2DImplementation = new Box2DImplementation();
-        for (PhysEntity physEntity : physEntities)
-        {
-            physEntity.initialisePhysics(box2DImplementation);
-        }
+        entities = gameContext.getGameState().getEntities();
     }
 
     public void onTick() {
         box2DImplementation.step(1.0f / tickRate,8,10);
-        for (PhysEntity physEntity : physEntities)
+        for (Entity entity : entities)
         {
-            physEntity.updatePhysState();
+            if(entity instanceof PhysEntity)
+            {
+                ((PhysEntity) entity).updatePhysState();
+            }
         }
     }
 
-    public List<PhysEntity> getPhysEntities() {
-        return physEntities;
-    }
-
     public float getTickrate() { return tickRate; }
+
+    public Box2DImplementation getBox2DImplementation() { return box2DImplementation; }
 
     public void setTickrate(float tickrate) { this.tickRate = tickrate; }
 }
