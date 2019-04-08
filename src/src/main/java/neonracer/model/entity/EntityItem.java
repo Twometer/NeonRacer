@@ -2,9 +2,10 @@ package neonracer.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import neonracer.phys.PhysEntity;
 import neonracer.render.gl.core.Texture;
 
-public class EntityItem extends Entity {
+public class EntityItem extends PhysEntity {
 
     @JsonCreator
     public EntityItem(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {

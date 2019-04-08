@@ -26,11 +26,21 @@ public abstract class Entity {
 
     private float rotation;
 
+    private boolean physState = false;
+
     @JsonCreator
-    Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {
+    public Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {
         this.type = type;
         this.position = new Vector2f(x, y);
         this.rotation = rotation;
+    }
+
+    @JsonCreator
+    public Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation, @JsonProperty("phys") boolean physState) {
+        this.type = type;
+        this.position = new Vector2f(x, y);
+        this.rotation = rotation;
+        this.physState = physState;
     }
 
     public String getType() {
@@ -44,6 +54,8 @@ public abstract class Entity {
     public float getRotation() {
         return rotation;
     }
+
+    public boolean getPhysState() { return physState; }
 
     public void setPosition(Vector2f position) {
         this.position = position;

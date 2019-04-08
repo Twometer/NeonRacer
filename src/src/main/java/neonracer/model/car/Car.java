@@ -49,6 +49,12 @@ public class Car implements IData {
     @JsonProperty
     private float weight;
 
+    @JsonProperty
+    private float length;
+
+    @JsonProperty
+    private float width;
+
     @JsonProperty("primary_ability")
     private String primaryAbilityId;
 
@@ -103,6 +109,12 @@ public class Car implements IData {
     public float getWeight() {
         return weight;
     }
+
+    public float getCarLength() {
+        return colorTexture.getWidth();
+    } //TODO
+
+    public float getCarWidth() { return colorTexture.getHeight(); } //TODO
 
     public Ability getPrimaryAbility() {
         return primaryAbility;

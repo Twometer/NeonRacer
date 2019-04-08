@@ -3,9 +3,10 @@ package neonracer.model.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import neonracer.model.car.Car;
+import neonracer.phys.PhysEntity;
 import neonracer.render.gl.core.Texture;
 
-public class EntityCar extends Entity {
+public class EntityCar extends PhysEntity {
 
     private Car car;
 
@@ -32,5 +33,9 @@ public class EntityCar extends Entity {
     public Texture getGlowTexture() {
         return car.getGlowTexture();
     }
+
+    public float getEntityWidth() { return car.getCarWidth(); }
+
+    public float getEntityLength() { return car.getCarLength(); }
 
 }

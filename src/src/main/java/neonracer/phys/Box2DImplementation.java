@@ -3,7 +3,7 @@ package neonracer.phys;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.joints.JointDef;
+//import org.jbox2d.dynamics.joints.JointDef;
 import org.jbox2d.collision.shapes.*;
 import org.joml.Vector2f;
 
@@ -24,17 +24,17 @@ public class Box2DImplementation {
         world = new World(new Vec2(0,-0.1f));
         world.setWarmStarting(true);
         world.setContinuousPhysics(true);
-        bd = new BodyDef();
-        bd.type = BodyType.DYNAMIC;
-        bd.position.set(0,0);
-        ps = new PolygonShape();
-        ps.setAsBox(1,1);
-        fd = new FixtureDef();
-        fd.shape = ps;
     }
 
-    public void createEntity()
+    public void createEntity(Vector2f pos, float width, float length)
     {
+        bd = new BodyDef();
+        bd.type = BodyType.DYNAMIC;
+        bd.position.set(Vector2f2toVec2(pos));
+        ps = new PolygonShape();
+        ps.setAsBox(width, length);
+        fd = new FixtureDef();
+        fd.shape = ps;
         body = world.createBody(bd);
         body.createFixture(fd);
     }
@@ -58,12 +58,15 @@ public class Box2DImplementation {
 
     public Vector2f currentVelocity()
     {
-        Transform xf = body.getTransform();
-        return Vec2toVector2f(xf.p);
+        Vector2f vec = new Vector2f(1,1);
+        //Transform xf = body.getTransform();
+        return vec;//Vec2toVector2f(xf.p);
     }
 
     public float currentAngularVelocity()
     {
         return body.getAngle();
     }
+
+    public int testTest() {return 0;};
 }
