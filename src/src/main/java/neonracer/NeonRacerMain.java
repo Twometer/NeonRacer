@@ -2,8 +2,6 @@ package neonracer;
 
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
-import neonracer.model.entity.Entity;
-import neonracer.model.track.Track;
 import neonracer.render.MasterRenderer;
 import neonracer.util.BuildInfo;
 import neonracer.util.Log;

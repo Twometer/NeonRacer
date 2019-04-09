@@ -24,7 +24,7 @@ public class Material implements IData {
 
     @Override
     public void initialize(GameContext context) {
-        texture = context.getTextureManager().getTexture(texturePath);
+        texture = context.getTextureProvider().getTexture(texturePath);
     }
 
     public String getId() {

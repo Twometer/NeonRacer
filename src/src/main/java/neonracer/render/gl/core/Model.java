@@ -2,8 +2,7 @@ package neonracer.render.gl.core;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * A model is a mesh that has been uploaded
@@ -19,15 +18,18 @@ public class Model {
 
     private int vertices;
 
-    private Model(int vao, int vertexBuffer, int colorBuffer, int texCoordBuffer, int vertices) {
+    private int primitiveType;
+
+    private Model(int vao, int vertexBuffer, int colorBuffer, int texCoordBuffer, int vertices, int primitiveType) {
         this.vao = vao;
         this.vertexBuffer = vertexBuffer;
         this.colorBuffer = colorBuffer;
         this.texCoordBuffer = texCoordBuffer;
         this.vertices = vertices;
+        this.primitiveType = primitiveType;
     }
 
-    public static Model create(Mesh mesh) {
+    public static Model create(Mesh mesh, int primitiveType) {
         mesh.getVertices().flip();
         mesh.getColors().flip();
         mesh.getTexCoords().flip();
@@ -59,13 +61,14 @@ public class Model {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        return new Model(vao, vertexBuffer, colorBuffer, texCoordBuffer, mesh.getVertexCount());
+        return new Model(vao, vertexBuffer, colorBuffer, texCoordBuffer, mesh.getVertexCount(), primitiveType);
     }
 
     public void destroy() {
         glDeleteBuffers(vertexBuffer);
         glDeleteBuffers(colorBuffer);
         glDeleteBuffers(texCoordBuffer);
+        glDeleteVertexArrays(vao);
     }
 
     public void draw() {
@@ -78,7 +81,7 @@ public class Model {
         if (hasColors) glEnableVertexAttribArray(1);
         if (hasTexture) glEnableVertexAttribArray(2);
 
-        glDrawArrays(GL_TRIANGLES, 0, vertices);
+        glDrawArrays(primitiveType, 0, vertices);
 
         if (hasTexture) glDisableVertexAttribArray(2);
         if (hasColors) glDisableVertexAttribArray(1);
