@@ -40,3 +40,16 @@ Nach langer Abiturpause treffen wir uns wieder als komplettes Team. Das wichtigs
 ## 10.04.2019
 
 Tim übernimmt für Maxim die Implementation der Physik-Engine. Die Aufgaben und die jeweiligen Verantwortlichen verschieben wir in [GitHub Issues](https://github.com/Twometer/NeonRacer/issues).
+
+## 11.04.2019
+
+Wir besprechen wichtige Grundlagen des Spielablaufs:
+1. Spielstart
+2. Server auswählen
+3. Mit Nickname anmelden
+4. Spiel starten oder Spiel beitreten
+5. Abstimmung für Rennstrecke
+6. Auto auswählen
+7. Rennen fahren
+
+Für die Serverauswahl kann evtl. ein UDP Multicast verwendet werden. Auf jedem Server läuft immer nur ein Rennen parallel. Sobald ein Spieler im Hauptmenü ein Rennen startet, werden alle anderen verbundenen Spieler angefragt und haben 10 Sekunden Zeit, dem Rennen beizutreten. Dann startet die Auswahl für Auto und Rennstrecke. Wählt der Nutzer innerhalb der Frist nichts aus, werden Rennstrecke und Autos vom Server zugeteilt. Spieler die nicht oder erst verspätet beigetreten sind, können den aktuellen Zustand beobachten.
