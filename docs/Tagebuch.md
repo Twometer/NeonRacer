@@ -31,35 +31,12 @@ Jonas
 
 ## 21.02.2019
 
-Heute besprechen wir, welche Aufgaben wir in welcher Reihenfolge machen müssen. Außerdem 
+Heute besprechen wir, welche Aufgaben wir in welcher Reihenfolge machen müssen. Im Kapitel _Nächste Aufgaben_ wird die Liste stets aktualisiert.
 
-## Nächste Aufgaben
+## 04.04.2019
 
-Projektplanung: _Daniel_
-- Magisches Dreieck
-- Projektumfeldanalyse
-- SMARTe Ziele
+Nach langer Abiturpause treffen wir uns wieder als komplettes Team. Das wichtigste Thema ist die Physik-Implementation und das Timer-System. Wir entscheiden uns für ein System, das Ticks in regelmäßigen Abständen unabhängig von der Grafik ausführt. Mit einer Delta-Zeit können Bewegungen bei hohen Framerates interpoliert werden.
 
-Rendering: _Tim_
-- Data model
-- Storage (path based)
-- Rendering
+## 10.04.2019
 
-Physics: _Maxim_
-- Recherche (Libraries, Implementationsaufwand)
-- Core Implementation
-- Sounds
-
-Gameplay: _Johannes_
-- Streckenlayouts
-- Items
-- Auto Eigenschaften (Skizzen an Daniel)
-
-Graphical Design: _Jonas_
-- Autos
-- Strecke
-- Texturen
-
-Bisher offen:
-- User Interface
-- Multiplayer
+Tim übernimmt für Maxim die Implementation der Physik-Engine. Die Aufgaben und die jeweiligen Verantwortlichen verschieben wir in [GitHub Issues](https://github.com/Twometer/NeonRacer/issues).
