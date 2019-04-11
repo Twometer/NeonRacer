@@ -104,10 +104,6 @@ public class Car implements IData {
         return weight;
     }
 
-    public float getCarLength() { return 1; }//colorTexture.getWidth()/150;} //TODO
-
-    public float getCarWidth() { return 1; }//colorTexture.getHeight()/150; } //TODO
-
     public Ability getPrimaryAbility() {
         return primaryAbility;
     }

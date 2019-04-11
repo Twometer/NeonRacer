@@ -21,7 +21,7 @@ public abstract class PhysEntity extends Entity {
         super(type, x, y, rotation, gameContext);
         this.physicsEngine = gameContext.getPhysicsEngine();
         this.box2DImplementation = physicsEngine.getBox2DImplementation();
-        box2DImplementation.createEntity(getPosition(), getEntityWidth(), getEntityLength());
+        //box2DImplementation.createEntity(getPosition(), getEntityWidth(), getEntityLength());
     }
 
     public abstract Texture getColorTexture();
@@ -35,9 +35,5 @@ public abstract class PhysEntity extends Entity {
         setPosition(newPos);
         setRotation(getRotation() + box2DImplementation.currentAngularVelocity());
     }
-
-    public abstract float getEntityWidth();
-
-    public abstract float getEntityLength();
 
 }

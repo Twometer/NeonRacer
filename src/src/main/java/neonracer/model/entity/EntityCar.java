@@ -39,8 +39,4 @@ public class EntityCar extends PhysEntity {
         return car.getGlowTexture();
     }
 
-    public float getEntityWidth() { return 1; }//car.getCarWidth(); } NPE!!!!!
-
-    public float getEntityLength() { return 1; }//car.getCarLength(); }
-
 }

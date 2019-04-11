@@ -37,9 +37,5 @@ public class PhysicsEngine {
         }
     }
 
-    public float getTickrate() { return tickRate; }
-
     public Box2DImplementation getBox2DImplementation() { return box2DImplementation; }
-
-    public void setTickrate(float tickrate) { this.tickRate = tickrate; }
 }
