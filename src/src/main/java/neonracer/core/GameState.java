@@ -9,6 +9,8 @@ import java.util.List;
 
 public class GameState {
 
+    private GameContext gameContext;
+
     private Track currentTrack;
 
     private EntityCar playerEntity;
@@ -29,6 +31,15 @@ public class GameState {
 
     public void setCurrentTrack(Track currentTrack) {
         this.currentTrack = currentTrack;
+    }
+
+    public void initialize(GameContext gameContext) {
+        this.gameContext = gameContext;
+    }
+
+    public void addEntity(Entity entity) {
+        entities.add(entity);
+        entity.onInitialize(gameContext);
     }
 
     public List<Entity> getEntities() {

@@ -34,6 +34,7 @@ public class GameContext {
         gameWindow.create();
         dataManager.load(this);
         physicsEngine.initialize(this);
+        gameState.initialize(this);
     }
 
     public void destroy() {

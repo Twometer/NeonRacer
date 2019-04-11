@@ -89,7 +89,7 @@ public class MasterRenderer {
         gameContext.getGameState().setCurrentTrack(testTrack);
         EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0]);
         gameContext.getGameState().setPlayerEntity(playerEntity);
-        gameContext.getGameState().getEntities().add(playerEntity);
+        gameContext.getGameState().addEntity(playerEntity);
 
         renderContext.setGuiMatrix(new Matrix4f());
 

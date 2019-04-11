@@ -40,11 +40,11 @@ public class EntityRenderer implements IRenderer {
         for (Entity entity : entities) {
             Texture texture = renderPass == RenderPass.GLOW ? entity.getGlowTexture() : entity.getColorTexture();
             texture.bind();
-            float width = texture.getWidth() / 150.0f;
-            float height = texture.getHeight() / 150.0f;
+            float width = entity.getWidth();
+            float height = entity.getHeight();
             Matrix4f transformationMatrix = new Matrix4f();
             transformationMatrix.translate(entity.getPosition().x(), entity.getPosition().y, 0.0f);
-            transformationMatrix.rotate((float) Math.toRadians(entity.getRotation()), 0.0f, 0.0f, 1.0f);
+            transformationMatrix.rotate(entity.getRotation(), 0.0f, 0.0f, 1.0f);
             transformationMatrix.translate(-width / 2, -height / 2, 0.0f);
             transformationMatrix.scale(width, height, 1.0f);
             entityShader.setTransformationMatrix(transformationMatrix);
