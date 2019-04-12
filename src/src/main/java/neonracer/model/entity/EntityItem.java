@@ -2,7 +2,7 @@ package neonracer.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import neonracer.phys.EntityPhysics;
+import neonracer.phys.entity.EntityPhysics;
 import neonracer.render.gl.core.Texture;
 
 public class EntityItem extends Entity {

@@ -25,6 +25,12 @@ public class Timer {
             lastTick = now;
     }
 
+    public void reset() {
+        this.elaspedTime = 0.0f;
+        this.ticks = 0;
+        this.lastTick = System.currentTimeMillis();
+    }
+
     public int getTicks() {
         return ticks;
     }

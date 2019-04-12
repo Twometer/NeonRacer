@@ -9,7 +9,7 @@ public class Box2dHelper {
         return new Vec2(vec.x, vec.y);
     }
 
-    static Vector2f toVector2f(Vec2 vec2) {
+    public static Vector2f toVector2f(Vec2 vec2) {
         return new Vector2f(vec2.x, vec2.y);
     }
 

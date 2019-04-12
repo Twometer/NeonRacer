@@ -1,5 +1,6 @@
 package neonracer.render;
 
+import neonracer.core.ControlState;
 import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
@@ -17,6 +18,7 @@ import neonracer.render.gl.shaders.VGaussShader;
 import neonracer.util.Log;
 import org.joml.Matrix4f;
 
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
@@ -60,10 +62,23 @@ public class MasterRenderer {
             render();
             gameContext.getTimer().update();
             for (int i = 0; i < gameContext.getTimer().getTicks(); i++)
-                gameContext.getPhysicsEngine().onTick();
+                tick();
             gameContext.getGameWindow().update();
         }
         destroy();
+    }
+
+    private void tick() {
+        gameContext.getPhysicsEngine().onTick();
+
+        ControlState controlState = gameContext.getControlState();
+        controlState.setForward(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_W));
+        controlState.setLeft(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_A));
+        controlState.setReverse(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_S));
+        controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
+
+        renderContext.getCamera().setCenterPoint(gameContext.getGameState().getPlayerEntity().getPosition());
+        renderContext.getCamera().setRotation(gameContext.getGameState().getPlayerEntity().getRotation());
     }
 
     private void setup() {
@@ -83,7 +98,7 @@ public class MasterRenderer {
         vGaussShader = new VGaussShader();
         mixShader = new MixShader();
 
-        renderContext.getCamera().setZoomFactor(0.05f);
+        renderContext.getCamera().setZoomFactor(0.01f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
@@ -95,6 +110,9 @@ public class MasterRenderer {
 
         for (IRenderer renderer : renderers)
             renderer.setup(gameContext);
+
+        gameContext.getTimer().reset();
+
         Log.i("Initialization completed");
     }
 

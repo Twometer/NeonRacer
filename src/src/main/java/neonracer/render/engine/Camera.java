@@ -12,7 +12,7 @@ public class Camera {
 
     private float rotation = 0.0f;
 
-    private float zoomFactor = 1.0f;
+    private float zoomFactor = 0.0f;
 
     private Matrix4f matrix = new Matrix4f();
 
@@ -48,8 +48,9 @@ public class Camera {
         float aspectRatio = gameContext.getGameWindow().getHeight() / (float) gameContext.getGameWindow().getWidth();
         float cameraWidth = 1 / zoomFactor;
         float cameraHeight = cameraWidth * aspectRatio;
-        matrix.setOrtho2D(centerPoint.x - cameraWidth / 2, centerPoint.x + cameraWidth / 2, centerPoint.y - cameraHeight / 2, centerPoint.y + cameraHeight / 2);
-        matrix.mul(new Matrix4f().setRotationXYZ(0, 0, rotation));
+        matrix.setOrtho2D(-cameraWidth / 2, +cameraWidth / 2, -cameraHeight / 2, +cameraHeight / 2);
+        matrix = matrix.mul(new Matrix4f().setRotationXYZ(0, 0, -rotation));
+        matrix = matrix.mul(new Matrix4f().setTranslation(-centerPoint.x, -centerPoint.y, 0));
         return matrix;
     }
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import neonracer.core.GameContext;
-import neonracer.phys.EntityPhysics;
+import neonracer.phys.entity.EntityPhysics;
 import neonracer.render.gl.core.Texture;
 import org.joml.Vector2f;
 

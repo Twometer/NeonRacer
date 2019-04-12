@@ -3,6 +3,8 @@ package neonracer.phys;
 import neonracer.core.GameContext;
 import neonracer.core.GameState;
 import neonracer.model.entity.Entity;
+import neonracer.phys.entity.CarPhysics;
+import neonracer.phys.entity.EntityPhysics;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
@@ -14,7 +16,9 @@ public class PhysicsEngine {
 
     public void initialize(GameContext gameContext) {
         this.gameContext = gameContext;
-        this.world = new World(new Vec2(0, 0));
+        this.world = new World(new Vec2(0, 0f));
+        this.world.setContinuousPhysics(true);
+        this.world.setWarmStarting(true);
         for (Entity entity : gameContext.getGameState().getEntities()) {
             entity.onInitialize(gameContext);
         }
@@ -24,13 +28,15 @@ public class PhysicsEngine {
         GameState gameState = gameContext.getGameState();
 
         float tps = gameContext.getTimer().getTicksPerSecond();
-        world.step(1f / tps, 6, 2);
+        world.step(1f / tps, 8, 3);
 
         for (Entity entity : gameState.getEntities()) {
             EntityPhysics physics = entity.getPhysics();
             if (physics != null) {
-                entity.setPosition(Box2dHelper.toVector2f(physics.getBody().getPosition()));
-                entity.setRotation(physics.getBody().getAngle());
+                entity.setPosition(physics.getPosition().mul(.2f));
+                entity.setRotation(physics.getRotation());
+                if (physics instanceof CarPhysics)
+                    ((CarPhysics) physics).update(gameContext.getControlState());
             }
         }
     }

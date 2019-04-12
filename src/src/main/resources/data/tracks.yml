@@ -4,9 +4,9 @@
   thumbnail: "textures/test.png"
   base_material: "grass"
   path:
-    - {x: 0, y: 0, w: 1, mat: "street"}
-    - {x: 0, y: 5, w: 1.5, mat: "street"}
-    - {x: 5, y: 5, w: 1, mat: "dirt"}
-    - {x: 8, y: 0, w: 1.5, mat: "dirt"}
+    - {x: 0, y: 0, w: 8, mat: "street"}
+    - {x: 0, y: 50, w: 8, mat: "street"}
+    - {x: 50, y: 50, w: 8, mat: "dirt"}
+    - {x: 50, y: 0, w: 8, mat: "dirt"}
   entities:
     - {type: "item", x: 5, y: 0, r: 0}
