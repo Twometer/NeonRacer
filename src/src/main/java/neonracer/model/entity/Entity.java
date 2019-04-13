@@ -22,6 +22,8 @@ import org.joml.Vector2f;
 )
 public abstract class Entity {
 
+    private static final float SCALE_FACTOR = 200.f;
+
     private String type;
 
     private Vector2f position;
@@ -80,11 +82,11 @@ public abstract class Entity {
     }
 
     public float getWidth() {
-        return getColorTexture().getWidth() / 150.0f;
+        return getColorTexture().getWidth() / SCALE_FACTOR;
     }
 
     public float getHeight() {
-        return getColorTexture().getHeight() / 150.0f;
+        return getColorTexture().getHeight() / SCALE_FACTOR;
     }
 
 }

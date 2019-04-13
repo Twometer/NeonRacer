@@ -78,7 +78,7 @@ public class MasterRenderer {
         controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
 
         renderContext.getCamera().setCenterPoint(gameContext.getGameState().getPlayerEntity().getPosition());
-        renderContext.getCamera().setRotation(gameContext.getGameState().getPlayerEntity().getRotation());
+        //renderContext.getCamera().setRotation(gameContext.getGameState().getPlayerEntity().getRotation());
     }
 
     private void setup() {
@@ -98,7 +98,7 @@ public class MasterRenderer {
         vGaussShader = new VGaussShader();
         mixShader = new MixShader();
 
-        renderContext.getCamera().setZoomFactor(0.01f);
+        renderContext.getCamera().setZoomFactor(0.03f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
