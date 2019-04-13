@@ -48,8 +48,8 @@ public class CarPhysics extends EntityPhysics {
                 new Vec2(1.5f, 0f),
                 new Vec2(3f, 2.5f),
                 new Vec2(2.8f, 5.5f),
-                new Vec2(1f, 10f),
-                new Vec2(-1f, 10f),
+                new Vec2(1f, 7f),
+                new Vec2(-1f, 7f),
                 new Vec2(-2.8f, 5.5f),
                 new Vec2(-3f, 2.5f),
                 new Vec2(-1.5f, 0f)
@@ -94,13 +94,13 @@ public class CarPhysics extends EntityPhysics {
 
         Tire frontLeft = new Tire(world, maxForwardSpeed, maxBackwardSpeed, frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = frontLeft.body;
-        jointDef.localAnchorA.set(-3, 8.5f);
+        jointDef.localAnchorA.set(-3, 5.5f);
         RevoluteJoint flJoint = (RevoluteJoint) world.createJoint(jointDef);
         tires.add(frontLeft);
 
         Tire frontRight = new Tire(world, maxForwardSpeed, maxBackwardSpeed, frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = frontRight.body;
-        jointDef.localAnchorA.set(3, 8.5f);
+        jointDef.localAnchorA.set(3, 5.5f);
         RevoluteJoint frJoint = (RevoluteJoint) world.createJoint(jointDef);
         tires.add(frontRight);
 
@@ -153,7 +153,7 @@ public class CarPhysics extends EntityPhysics {
         float maxLateralImpulse;
         // TODO: Don't hardcode this
         float currentTraction = 1f;
-        float currentDrag = 1f;
+        float currentDrag = 30f;
         private Body body;
 
         Tire(World world, float maxForwardSpeed, float maxReverseSpeed, float maxDriveForce, float maxLateralImpulse) {
@@ -198,6 +198,20 @@ public class CarPhysics extends EntityPhysics {
             else if (controlState.isReverse())
                 desiredSpeed = maxReverseSpeed;
 
+            float maxLateralImpulse = this.maxLateralImpulse;
+            float maxDriveForce = this.maxDriveForce;
+
+            /*
+            NITRO MODE
+             */
+            if (controlState.isSpacebar()) {
+
+                desiredSpeed *= 2;
+                maxDriveForce *= 4;
+                maxLateralImpulse *= 4;
+
+            }
+
             Vec2 currentForwardNormal = body.getWorldVector(new Vec2(0, 1));
             float currentSpeed = Vec2.dot(getForwardVelocity(), currentForwardNormal);
 
@@ -223,6 +237,7 @@ public class CarPhysics extends EntityPhysics {
             Vec2 impulse = driveImpulse.add(lateralFrictionImpulse);
             if (impulse.length() > maxLateralImpulse)
                 impulse = impulse.mul(maxLateralImpulse / impulse.length());
+
 
             body.applyLinearImpulse(impulse.mul(currentTraction), body.getWorldCenter());
 

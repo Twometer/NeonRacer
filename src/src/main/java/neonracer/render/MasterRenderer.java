@@ -76,6 +76,7 @@ public class MasterRenderer {
         controlState.setLeft(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_A));
         controlState.setReverse(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_S));
         controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
+        controlState.setSpacebar(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_SPACE));
 
         renderContext.getCamera().setCenterPoint(gameContext.getGameState().getPlayerEntity().getPosition());
         //renderContext.getCamera().setRotation(gameContext.getGameState().getPlayerEntity().getRotation());

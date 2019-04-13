@@ -10,6 +10,16 @@ public class ControlState {
 
     private boolean right;
 
+    private boolean isSpacebar;
+
+    public boolean isSpacebar() {
+        return isSpacebar;
+    }
+
+    public void setSpacebar(boolean spacebar) {
+        isSpacebar = spacebar;
+    }
+
     public boolean isForward() {
         return forward;
     }
