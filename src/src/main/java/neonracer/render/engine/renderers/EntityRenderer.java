@@ -45,7 +45,7 @@ public class EntityRenderer implements IRenderer {
             Matrix4f transformationMatrix = new Matrix4f();
             transformationMatrix.translate(entity.getPosition().x(), entity.getPosition().y, 0.0f);
             transformationMatrix.rotate(entity.getRotation(), 0.0f, 0.0f, 1.0f);
-            transformationMatrix.translate(-width / 2, -height / 2, 0.0f);
+            transformationMatrix.translate(-width / 2, 0, 0.0f);
             transformationMatrix.scale(width, height, 1.0f);
             entityShader.setTransformationMatrix(transformationMatrix);
             rectangle.draw();

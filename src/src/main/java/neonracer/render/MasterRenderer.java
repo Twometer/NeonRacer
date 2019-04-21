@@ -99,13 +99,18 @@ public class MasterRenderer {
         vGaussShader = new VGaussShader();
         mixShader = new MixShader();
 
-        renderContext.getCamera().setZoomFactor(0.03f);
+        renderContext.getCamera().setZoomFactor(0.02f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
-        EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0]);
+        EntityCar playerEntity = new EntityCar(0.0f, 0.0f, 0.0f, gameContext.getDataManager().getCars()[0]);
         gameContext.getGameState().setPlayerEntity(playerEntity);
         gameContext.getGameState().addEntity(playerEntity);
+
+        for (int i = 0; i < 30; i += 2) {
+            EntityCar e = new EntityCar(i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[0]);
+            gameContext.getGameState().addEntity(e);
+        }
 
         renderContext.setGuiMatrix(new Matrix4f());
 

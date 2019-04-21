@@ -22,7 +22,7 @@ import org.joml.Vector2f;
 )
 public abstract class Entity {
 
-    private static final float SCALE_FACTOR = 200.f;
+    private static final float SCALE_FACTOR = 150.f;
 
     private String type;
 

@@ -37,39 +37,41 @@ public class CarPhysics extends EntityPhysics {
         List<Tire> tires = new ArrayList<>();
         World world = context.getPhysicsEngine().getWorld();
 
+        System.out.println("Car Size: " + car.getWidth() + " , " + car.getHeight());
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(Box2dHelper.toVec2(car.getPosition()));
 
         PolygonShape shape = new PolygonShape();
-        //shape.setAsBox(car.getWidth() / 2f, car.getHeight() / 2f);
+
+        float halfWidth = car.getWidth() / 2;
 
         Vec2[] vecs = new Vec2[]{
-                new Vec2(1.5f, 0f),
-                new Vec2(3f, 2.5f),
-                new Vec2(2.8f, 5.5f),
-                new Vec2(1f, 7f),
-                new Vec2(-1f, 7f),
-                new Vec2(-2.8f, 5.5f),
-                new Vec2(-3f, 2.5f),
-                new Vec2(-1.5f, 0f)
+                new Vec2(halfWidth - 0.22f, 0f),
+                new Vec2(halfWidth, 0.7f),
+                new Vec2(halfWidth - 0.05f, car.getHeight() / 2),
+                new Vec2(halfWidth / 2, car.getHeight()),
+                new Vec2(-(halfWidth / 2), car.getHeight()),
+                new Vec2(-(halfWidth - 0.05f), car.getHeight() / 2),
+                new Vec2(-(halfWidth), 0.7f),
+                new Vec2(-(halfWidth - 0.22f), 0f)
         };
 
         shape.set(vecs, vecs.length);
 
-
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 0.1f;
+        fixtureDef.density = 1f;
 
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setAngularDamping(5);
 
-        float maxForwardSpeed = 300;
+        float maxForwardSpeed = 100;
         float maxBackwardSpeed = -40;
-        float backTireMaxDriveForce = 950;
-        float frontTireMaxDriveForce = 400;
+        float backTireMaxDriveForce = 950 / 5;
+        float frontTireMaxDriveForce = 400 / 3;
         float backTireMaxLateralImpulse = 9f;
         float frontTireMaxLateralImpulse = 9f;
 
@@ -82,25 +84,25 @@ public class CarPhysics extends EntityPhysics {
 
         Tire backLeft = new Tire(world, maxForwardSpeed, maxBackwardSpeed, backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = backLeft.body;
-        jointDef.localAnchorA.set(-3, 0.75f);
+        jointDef.localAnchorA.set(-halfWidth, 0.01f);
         world.createJoint(jointDef);
         tires.add(backLeft);
 
         Tire backRight = new Tire(world, maxForwardSpeed, maxBackwardSpeed, backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = backRight.body;
-        jointDef.localAnchorA.set(3, 0.75f);
+        jointDef.localAnchorA.set(halfWidth, 0.01f);
         world.createJoint(jointDef);
         tires.add(backRight);
 
         Tire frontLeft = new Tire(world, maxForwardSpeed, maxBackwardSpeed, frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = frontLeft.body;
-        jointDef.localAnchorA.set(-3, 5.5f);
+        jointDef.localAnchorA.set(-halfWidth, car.getHeight() - 0.18f * 2);
         RevoluteJoint flJoint = (RevoluteJoint) world.createJoint(jointDef);
         tires.add(frontLeft);
 
         Tire frontRight = new Tire(world, maxForwardSpeed, maxBackwardSpeed, frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = frontRight.body;
-        jointDef.localAnchorA.set(3, 5.5f);
+        jointDef.localAnchorA.set(halfWidth, car.getHeight() - 0.18f * 2);
         RevoluteJoint frJoint = (RevoluteJoint) world.createJoint(jointDef);
         tires.add(frontRight);
 
@@ -123,6 +125,9 @@ public class CarPhysics extends EntityPhysics {
         float angleNow = flJoint.getJointAngle();
         float angleToTurn = desiredAngle - angleNow;
         angleToTurn = clamp(angleToTurn, -turnPerTimeStep, turnPerTimeStep);
+
+        if (Math.abs(angleToTurn) < 1E-4)
+            return;
 
         float newAngle = angleNow + angleToTurn;
         flJoint.setLimits(newAngle, newAngle);
@@ -166,7 +171,7 @@ public class CarPhysics extends EntityPhysics {
             def.type = BodyType.DYNAMIC;
             body = world.createBody(def);
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(0.5f, 1.25f);
+            shape.setAsBox(0.09f, 0.18f);
             Fixture fixture = body.createFixture(shape, 1);
             body.setUserData(this);
         }
@@ -207,10 +212,11 @@ public class CarPhysics extends EntityPhysics {
             if (controlState.isSpacebar()) {
 
                 desiredSpeed *= 2;
-                maxDriveForce *= 4;
-                maxLateralImpulse *= 4;
+                maxDriveForce *= 2;
+                maxLateralImpulse *= 2;
 
             }
+
 
             Vec2 currentForwardNormal = body.getWorldVector(new Vec2(0, 1));
             float currentSpeed = Vec2.dot(getForwardVelocity(), currentForwardNormal);
@@ -218,8 +224,9 @@ public class CarPhysics extends EntityPhysics {
             float force = 0;
             if (desiredSpeed > currentSpeed)
                 force = maxDriveForce;
-            else if (desiredSpeed < currentSpeed)
+            else if (desiredSpeed < currentSpeed && desiredSpeed != 0)
                 force = -maxDriveForce * 0.5f;
+
 
             float speedFactor = currentSpeed / 120f;
             Vec2 driveImpulse = currentForwardNormal.mul(force / 60.0f);
@@ -240,8 +247,6 @@ public class CarPhysics extends EntityPhysics {
 
 
             body.applyLinearImpulse(impulse.mul(currentTraction), body.getWorldCenter());
-
-            //body.applyForce(currentForwardNormal.mul(currentTraction).mul(force), body.getWorldCenter());
         }
 
     }

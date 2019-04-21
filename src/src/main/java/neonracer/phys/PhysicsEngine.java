@@ -33,12 +33,13 @@ public class PhysicsEngine {
         for (Entity entity : gameState.getEntities()) {
             EntityPhysics physics = entity.getPhysics();
             if (physics != null) {
-                entity.setPosition(physics.getPosition().mul(.2f)); // TODO: Remove this and update parameters
+                entity.setPosition(physics.getPosition());
                 entity.setRotation(physics.getRotation());
-                if (physics instanceof CarPhysics)
-                    ((CarPhysics) physics).update(gameContext.getControlState());
             }
         }
+
+        ((CarPhysics) gameState.getPlayerEntity().getPhysics()).update(gameContext.getControlState());
+
     }
 
     public World getWorld() {
