@@ -43,6 +43,9 @@ public class Car implements IData {
     @JsonProperty("max_force_back")
     private float maxBackForce;
 
+    @JsonProperty("max_lateral_force")
+    private float maxLateralForce;
+
     @JsonProperty("primary_ability")
     private String primaryAbilityId;
 
@@ -88,6 +91,10 @@ public class Car implements IData {
 
     public float getMaxBackForce() {
         return maxBackForce;
+    }
+
+    public float getMaxLateralForce() {
+        return maxLateralForce;
     }
 
     public Ability getPrimaryAbility() {

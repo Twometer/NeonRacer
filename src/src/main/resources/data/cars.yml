@@ -8,3 +8,4 @@
   max_reverse_speed: -40
   max_force_front: 190
   max_force_back: 133.3
+  max_lateral_force: 9
