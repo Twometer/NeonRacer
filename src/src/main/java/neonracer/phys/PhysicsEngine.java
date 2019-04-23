@@ -3,7 +3,6 @@ package neonracer.phys;
 import neonracer.core.GameContext;
 import neonracer.core.GameState;
 import neonracer.model.entity.Entity;
-import neonracer.phys.entity.CarPhysics;
 import neonracer.phys.entity.EntityPhysics;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -35,11 +34,9 @@ public class PhysicsEngine {
             if (physics != null) {
                 entity.setPosition(physics.getPosition());
                 entity.setRotation(physics.getRotation());
+                physics.update();
             }
         }
-
-        ((CarPhysics) gameState.getPlayerEntity().getPhysics()).update(gameContext.getControlState());
-
     }
 
     public World getWorld() {

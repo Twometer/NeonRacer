@@ -4,6 +4,7 @@ import neonracer.core.ControlState;
 import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
+import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.engine.Camera;
 import neonracer.render.engine.PostProcessing;
 import neonracer.render.engine.RenderPass;
@@ -104,6 +105,7 @@ public class MasterRenderer {
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
         EntityCar playerEntity = new EntityCar(0.0f, 0.0f, 0.0f, gameContext.getDataManager().getCars()[0]);
+        playerEntity.setPhysics(CarPhysicsFactory.createDriveable(gameContext, playerEntity));
         gameContext.getGameState().setPlayerEntity(playerEntity);
         gameContext.getGameState().addEntity(playerEntity);
 

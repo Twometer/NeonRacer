@@ -73,7 +73,7 @@ public abstract class Entity {
         return physics;
     }
 
-    void setPhysics(EntityPhysics physics) {
+    public void setPhysics(EntityPhysics physics) {
         this.physics = physics;
     }
 

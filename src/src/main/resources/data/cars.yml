@@ -4,9 +4,7 @@
   color_texture: "textures/testcar.png"
   glow_texture: "textures/testcar-glow.png"
   primary_ability: ""
-  acceleration: 0
-  brake_strength: 0
-  aerodynamics: 0
-  friction: 0
-  horsepower: 0
-  weight: 0
+  max_forward_speed: 100
+  max_reverse_speed: -40
+  max_force_front: 190
+  max_force_back: 133.3
