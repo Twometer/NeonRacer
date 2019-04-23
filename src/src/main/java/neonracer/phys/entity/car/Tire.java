@@ -1,27 +1,32 @@
 package neonracer.phys.entity.car;
 
 import neonracer.core.ControlState;
+import neonracer.core.GameContext;
+import neonracer.phys.Box2dHelper;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import org.joml.Vector2f;
 
 public class Tire {
 
     // Ported from http://www.iforce2d.net/src/iforce2d_TopdownCar.h
 
+    private GameContext gameContext;
+
     private float maxForwardSpeed;
     private float maxReverseSpeed;
     private float maxDriveForce;
     private float maxLateralImpulse;
-    // TODO: Don't hardcode this
-    private float currentTraction = 1f;
-    private float currentDrag = 30f;
+    private float currentTraction;
+    private float currentDrag;
     private Body body;
 
-    public Tire(World world, float maxForwardSpeed, float maxReverseSpeed, float maxDriveForce, float maxLateralImpulse) {
+    public Tire(GameContext gameContext, World world, float maxForwardSpeed, float maxReverseSpeed, float maxDriveForce, float maxLateralImpulse) {
+        this.gameContext = gameContext;
         this.maxForwardSpeed = maxForwardSpeed;
         this.maxReverseSpeed = maxReverseSpeed;
         this.maxDriveForce = maxDriveForce;
@@ -47,6 +52,19 @@ public class Tire {
     }
 
     void updateFriction() {
+        // Load traction and drag here
+        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
+        boolean onTrack = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
+
+        // TODO: Read these values from the YML file
+        if (onTrack) {
+            currentTraction = 1f;
+            currentDrag = 30f;
+        } else {
+            currentTraction = 0.1f;
+            currentDrag = 30f;
+        }
+
         body.applyAngularImpulse(currentTraction * 0.1f * body.getInertia() * -body.getAngularVelocity());
 
         Vec2 currentForwardNormal = getForwardVelocity();

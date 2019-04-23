@@ -58,28 +58,28 @@ public class CarBodyBuilder {
 
         Car carDef = car.getCar();
 
-        Tire backLeft = createTire(world, carDef, false, -halfWidth, 0.01f, tireJoint);
+        Tire backLeft = createTire(context, world, carDef, false, -halfWidth, 0.01f, tireJoint);
         world.createJoint(tireJoint);
         tires.add(backLeft);
 
-        Tire backRight = createTire(world, carDef, false, halfWidth, 0.01f, tireJoint);
+        Tire backRight = createTire(context, world, carDef, false, halfWidth, 0.01f, tireJoint);
         world.createJoint(tireJoint);
         tires.add(backRight);
 
-        Tire frontLeft = createTire(world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
+        Tire frontLeft = createTire(context, world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
         RevoluteJoint leftJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontLeft);
 
-        Tire frontRight = createTire(world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
+        Tire frontRight = createTire(context, world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
         RevoluteJoint rightJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontRight);
 
         return new CarBody(body, tires, leftJoint, rightJoint);
     }
 
-    private static Tire createTire(World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef) {
+    private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef) {
         float maxDriveForce = front ? car.getMaxFrontForce() : car.getMaxBackForce();
-        Tire tire = new Tire(world, car.getMaxForwardSpeed(), car.getMaxReverseSpeed(), maxDriveForce, 9f);
+        Tire tire = new Tire(gameContext, world, car.getMaxForwardSpeed(), car.getMaxReverseSpeed(), maxDriveForce, 9f);
         jointDef.bodyB = tire.getBody();
         jointDef.localAnchorA.set(x, y);
         return tire;

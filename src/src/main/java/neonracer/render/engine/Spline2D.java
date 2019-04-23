@@ -48,6 +48,10 @@ public class Spline2D {
         this.curvature = curvature;
     }
 
+    public int pointsSize() {
+        return points.size();
+    }
+
     public void addPoint(Vector2f point) {
         points.add(point);
         dirty = true;

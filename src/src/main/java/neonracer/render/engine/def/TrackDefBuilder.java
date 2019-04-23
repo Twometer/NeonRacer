@@ -1,4 +1,4 @@
-package neonracer.render.engine.models;
+package neonracer.render.engine.def;
 
 import neonracer.model.track.Node;
 import neonracer.model.track.Track;
@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
 
-public class TrackModelBuilder implements IModelBuilder<Track> {
+public class TrackDefBuilder implements IDefBuilder<Track, TrackDef> {
 
     private static final int TRACK_SAMPLES = 100;
 
     @Override
-    public Model build(Track track) {
+    public TrackDef build(Track track) {
         List<Vector2f> points = track.getPath().stream().map(Node::getPosition).collect(Collectors.toList());
         Spline2D spline = new Spline2D(points, true, 0.8f);
 
@@ -43,6 +43,8 @@ public class TrackModelBuilder implements IModelBuilder<Track> {
 
         Model model = Model.create(mesh, GL_TRIANGLE_STRIP);
         mesh.destroy();
-        return model;
+
+        return new TrackDef(model, spline);
     }
+
 }

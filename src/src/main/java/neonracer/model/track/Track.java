@@ -3,9 +3,11 @@ package neonracer.model.track;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import neonracer.core.GameContext;
 import neonracer.model.entity.Entity;
-import neonracer.render.engine.models.ModelBuilderFactory;
-import neonracer.render.engine.models.ModelType;
-import neonracer.render.gl.core.Model;
+import neonracer.render.engine.collider.ColliderFactory;
+import neonracer.render.engine.collider.ICollider;
+import neonracer.render.engine.def.DefBuilderFactory;
+import neonracer.render.engine.def.IDefBuilder;
+import neonracer.render.engine.def.TrackDef;
 import neonracer.render.gl.core.Texture;
 import neonracer.resource.IData;
 
@@ -42,7 +44,9 @@ public class Track implements IData {
     @JsonProperty
     private List<Entity> entities;
 
-    private Model model;
+    private ICollider<Track> collider;
+
+    private TrackDef trackDef;
 
     @Override
     public void initialize(GameContext context) {
@@ -50,7 +54,11 @@ public class Track implements IData {
         baseMaterial = context.getDataManager().getMaterial(baseMaterialId);
         for (Node node : path)
             node.initialize(context);
-        model = ModelBuilderFactory.<Track>getModelBuilder(ModelType.TRACK).build(this);
+
+        IDefBuilder<Track, TrackDef> defBuilder = DefBuilderFactory.trackDefBuilder();
+        this.trackDef = defBuilder.build(this);
+
+        this.collider = ColliderFactory.trackCollider(this);
     }
 
     public String getId() {
@@ -81,7 +89,13 @@ public class Track implements IData {
         return entities;
     }
 
-    public Model getModel() {
-        return model;
+    public ICollider<Track> getCollider() {
+        return collider;
     }
+
+    public TrackDef getTrackDef() {
+        return trackDef;
+    }
+
+
 }
