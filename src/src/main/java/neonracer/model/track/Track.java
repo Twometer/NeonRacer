@@ -56,10 +56,10 @@ public class Track implements IData {
         for (Node node : path)
             node.initialize(context);
 
-        IDefBuilder<Track, TrackDef> defBuilder = DefBuilderFactory.trackDefBuilder();
+        IDefBuilder<Track, TrackDef> defBuilder = DefBuilderFactory.createTrackDefBuilder();
         this.trackDef = defBuilder.build(this);
 
-        this.collider = ColliderFactory.trackCollider(this);
+        this.collider = ColliderFactory.createTrackCollider(this);
     }
 
     public String getId() {

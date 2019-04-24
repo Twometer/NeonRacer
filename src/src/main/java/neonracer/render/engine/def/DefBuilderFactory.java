@@ -4,7 +4,7 @@ import neonracer.model.track.Track;
 
 public class DefBuilderFactory {
 
-    public static IDefBuilder<Track, TrackDef> trackDefBuilder() {
+    public static IDefBuilder<Track, TrackDef> createTrackDefBuilder() {
         return new TrackDefBuilder();
     }
 
