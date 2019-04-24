@@ -14,8 +14,9 @@ public class GameContextFactory {
         DataManager dataManager = new DataManager();
         GameState gameState = new GameState();
         PhysicsEngine physicsEngine = new PhysicsEngine();
-        Timer timer = new Timer(30);
-        return new GameContext(gameWindow, textureProvider, dataManager, gameState, physicsEngine, timer);
+        Timer timer = new Timer(60);
+        ControlState controlState = new ControlState();
+        return new GameContext(gameWindow, textureProvider, dataManager, gameState, physicsEngine, timer, controlState);
     }
 
 }

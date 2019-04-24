@@ -31,23 +31,20 @@ public class Car implements IData {
 
     private Texture glowTexture;
 
-    @JsonProperty
-    private float acceleration;
+    @JsonProperty("max_forward_speed")
+    private float maxForwardSpeed;
 
-    @JsonProperty("brake_strength")
-    private float brakeStrength;
+    @JsonProperty("max_reverse_speed")
+    private float maxReverseSpeed;
 
-    @JsonProperty
-    private float aerodynamics;
+    @JsonProperty("max_force_front")
+    private float maxFrontForce;
 
-    @JsonProperty
-    private float friction;
+    @JsonProperty("max_force_back")
+    private float maxBackForce;
 
-    @JsonProperty
-    private float horsepower;
-
-    @JsonProperty
-    private float weight;
+    @JsonProperty("max_lateral_force")
+    private float maxLateralForce;
 
     @JsonProperty("primary_ability")
     private String primaryAbilityId;
@@ -80,28 +77,24 @@ public class Car implements IData {
         return glowTexture;
     }
 
-    public float getAcceleration() {
-        return acceleration;
+    public float getMaxForwardSpeed() {
+        return maxForwardSpeed;
     }
 
-    public float getBrakeStrength() {
-        return brakeStrength;
+    public float getMaxReverseSpeed() {
+        return maxReverseSpeed;
     }
 
-    public float getAerodynamics() {
-        return aerodynamics;
+    public float getMaxFrontForce() {
+        return maxFrontForce;
     }
 
-    public float getFriction() {
-        return friction;
+    public float getMaxBackForce() {
+        return maxBackForce;
     }
 
-    public float getHorsepower() {
-        return horsepower;
-    }
-
-    public float getWeight() {
-        return weight;
+    public float getMaxLateralForce() {
+        return maxLateralForce;
     }
 
     public Ability getPrimaryAbility() {

@@ -21,19 +21,23 @@ public class GameContext {
 
     private GameState gameState;
 
-    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer) {
+    private ControlState controlState;
+
+    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, ControlState controlState) {
         this.gameWindow = gameWindow;
         this.textureProvider = textureProvider;
         this.dataManager = dataManager;
         this.gameState = gameState;
         this.physicsEngine = physicsEngine;
         this.timer = timer;
+        this.controlState = controlState;
     }
 
     public void initialize() throws IOException {
         gameWindow.create();
         dataManager.load(this);
         physicsEngine.initialize(this);
+        gameState.initialize(this);
     }
 
     public void destroy() {
@@ -63,4 +67,9 @@ public class GameContext {
     public Timer getTimer() {
         return timer;
     }
+
+    public ControlState getControlState() {
+        return controlState;
+    }
+
 }

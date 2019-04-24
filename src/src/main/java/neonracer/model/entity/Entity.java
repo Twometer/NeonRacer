@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import neonracer.core.GameContext;
+import neonracer.phys.entity.EntityPhysics;
 import neonracer.render.gl.core.Texture;
 import org.joml.Vector2f;
 
@@ -20,11 +22,15 @@ import org.joml.Vector2f;
 )
 public abstract class Entity {
 
+    private static final float SCALE_FACTOR = 150.f;
+
     private String type;
 
     private Vector2f position;
 
     private float rotation;
+
+    private EntityPhysics physics;
 
     @JsonCreator
     Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {
@@ -41,6 +47,9 @@ public abstract class Entity {
         return position;
     }
 
+    /**
+     * @return Returns the rotation angle in radians
+     */
     public float getRotation() {
         return rotation;
     }
@@ -49,6 +58,9 @@ public abstract class Entity {
         this.position = position;
     }
 
+    /**
+     * Set the rotation angle in radians
+     */
     public void setRotation(float rotation) {
         this.rotation = rotation;
     }
@@ -56,5 +68,25 @@ public abstract class Entity {
     public abstract Texture getColorTexture();
 
     public abstract Texture getGlowTexture();
+
+    public EntityPhysics getPhysics() {
+        return physics;
+    }
+
+    public void setPhysics(EntityPhysics physics) {
+        this.physics = physics;
+    }
+
+    public void onInitialize(GameContext gameContext) {
+
+    }
+
+    public float getWidth() {
+        return getColorTexture().getWidth() / SCALE_FACTOR;
+    }
+
+    public float getHeight() {
+        return getColorTexture().getHeight() / SCALE_FACTOR;
+    }
 
 }

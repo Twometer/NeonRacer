@@ -26,7 +26,7 @@ public class TrackRenderer implements IRenderer {
         Texture texture = gameContext.getGameState().getCurrentTrack().getBaseMaterial().getTexture();
         glActiveTexture(GL_TEXTURE0);
         texture.bind();
-        gameContext.getGameState().getCurrentTrack().getModel().draw();
+        gameContext.getGameState().getCurrentTrack().getTrackDef().getModel().draw();
         texture.unbind();
         worldShader.unbind();
     }

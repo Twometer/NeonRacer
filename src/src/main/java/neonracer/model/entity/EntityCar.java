@@ -2,7 +2,9 @@ package neonracer.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import neonracer.core.GameContext;
 import neonracer.model.car.Car;
+import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.gl.core.Texture;
 
 public class EntityCar extends Entity {
@@ -31,6 +33,13 @@ public class EntityCar extends Entity {
     @Override
     public Texture getGlowTexture() {
         return car.getGlowTexture();
+    }
+
+    @Override
+    public void onInitialize(GameContext gameContext) {
+        super.onInitialize(gameContext);
+        if (getPhysics() == null)
+            setPhysics(CarPhysicsFactory.createStatic(gameContext, this));
     }
 
 }

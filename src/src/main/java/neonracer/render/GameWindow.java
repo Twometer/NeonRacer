@@ -115,6 +115,10 @@ public class GameWindow {
         return (scaleX + scaleY) / 2;
     }
 
+    boolean isKeyPressed(int key) {
+        return glfwGetKey(window, key) == GLFW_PRESS;
+    }
+
     void setSizeChangedListener(SizeChangedListener sizeChangedListener) {
         this.sizeChangedListener = sizeChangedListener;
     }

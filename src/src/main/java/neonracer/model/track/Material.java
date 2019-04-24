@@ -20,7 +20,10 @@ public class Material implements IData {
     private Texture texture;
 
     @JsonProperty
-    private float grip;
+    private float traction;
+
+    @JsonProperty
+    private float drag;
 
     @Override
     public void initialize(GameContext context) {
@@ -35,7 +38,11 @@ public class Material implements IData {
         return texture;
     }
 
-    public float getGrip() {
-        return grip;
+    public float getTraction() {
+        return traction;
+    }
+
+    public float getDrag() {
+        return drag;
     }
 }

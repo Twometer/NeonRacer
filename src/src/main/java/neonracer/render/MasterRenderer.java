@@ -1,8 +1,10 @@
 package neonracer.render;
 
+import neonracer.core.ControlState;
 import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
+import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.engine.Camera;
 import neonracer.render.engine.PostProcessing;
 import neonracer.render.engine.RenderPass;
@@ -17,6 +19,7 @@ import neonracer.render.gl.shaders.VGaussShader;
 import neonracer.util.Log;
 import org.joml.Matrix4f;
 
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
@@ -60,10 +63,23 @@ public class MasterRenderer {
             render();
             gameContext.getTimer().update();
             for (int i = 0; i < gameContext.getTimer().getTicks(); i++)
-                gameContext.getPhysicsEngine().onTick();
+                tick();
             gameContext.getGameWindow().update();
         }
         destroy();
+    }
+
+    private void tick() {
+        ControlState controlState = gameContext.getControlState();
+        controlState.setForward(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_W));
+        controlState.setLeft(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_A));
+        controlState.setReverse(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_S));
+        controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
+        controlState.setSpacebar(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_SPACE));
+
+        gameContext.getPhysicsEngine().onTick();
+
+        renderContext.getCameraManager().smoothFollow(gameContext.getGameState().getPlayerEntity());
     }
 
     private void setup() {
@@ -83,18 +99,27 @@ public class MasterRenderer {
         vGaussShader = new VGaussShader();
         mixShader = new MixShader();
 
-        renderContext.getCamera().setZoomFactor(0.05f);
+        renderContext.getCamera().setZoomFactor(0.02f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
-        EntityCar playerEntity = new EntityCar(5.0f, 0.0f, 90.0f, gameContext.getDataManager().getCars()[0]);
+        EntityCar playerEntity = new EntityCar(0.0f, 0.0f, 0.0f, gameContext.getDataManager().getCars()[0]);
+        playerEntity.setPhysics(CarPhysicsFactory.createDriveable(gameContext, playerEntity));
         gameContext.getGameState().setPlayerEntity(playerEntity);
-        gameContext.getGameState().getEntities().add(playerEntity);
+        gameContext.getGameState().addEntity(playerEntity);
+
+        for (int i = 0; i < 30; i += 2) {
+            EntityCar e = new EntityCar(i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[0]);
+            gameContext.getGameState().addEntity(e);
+        }
 
         renderContext.setGuiMatrix(new Matrix4f());
 
         for (IRenderer renderer : renderers)
             renderer.setup(gameContext);
+
+        gameContext.getTimer().reset();
+
         Log.i("Initialization completed");
     }
 
