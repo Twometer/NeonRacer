@@ -5,6 +5,7 @@ import neonracer.core.GameContext;
 import neonracer.model.entity.Entity;
 import neonracer.render.engine.collider.ColliderFactory;
 import neonracer.render.engine.collider.ICollider;
+import neonracer.render.engine.collider.TrackColliderResult;
 import neonracer.render.engine.def.DefBuilderFactory;
 import neonracer.render.engine.def.IDefBuilder;
 import neonracer.render.engine.def.TrackDef;
@@ -44,7 +45,7 @@ public class Track implements IData {
     @JsonProperty
     private List<Entity> entities;
 
-    private ICollider<Track> collider;
+    private ICollider<Track, TrackColliderResult> collider;
 
     private TrackDef trackDef;
 
@@ -89,7 +90,7 @@ public class Track implements IData {
         return entities;
     }
 
-    public ICollider<Track> getCollider() {
+    public ICollider<Track, TrackColliderResult> getCollider() {
         return collider;
     }
 

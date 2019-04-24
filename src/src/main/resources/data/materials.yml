@@ -1,9 +1,14 @@
 - id: "grass"
   texture: "textures/test.png"
-  grip: 0
+  traction: 0.1
+  drag: 30
+
 - id: "dirt"
   texture: "textures/test.png"
-  grip: 0
+  traction: 0.1
+  drag: 30
+
 - id: "street"
   texture: "textures/test.png"
-  grip: 0
+  traction: 1
+  drag: 30

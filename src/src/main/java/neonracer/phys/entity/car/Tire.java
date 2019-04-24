@@ -2,7 +2,9 @@ package neonracer.phys.entity.car;
 
 import neonracer.core.ControlState;
 import neonracer.core.GameContext;
+import neonracer.model.track.Material;
 import neonracer.phys.Box2dHelper;
+import neonracer.render.engine.collider.TrackColliderResult;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -21,8 +23,7 @@ public class Tire {
     private float maxReverseSpeed;
     private float maxDriveForce;
     private float maxLateralImpulse;
-    private float currentTraction;
-    private float currentDrag;
+    private Material currentMaterial;
     private Body body;
 
     public Tire(GameContext gameContext, World world, float maxForwardSpeed, float maxReverseSpeed, float maxDriveForce, float maxLateralImpulse) {
@@ -54,18 +55,12 @@ public class Tire {
     void updateFriction() {
         // Load traction and drag here
         Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
-        boolean onTrack = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
+        TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
 
-        // TODO: Read these values from the YML file
-        if (onTrack) {
-            currentTraction = 1f;
-            currentDrag = 30f;
-        } else {
-            currentTraction = 0.1f;
-            currentDrag = 30f;
-        }
+        if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
+        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBaseMaterial();
 
-        body.applyAngularImpulse(currentTraction * 0.1f * body.getInertia() * -body.getAngularVelocity());
+        body.applyAngularImpulse(currentMaterial.getTraction() * 0.1f * body.getInertia() * -body.getAngularVelocity());
 
         Vec2 currentForwardNormal = getForwardVelocity();
 
@@ -75,8 +70,8 @@ public class Tire {
 
         float currentForwardSpeed = currentForwardNormal.normalize();
         float dragForceMagnitude = -0.25f * currentForwardSpeed;
-        dragForceMagnitude *= currentDrag;
-        body.applyForce(currentForwardNormal.mul(dragForceMagnitude).mul(currentTraction), body.getWorldCenter());
+        dragForceMagnitude *= currentMaterial.getDrag();
+        body.applyForce(currentForwardNormal.mul(dragForceMagnitude).mul(currentMaterial.getTraction()), body.getWorldCenter());
     }
 
     void updateDrive(ControlState controlState) {
@@ -121,7 +116,7 @@ public class Tire {
             impulse = impulse.mul(maxLateralImpulse / impulse.length());
 
 
-        body.applyLinearImpulse(impulse.mul(currentTraction), body.getWorldCenter());
+        body.applyLinearImpulse(impulse.mul(currentMaterial.getTraction()), body.getWorldCenter());
     }
 
     public Body getBody() {

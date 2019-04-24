@@ -1,11 +1,14 @@
 package neonracer.render;
 
 import neonracer.render.engine.Camera;
+import neonracer.render.engine.CameraManager;
 import org.joml.Matrix4f;
 
 public class RenderContext {
 
     private Camera camera;
+
+    private CameraManager cameraManager;
 
     private Matrix4f worldMatrix;
 
@@ -13,10 +16,15 @@ public class RenderContext {
 
     RenderContext(Camera camera) {
         this.camera = camera;
+        this.cameraManager = new CameraManager(camera);
     }
 
     public Camera getCamera() {
         return camera;
+    }
+
+    CameraManager getCameraManager() {
+        return cameraManager;
     }
 
     public Matrix4f getWorldMatrix() {

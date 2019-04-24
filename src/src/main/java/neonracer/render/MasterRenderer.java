@@ -79,8 +79,7 @@ public class MasterRenderer {
         controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
         controlState.setSpacebar(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_SPACE));
 
-        renderContext.getCamera().setCenterPoint(gameContext.getGameState().getPlayerEntity().getPosition());
-        //renderContext.getCamera().setRotation(gameContext.getGameState().getPlayerEntity().getRotation());
+        renderContext.getCameraManager().smoothFollow(gameContext.getGameState().getPlayerEntity());
     }
 
     private void setup() {
