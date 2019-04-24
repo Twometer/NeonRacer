@@ -1,5 +1,6 @@
 package neonracer.render;
 
+import neonracer.core.GameContext;
 import neonracer.render.engine.Camera;
 import neonracer.render.engine.CameraManager;
 import org.joml.Matrix4f;
@@ -10,18 +11,19 @@ public class RenderContext {
 
     private CameraManager cameraManager;
 
-    private Matrix4f worldMatrix;
+    private Matrix4f worldMatrix = new Matrix4f();
 
-    private Matrix4f guiMatrix;
+    private Matrix4f guiMatrix = new Matrix4f();
 
-    public RenderContext() {
-        guiMatrix = new Matrix4f();
-        worldMatrix = new Matrix4f();
-    }
-
-    RenderContext(Camera camera) {
+    public RenderContext(Camera camera) {
         this.camera = camera;
         this.cameraManager = new CameraManager(camera);
+    }
+
+    public void updateMatrices(GameContext gameContext) {
+        GameWindow gameWindow = gameContext.getGameWindow();
+        worldMatrix = camera.calculateMatrix();
+        guiMatrix.setOrtho2D(0.0f, gameWindow.getWidth(), gameWindow.getHeight(), 0.0f);
     }
 
     public Camera getCamera() {
@@ -36,16 +38,8 @@ public class RenderContext {
         return worldMatrix;
     }
 
-    void setWorldMatrix(Matrix4f worldMatrix) {
-        this.worldMatrix = worldMatrix;
-    }
-
     public Matrix4f getGuiMatrix() {
         return guiMatrix;
-    }
-
-    void setGuiMatrix(Matrix4f guiMatrix) {
-        this.guiMatrix = guiMatrix;
     }
 
 }

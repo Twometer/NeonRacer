@@ -4,6 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
+import neonracer.render.engine.Camera;
 import neonracer.render.engine.font.FontRenderer;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ class TrackDesigner {
 
     private GameContext gameContext = GameContextFactory.createForDesigner();
 
-    private RenderContext renderContext = new RenderContext();
+    private RenderContext renderContext = new RenderContext(new Camera(gameContext));
 
     private FontRenderer fontRenderer = new FontRenderer("lucida");
 
@@ -33,16 +34,16 @@ class TrackDesigner {
     private void startRenderLoop() {
         GameWindow gameWindow = gameContext.getGameWindow();
         while (!gameWindow.shouldClose()) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            renderContext.getGuiMatrix().setOrtho2D(0.0f, gameWindow.getWidth(), gameWindow.getHeight(), 0.0f);
             render();
             gameWindow.update();
         }
     }
 
     private void render() {
-        fontRenderer.draw(renderContext, "NeonRacer Track Designer", 0, 0, 0.4f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        renderContext.updateMatrices(gameContext);
 
+        fontRenderer.draw(renderContext, "NeonRacer Track Designer", 0, 0, 0.4f);
 
     }
 

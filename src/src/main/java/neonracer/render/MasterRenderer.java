@@ -17,7 +17,6 @@ import neonracer.render.gl.shaders.HGaussShader;
 import neonracer.render.gl.shaders.MixShader;
 import neonracer.render.gl.shaders.VGaussShader;
 import neonracer.util.Log;
-import org.joml.Matrix4f;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -113,8 +112,6 @@ public class MasterRenderer {
             gameContext.getGameState().addEntity(e);
         }
 
-        renderContext.setGuiMatrix(new Matrix4f());
-
         for (IRenderer renderer : renderers)
             renderer.setup(gameContext);
 
@@ -124,8 +121,7 @@ public class MasterRenderer {
     }
 
     private void render() {
-        renderContext.setWorldMatrix(renderContext.getCamera().calculateMatrix());
-        renderContext.getGuiMatrix().setOrtho2D(0.0f, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight(), 0.0f);
+        renderContext.updateMatrices(gameContext);
 
         colorFbo.bind();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
