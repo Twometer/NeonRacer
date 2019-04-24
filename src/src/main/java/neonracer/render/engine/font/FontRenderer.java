@@ -58,6 +58,16 @@ public class FontRenderer {
         return 50f * fontSize * gameContext.getGameWindow().getScale();
     }
 
+    public float getStringWidth(String string, float fontSize) {
+        fontSize *= gameContext.getGameWindow().getScale();
+        float cursor = 0;
+        for (char c : string.toCharArray()) {
+            Glyph glyph = fontFace.getGlyph(c);
+            cursor += (glyph.getAdvance() - 15) * fontSize;
+        }
+        return cursor;
+    }
+
     public void destroy() {
         if (textModel != null)
             textModel.destroy();

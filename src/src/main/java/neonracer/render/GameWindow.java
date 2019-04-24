@@ -1,5 +1,6 @@
 package neonracer.render;
 
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -115,7 +116,18 @@ public class GameWindow {
         return (scaleX + scaleY) / 2;
     }
 
-    boolean isKeyPressed(int key) {
+    public Vector2f getCursorPosition() {
+        double[] xPos = new double[1];
+        double[] yPos = new double[1];
+        glfwGetCursorPos(window, xPos, yPos);
+        return new Vector2f((float) xPos[0], (float) yPos[0]);
+    }
+
+    public boolean isMouseButtonPressed(int mouseButton) {
+        return glfwGetMouseButton(window, mouseButton) == GLFW_PRESS;
+    }
+
+    public boolean isKeyPressed(int key) {
         return glfwGetKey(window, key) == GLFW_PRESS;
     }
 

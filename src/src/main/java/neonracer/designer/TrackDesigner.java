@@ -19,6 +19,8 @@ class TrackDesigner {
 
     private FontRenderer fontRenderer = new FontRenderer("lucida");
 
+    private BasicButton testButton = new BasicButton(fontRenderer, 10, 10, "New Node");
+
     void start() throws IOException {
         gameContext.initialize();
         fontRenderer.setup(gameContext);
@@ -29,6 +31,7 @@ class TrackDesigner {
     private void setup() {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        testButton.setOnClickListener(() -> System.out.println("Button pressed"));
     }
 
     private void startRenderLoop() {
@@ -43,8 +46,11 @@ class TrackDesigner {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         renderContext.updateMatrices(gameContext);
 
-        fontRenderer.draw(renderContext, "NeonRacer Track Designer", 0, 0, 0.4f);
+        GameWindow gameWindow = gameContext.getGameWindow();
+        gameContext.getKeyboardState().update(gameWindow);
+        gameContext.getMouseState().update(gameWindow);
 
+        testButton.draw(renderContext, gameContext);
     }
 
 }

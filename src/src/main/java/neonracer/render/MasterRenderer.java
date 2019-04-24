@@ -1,6 +1,5 @@
 package neonracer.render;
 
-import neonracer.core.ControlState;
 import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
@@ -18,7 +17,6 @@ import neonracer.render.gl.shaders.MixShader;
 import neonracer.render.gl.shaders.VGaussShader;
 import neonracer.util.Log;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
@@ -69,12 +67,9 @@ public class MasterRenderer {
     }
 
     private void tick() {
-        ControlState controlState = gameContext.getControlState();
-        controlState.setForward(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_W));
-        controlState.setLeft(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_A));
-        controlState.setReverse(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_S));
-        controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
-        controlState.setSpacebar(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_SPACE));
+        GameWindow gameWindow = gameContext.getGameWindow();
+        gameContext.getKeyboardState().update(gameWindow);
+        gameContext.getMouseState().update(gameWindow);
 
         gameContext.getPhysicsEngine().onTick();
 

@@ -1,5 +1,7 @@
 package neonracer.core;
 
+import neonracer.gui.KeyboardState;
+import neonracer.gui.MouseState;
 import neonracer.phys.PhysicsEngine;
 import neonracer.render.GameWindow;
 import neonracer.render.gl.TextureProvider;
@@ -15,8 +17,9 @@ public class GameContextFactory {
         GameState gameState = new GameState();
         PhysicsEngine physicsEngine = new PhysicsEngine();
         Timer timer = new Timer(60);
-        ControlState controlState = new ControlState();
-        return new GameContext(gameWindow, textureProvider, dataManager, gameState, physicsEngine, timer, controlState);
+        MouseState mouseState = new MouseState();
+        KeyboardState keyboardState = new KeyboardState();
+        return new GameContext(gameWindow, textureProvider, dataManager, gameState, physicsEngine, timer, mouseState, keyboardState);
     }
 
     public static GameContext createForDesigner() {
@@ -24,7 +27,9 @@ public class GameContextFactory {
         TextureProvider textureProvider = new TextureProvider();
         DataManager dataManager = new DataManager();
         GameState gameState = new GameState();
-        return new GameContext(gameWindow, textureProvider, dataManager, gameState, null, null, null);
+        MouseState mouseState = new MouseState();
+        KeyboardState keyboardState = new KeyboardState();
+        return new GameContext(gameWindow, textureProvider, dataManager, gameState, null, null, mouseState, keyboardState);
     }
 
 }
