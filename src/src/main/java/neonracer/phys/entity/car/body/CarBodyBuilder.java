@@ -28,11 +28,17 @@ public class CarBodyBuilder {
 
         float halfWidth = car.getWidth() / 2;
 
+        // The base shape of the car is a rectangle. Then we cut away
+        // each corner so there is space for the wheels, which turns
+        // the rectangle into an octagon. This octagon is defined here:
         Vec2[] vecs = new Vec2[]{
+                // Right half of the octagon
                 new Vec2(halfWidth - 0.22f, 0f),
                 new Vec2(halfWidth, 0.7f),
                 new Vec2(halfWidth - 0.05f, car.getHeight() / 2),
                 new Vec2(halfWidth / 2, car.getHeight()),
+
+                // Left half: Same as right half, just mirrored
                 new Vec2(-(halfWidth / 2), car.getHeight()),
                 new Vec2(-(halfWidth - 0.05f), car.getHeight() / 2),
                 new Vec2(-(halfWidth), 0.7f),

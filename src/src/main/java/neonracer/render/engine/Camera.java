@@ -12,7 +12,7 @@ public class Camera {
 
     private float rotation = 0.0f;
 
-    private float zoomFactor = 0.0f;
+    private float zoomFactor = 1.0f;
 
     private Matrix4f matrix = new Matrix4f();
 
@@ -20,7 +20,7 @@ public class Camera {
         this.gameContext = gameContext;
     }
 
-    public void setCenterPoint(Vector2f centerPoint) {
+    void setCenterPoint(Vector2f centerPoint) {
         this.centerPoint = centerPoint;
     }
 
@@ -40,7 +40,7 @@ public class Camera {
         this.zoomFactor = zoomFactor;
     }
 
-    public void setRotation(float rotation) {
+    void setRotation(float rotation) {
         this.rotation = rotation;
     }
 

@@ -70,14 +70,14 @@ public class MasterRenderer {
     }
 
     private void tick() {
-        gameContext.getPhysicsEngine().onTick();
-
         ControlState controlState = gameContext.getControlState();
         controlState.setForward(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_W));
         controlState.setLeft(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_A));
         controlState.setReverse(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_S));
         controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
         controlState.setSpacebar(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_SPACE));
+
+        gameContext.getPhysicsEngine().onTick();
 
         renderContext.getCameraManager().smoothFollow(gameContext.getGameState().getPlayerEntity());
     }

@@ -32,9 +32,9 @@ public class PhysicsEngine {
         for (Entity entity : gameState.getEntities()) {
             EntityPhysics physics = entity.getPhysics();
             if (physics != null) {
+                physics.update();
                 entity.setPosition(physics.getPosition());
                 entity.setRotation(physics.getRotation());
-                physics.update();
             }
         }
     }
