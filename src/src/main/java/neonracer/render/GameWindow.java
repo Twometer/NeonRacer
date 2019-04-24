@@ -89,7 +89,7 @@ public class GameWindow {
     /**
      * Swaps back and front buffer and does event/message pumping
      */
-    void update() {
+    public void update() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -99,7 +99,7 @@ public class GameWindow {
      *
      * @return Whether the user requested the window to close
      */
-    boolean shouldClose() {
+    public boolean shouldClose() {
         return glfwWindowShouldClose(window);
     }
 

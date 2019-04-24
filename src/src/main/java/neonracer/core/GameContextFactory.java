@@ -19,4 +19,12 @@ public class GameContextFactory {
         return new GameContext(gameWindow, textureProvider, dataManager, gameState, physicsEngine, timer, controlState);
     }
 
+    public static GameContext createForDesigner() {
+        GameWindow gameWindow = new GameWindow(800, 600, BuildInfo.getGameTitle() + " - Track Designer");
+        TextureProvider textureProvider = new TextureProvider();
+        DataManager dataManager = new DataManager();
+        GameState gameState = new GameState();
+        return new GameContext(gameWindow, textureProvider, dataManager, gameState, null, null, null);
+    }
+
 }

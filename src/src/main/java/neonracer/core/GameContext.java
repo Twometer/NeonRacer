@@ -36,7 +36,7 @@ public class GameContext {
     public void initialize() throws IOException {
         gameWindow.create();
         dataManager.load(this);
-        physicsEngine.initialize(this);
+        if (physicsEngine != null) physicsEngine.initialize(this);
         gameState.initialize(this);
     }
 

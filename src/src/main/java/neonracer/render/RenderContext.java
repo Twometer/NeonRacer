@@ -14,6 +14,11 @@ public class RenderContext {
 
     private Matrix4f guiMatrix;
 
+    public RenderContext() {
+        guiMatrix = new Matrix4f();
+        worldMatrix = new Matrix4f();
+    }
+
     RenderContext(Camera camera) {
         this.camera = camera;
         this.cameraManager = new CameraManager(camera);
