@@ -4,7 +4,7 @@ import neonracer.model.entity.EntityCar;
 
 public class CameraManager {
 
-    private static final float ROTATION_SPEED = 0.01f;
+    private static final float ROTATION_SPEED = 0.015f;
 
     private Camera camera;
 

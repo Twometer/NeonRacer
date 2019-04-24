@@ -1,7 +1,7 @@
 - id: "grass"
   texture: "textures/test.png"
-  traction: 0.1
-  drag: 30
+  traction: 0.4
+  drag: 40
 
 - id: "dirt"
   texture: "textures/test.png"
@@ -10,5 +10,5 @@
 
 - id: "street"
   texture: "textures/test.png"
-  traction: 1
-  drag: 30
+  traction: 1.2
+  drag: 27
