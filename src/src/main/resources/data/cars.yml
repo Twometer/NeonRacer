@@ -1,8 +1,30 @@
-- id: "test_car"
-  name: "Test car"
-  desc: "This car is used for testing"
-  color_texture: "textures/testcar.png"
-  glow_texture: "textures/testcar-glow.png"
+- id: "kart"
+  name: "Kart"
+  desc: "Das Kart ist die kleinste und wendigste Rennmaschine."
+  color_texture: "textures/kart.png"
+  glow_texture: "textures/kart-glow.png"
+  primary_ability: ""
+  max_forward_speed: 110
+  max_reverse_speed: -55
+  max_force_front: 140
+  max_force_back: 140
+  max_lateral_force: 9.8
+- id: "rocketcar"
+  name: "Raketenauto"
+  desc: "Das Raketenauto ist wahnsinnig schnell, dafür aber auch sehr groß."
+  color_texture: "textures/rocketcar.png"
+  glow_texture: "textures/rocketcar-glow.png"
+  primary_ability: ""
+  max_forward_speed: 110
+  max_reverse_speed: -55
+  max_force_front: 140
+  max_force_back: 140
+  max_lateral_force: 9.8
+- id: "sportscar"
+  name: "Sportwagen"
+  desc: "Der Sportwagen bietet eine Balance zwischen Kurvenlage und Geschwindigkeit"
+  color_texture: "textures/sportscar.png"
+  glow_texture: "textures/sportscar-glow.png"
   primary_ability: ""
   max_forward_speed: 110
   max_reverse_speed: -55
