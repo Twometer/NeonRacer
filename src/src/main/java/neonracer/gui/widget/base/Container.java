@@ -1,4 +1,4 @@
-package neonracer.gui.widget;
+package neonracer.gui.widget.base;
 
 import java.util.ArrayList;
 import java.util.List;

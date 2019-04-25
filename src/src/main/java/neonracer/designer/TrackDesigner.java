@@ -52,6 +52,7 @@ class TrackDesigner {
         fontRenderer.setup(gameContext);
 
         testScreen = ScreenLoader.loadScreen(TestScreen.class);
+        testScreen.performLayout();
 
         setup();
         startRenderLoop();
@@ -84,6 +85,8 @@ class TrackDesigner {
         crosshairMesh.destroy();
 
         renderContext.getCamera().setZoomFactor(0.01f);
+
+        gameContext.getGameWindow().setSizeChangedListener((width, height) -> testScreen.performLayout());
     }
 
     private void startRenderLoop() {

@@ -1,4 +1,4 @@
-package neonracer.gui.widget;
+package neonracer.gui.widget.base;
 
 import neonracer.gui.GuiContext;
 import neonracer.gui.events.Event;
@@ -28,7 +28,7 @@ public abstract class Widget {
 
     private Map<String, String> foreignParameters = new HashMap<>();
 
-    Widget() {
+    public Widget() {
         this.internalId = UUID.randomUUID();
     }
 

@@ -1,6 +1,11 @@
 package neonracer.gui.parser;
 
-import neonracer.gui.widget.Widget;
+import neonracer.gui.widget.Border;
+import neonracer.gui.widget.Button;
+import neonracer.gui.widget.ImageView;
+import neonracer.gui.widget.Label;
+import neonracer.gui.widget.base.Widget;
+import neonracer.gui.widget.grid.Grid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +16,11 @@ public class WidgetFactory {
     private static final List<Class<? extends Widget>> REGISTERED_WIDGETS = new ArrayList<>();
 
     static {
-        // TODO register some widgets here
+        register(Grid.class);
+        register(ImageView.class);
+        register(Button.class);
+        register(Border.class);
+        register(Label.class);
     }
 
     private WidgetFactory() {

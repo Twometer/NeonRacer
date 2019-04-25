@@ -1,8 +1,8 @@
 package neonracer.gui.screen;
 
 import neonracer.gui.GuiContext;
-import neonracer.gui.widget.Container;
-import neonracer.gui.widget.Widget;
+import neonracer.gui.widget.base.Container;
+import neonracer.gui.widget.base.Widget;
 
 public abstract class Screen extends Container {
 

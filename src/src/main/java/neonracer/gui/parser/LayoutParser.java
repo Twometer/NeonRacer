@@ -5,8 +5,8 @@ import neonracer.gui.annotation.EventHandler;
 import neonracer.gui.annotation.ParserMethod;
 import neonracer.gui.screen.Screen;
 import neonracer.gui.util.PropertyList;
-import neonracer.gui.widget.Container;
-import neonracer.gui.widget.Widget;
+import neonracer.gui.widget.base.Container;
+import neonracer.gui.widget.base.Widget;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -127,7 +127,6 @@ class LayoutParser {
             if (widget instanceof Container)
                 traverseDocument(node, (Container) widget);
             parent.addChild(widget);
-            System.out.println(node.getNodeName() + " = " + node.getNodeValue());
         }
     }
 
