@@ -15,7 +15,9 @@ class BasicButton {
 
     private OnClickListener onClickListener;
 
-    private boolean pressed;
+    private float width;
+
+    private float height;
 
     BasicButton(FontRenderer fontRenderer, float x, float y, String text) {
         this.fontRenderer = fontRenderer;
@@ -24,8 +26,8 @@ class BasicButton {
     }
 
     void draw(RenderContext renderContext, GameContext gameContext) {
-        float width = fontRenderer.getStringWidth(text, 0.35f);
-        float height = fontRenderer.getLineHeight(0.35f);
+        this.width = fontRenderer.getStringWidth(text, 0.35f);
+        this.height = fontRenderer.getLineHeight(0.35f);
 
         Vector2f mouse = gameContext.getMouseState().getPosition();
 
@@ -35,13 +37,17 @@ class BasicButton {
         } else {
             fontRenderer.draw(renderContext, text, position.x, position.y, 0.35f);
         }
+    }
 
-        if (gameContext.getMouseState().isLeft() && hover) {
-            if (!pressed && onClickListener != null) onClickListener.onClick();
-            pressed = true;
+    boolean click(GameContext gameContext) {
+        Vector2f mouse = gameContext.getMouseState().getPosition();
+        boolean hover = mouse.x >= position.x && mouse.y >= position.y && mouse.x <= position.x + width && mouse.y <= position.y + height;
+
+        if (onClickListener != null && hover) {
+            onClickListener.onClick();
+            return true;
         }
-        if (!gameContext.getMouseState().isLeft()) pressed = false;
-
+        return false;
     }
 
     void setOnClickListener(OnClickListener onClickListener) {

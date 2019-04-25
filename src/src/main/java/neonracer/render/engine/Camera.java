@@ -36,8 +36,17 @@ public class Camera {
         this.centerPoint.add(x, y);
     }
 
+    public float getZoomFactor() {
+        return zoomFactor;
+    }
+
     public void setZoomFactor(float zoomFactor) {
         this.zoomFactor = zoomFactor;
+    }
+
+    public void zoom(float zoomFactor) {
+        this.zoomFactor += zoomFactor;
+        this.zoomFactor = Math.max(0.0f, this.zoomFactor);
     }
 
     void setRotation(float rotation) {

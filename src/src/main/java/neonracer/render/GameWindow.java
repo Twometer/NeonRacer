@@ -30,6 +30,8 @@ public class GameWindow {
 
     private SizeChangedListener sizeChangedListener;
 
+    private MouseScrollListener mouseScrollListener;
+
     public GameWindow(int width, int height, String title) {
         this.width = width;
         this.height = height;
@@ -60,6 +62,11 @@ public class GameWindow {
             this.height = height;
             if (sizeChangedListener != null)
                 sizeChangedListener.onSizeChanged(width, height);
+        });
+
+        glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
+            if (mouseScrollListener != null)
+                mouseScrollListener.onMouseScroll((float) xoffset, (float) yoffset);
         });
 
         glfwMakeContextCurrent(window);
@@ -135,6 +142,10 @@ public class GameWindow {
         this.sizeChangedListener = sizeChangedListener;
     }
 
+    public void setMouseScrollListener(MouseScrollListener mouseScrollListener) {
+        this.mouseScrollListener = mouseScrollListener;
+    }
+
     private void setSize(int width, int height) {
         this.width = width;
         this.height = height;
@@ -143,6 +154,10 @@ public class GameWindow {
 
     public interface SizeChangedListener {
         void onSizeChanged(int width, int height);
+    }
+
+    public interface MouseScrollListener {
+        void onMouseScroll(float x, float y);
     }
 
 }

@@ -5,14 +5,15 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20.*;
 
 public class FlatShader extends Shader {
 
     private int transformationMatrix;
 
     private int projectionMatrix;
+
+    private int color;
 
     public FlatShader() {
         super("flat");
@@ -22,12 +23,17 @@ public class FlatShader extends Shader {
     protected void bindUniforms(int program) {
         this.projectionMatrix = glGetUniformLocation(program, "projectionMatrix");
         this.transformationMatrix = glGetUniformLocation(program, "transformationMatrix");
+        this.color = glGetUniformLocation(program, "color");
     }
 
     public void setProjectionMatrix(Matrix4f matrix) {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         matrix.get(buffer);
         glUniformMatrix4fv(projectionMatrix, false, buffer);
+    }
+
+    public void setColor(float r, float g, float b, float a) {
+        glUniform4f(color, r, g, b, a);
     }
 
     public void setTransformationMatrix(Matrix4f matrix) {
