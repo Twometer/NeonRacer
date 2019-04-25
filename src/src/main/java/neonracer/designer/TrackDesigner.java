@@ -2,11 +2,13 @@ package neonracer.designer;
 
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
+import neonracer.gui.GuiContext;
+import neonracer.gui.font.FontRenderer;
+import neonracer.gui.parser.ScreenLoader;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.Camera;
-import neonracer.render.engine.font.FontRenderer;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.gl.core.Mesh;
@@ -31,7 +33,7 @@ class TrackDesigner {
 
     private FontRenderer fontRenderer = new FontRenderer("lucida");
 
-    private BasicButton testButton = new BasicButton(fontRenderer, 10, 30, "New Node");
+    private GuiContext guiContext = new GuiContext(gameContext.getKeyboardState(), gameContext.getMouseState(), renderContext, fontRenderer);
 
     private FlatShader flatShader;
 
@@ -43,9 +45,14 @@ class TrackDesigner {
 
     private Model nodeModel;
 
+    private TestScreen testScreen;
+
     void start() throws IOException {
         gameContext.initialize();
         fontRenderer.setup(gameContext);
+
+        testScreen = ScreenLoader.loadScreen(TestScreen.class);
+
         setup();
         startRenderLoop();
     }
@@ -76,8 +83,6 @@ class TrackDesigner {
         crosshairModel = Model.create(crosshairMesh, GL_LINES);
         crosshairMesh.destroy();
 
-        testButton.setOnClickListener(() -> System.out.println("Button pressed"));
-
         renderContext.getCamera().setZoomFactor(0.01f);
     }
 
@@ -107,8 +112,6 @@ class TrackDesigner {
         Vector4f unprojected4 = renderContext.getWorldMatrix().unproject(gameWindow.getCursorPosition().x, gameWindow.getHeight() - gameWindow.getCursorPosition().y, 0.0f, viewport, new Vector4f());
         this.unprojected = new Vector2f(unprojected4.x, unprojected4.y);
 
-
-        testButton.draw(renderContext, gameContext);
 
         float lh = fontRenderer.getLineHeight(0.2f);
         fontRenderer.draw(renderContext, "node_count=" + nodes.size(), 0, 0, 0.2f);
@@ -142,6 +145,8 @@ class TrackDesigner {
 
         fontRenderer.draw(renderContext, "Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
+        testScreen.draw(guiContext);
+
         // Do the controls handling
         Vector2f curMouse = gameContext.getMouseState().getPosition();
         if (gameContext.getMouseState().isMiddle()) {
@@ -159,8 +164,6 @@ class TrackDesigner {
     }
 
     private void onClick() {
-        if (testButton.click(gameContext))
-            return;
 
         GameWindow gameWindow = gameContext.getGameWindow();
 

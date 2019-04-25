@@ -1,9 +1,9 @@
 package neonracer.render.engine.renderers;
 
 import neonracer.core.GameContext;
+import neonracer.gui.font.FontRenderer;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
-import neonracer.render.engine.font.FontRenderer;
 import neonracer.util.BuildInfo;
 
 import java.text.NumberFormat;

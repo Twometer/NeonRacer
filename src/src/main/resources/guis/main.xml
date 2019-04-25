@@ -1,0 +1,24 @@
+<Screen Background="textures/test.png">
+
+    <Grid Padding="25">
+        <Grid.RowDefinitions>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>*</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>*</ColumnDefinition>
+            <ColumnDefinition>100px</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ImageView Src="textures/logo.png" Grid.Row="0" Grid.Column="0"/>
+        <Button Text="Rennen starten" Grid.Row="1" Grid.Column="0"/>
+        <Button Text="Einstellungen" Grid.Row="3" Grid.Column="0"/>
+        <Button Text="Spiel verlassen" Grid.Row="4" Grid.Column="0"/>
+        <Border Padding="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+            <Label Text="Some text goes here"/>
+        </Border>
+    </Grid>
+
+</Screen>

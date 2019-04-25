@@ -1,7 +1,7 @@
 package neonracer.core;
 
-import neonracer.gui.KeyboardState;
-import neonracer.gui.MouseState;
+import neonracer.gui.input.KeyboardState;
+import neonracer.gui.input.MouseState;
 import neonracer.phys.PhysicsEngine;
 import neonracer.render.GameWindow;
 import neonracer.render.gl.TextureProvider;

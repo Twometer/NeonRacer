@@ -1,4 +1,4 @@
-package neonracer.render.engine.font;
+package neonracer.gui.font;
 
 import neonracer.core.GameContext;
 import neonracer.render.RenderContext;
@@ -52,6 +52,7 @@ public class FontRenderer {
         textModel.draw();
         fontFace.getFontTexture().unbind();
         fontShader.unbind();
+        textModel.destroy();
     }
 
     public float getLineHeight(float fontSize) {

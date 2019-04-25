@@ -1,7 +1,7 @@
 package neonracer.phys.entity.car;
 
 import neonracer.core.GameContext;
-import neonracer.gui.KeyboardState;
+import neonracer.gui.input.KeyboardState;
 import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;

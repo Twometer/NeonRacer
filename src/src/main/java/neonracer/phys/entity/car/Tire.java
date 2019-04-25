@@ -1,7 +1,7 @@
 package neonracer.phys.entity.car;
 
 import neonracer.core.GameContext;
-import neonracer.gui.KeyboardState;
+import neonracer.gui.input.KeyboardState;
 import neonracer.model.track.Material;
 import neonracer.phys.Box2dHelper;
 import neonracer.render.engine.collider.TrackColliderResult;
