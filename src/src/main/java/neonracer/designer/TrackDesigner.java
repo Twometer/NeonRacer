@@ -133,7 +133,14 @@ class TrackDesigner {
         flatShader.setColor(1f, 1f, 1f, 1f);
         crosshairModel.draw();
 
+        flatShader.setProjectionMatrix(renderContext.getGuiMatrix());
+        flatShader.setTransformationMatrix(new Matrix4f().translate(gameWindow.getWidth() - 300f, 0, 0).scale(300.0f, gameWindow.getHeight(), 1.0f));
+        flatShader.setColor(0.5f, 0.5f, 0.5f, 0.95f);
+        nodeModel.draw();
+
         flatShader.unbind();
+
+        fontRenderer.draw(renderContext, "Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
         // Do the controls handling
         Vector2f curMouse = gameContext.getMouseState().getPosition();

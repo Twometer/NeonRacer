@@ -23,7 +23,7 @@ public class GameContextFactory {
     }
 
     public static GameContext createForDesigner() {
-        GameWindow gameWindow = new GameWindow(800, 600, BuildInfo.getGameTitle() + " - Track Designer");
+        GameWindow gameWindow = new GameWindow(1000, 800, BuildInfo.getGameTitle() + " - Track Designer");
         TextureProvider textureProvider = new TextureProvider();
         DataManager dataManager = new DataManager();
         GameState gameState = new GameState();
