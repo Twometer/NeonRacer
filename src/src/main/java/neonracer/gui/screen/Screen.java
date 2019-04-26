@@ -13,7 +13,13 @@ public abstract class Screen extends Container {
 
     @Override
     public final void performLayout() {
-        singleWidget().performLayout();
+        Widget singleWidget = singleWidget();
+        singleWidget.setX(getPadding());
+        singleWidget.setY(getPadding());
+        singleWidget.setWidth(getWidth() - getPadding());
+        singleWidget.setHeight(getHeight() - getPadding());
+        if (singleWidget instanceof Container)
+            ((Container) singleWidget).performLayout();
     }
 
     private Widget singleWidget() {

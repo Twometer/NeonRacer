@@ -5,6 +5,7 @@ import neonracer.core.GameContextFactory;
 import neonracer.gui.GuiContext;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.parser.ScreenLoader;
+import neonracer.gui.util.PrimitiveRenderer;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
@@ -33,7 +34,9 @@ class TrackDesigner {
 
     private FontRenderer fontRenderer = new FontRenderer("lucida");
 
-    private GuiContext guiContext = new GuiContext(gameContext.getKeyboardState(), gameContext.getMouseState(), renderContext, fontRenderer);
+    private PrimitiveRenderer primitiveRenderer = new PrimitiveRenderer(renderContext);
+
+    private GuiContext guiContext = new GuiContext(gameContext.getKeyboardState(), gameContext.getMouseState(), renderContext, fontRenderer, primitiveRenderer);
 
     private FlatShader flatShader;
 
@@ -52,6 +55,9 @@ class TrackDesigner {
         fontRenderer.setup(gameContext);
 
         testScreen = ScreenLoader.loadScreen(TestScreen.class);
+        testScreen.setWidth(gameContext.getGameWindow().getWidth());
+        testScreen.setHeight(gameContext.getGameWindow().getHeight());
+        testScreen.initialize(gameContext);
         testScreen.performLayout();
 
         setup();
@@ -83,6 +89,8 @@ class TrackDesigner {
         crosshairMesh.putVertex(10000f, 0f);
         crosshairModel = Model.create(crosshairMesh, GL_LINES);
         crosshairMesh.destroy();
+
+        primitiveRenderer.initialize();
 
         renderContext.getCamera().setZoomFactor(0.01f);
 

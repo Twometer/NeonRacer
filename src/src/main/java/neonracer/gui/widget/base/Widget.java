@@ -1,8 +1,11 @@
 package neonracer.gui.widget.base;
 
+import neonracer.core.GameContext;
 import neonracer.gui.GuiContext;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
+import neonracer.gui.util.ForeignParameters;
+import neonracer.gui.util.Size;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +29,7 @@ public abstract class Widget {
 
     private Map<Class<? extends Event>, EventHandler> eventHandlers = new HashMap<>();
 
-    private Map<String, String> foreignParameters = new HashMap<>();
+    private ForeignParameters foreignParameters = new ForeignParameters();
 
     public Widget() {
         this.internalId = UUID.randomUUID();
@@ -38,7 +41,9 @@ public abstract class Widget {
 
     public abstract void draw(GuiContext guiContext);
 
-    public abstract void performLayout();
+    public Size measure() {
+        return new Size(width, height);
+    }
 
     public void raiseEvent(Event event) {
         onEvent(event);
@@ -46,7 +51,10 @@ public abstract class Widget {
         if (handler != null) handler.handle(event);
     }
 
-    public void onEvent(Event event) {
+    protected void onEvent(Event event) {
+    }
+
+    public void initialize(GameContext gameContext) {
     }
 
     public String getId() {
@@ -89,7 +97,7 @@ public abstract class Widget {
         this.height = height;
     }
 
-    public int getPadding() {
+    protected int getPadding() {
         return padding;
     }
 
@@ -97,7 +105,7 @@ public abstract class Widget {
         this.padding = padding;
     }
 
-    public Map<String, String> getForeignParameters() {
+    public ForeignParameters getForeignParameters() {
         return foreignParameters;
     }
 

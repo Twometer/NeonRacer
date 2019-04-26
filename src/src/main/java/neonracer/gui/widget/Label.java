@@ -8,9 +8,4 @@ public class Label extends Widget {
     public void draw(GuiContext guiContext) {
 
     }
-
-    @Override
-    public void performLayout() {
-
-    }
 }
