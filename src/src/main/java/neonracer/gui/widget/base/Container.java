@@ -34,7 +34,7 @@ public abstract class Container extends Widget {
         children.add(widget);
     }
 
-    protected List<Widget> getChildren() {
+    public List<Widget> getChildren() {
         return children;
     }
 

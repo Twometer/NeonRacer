@@ -10,9 +10,9 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition>*</ColumnDefinition>
-            <ColumnDefinition>100</ColumnDefinition>
+            <ColumnDefinition>200</ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ImageView Src="textures/logo.png" Grid.Row="0" Grid.Column="0"/>
+        <ImageView Src="textures/logo.png" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center"/>
         <Button Text="Rennen starten" Grid.Row="1" Grid.Column="0"/>
         <Button Text="Einstellungen" Grid.Row="3" Grid.Column="0"/>
         <Button Text="Spiel verlassen" Grid.Row="4" Grid.Column="0"/>

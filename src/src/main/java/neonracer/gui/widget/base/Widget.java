@@ -4,6 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.gui.GuiContext;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
+import neonracer.gui.util.Alignment;
 import neonracer.gui.util.ForeignParameters;
 import neonracer.gui.util.Size;
 
@@ -26,6 +27,10 @@ public abstract class Widget {
     private int height;
 
     private int padding;
+
+    private Alignment verticalAlignment = Alignment.Fill;
+
+    private Alignment horizontalAlignment = Alignment.Fill;
 
     private Map<Class<? extends Event>, EventHandler> eventHandlers = new HashMap<>();
 
@@ -103,6 +108,22 @@ public abstract class Widget {
 
     public void setPadding(int padding) {
         this.padding = padding;
+    }
+
+    public Alignment getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    public void setVerticalAlignment(Alignment verticalAlignment) {
+        this.verticalAlignment = verticalAlignment;
+    }
+
+    public Alignment getHorizontalAlignment() {
+        return horizontalAlignment;
+    }
+
+    public void setHorizontalAlignment(Alignment horizontalAlignment) {
+        this.horizontalAlignment = horizontalAlignment;
     }
 
     public ForeignParameters getForeignParameters() {
