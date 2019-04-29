@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-
 class LayoutParser {
 
     private static final String ROOT_ELEMENT = "Screen";
@@ -36,7 +35,7 @@ class LayoutParser {
     }
 
     static LayoutParser fromStream(InputStream inputStream) {
-        if (inputStream == null) throw new LayoutParserException("Could not find the layout file");
+        if (inputStream == null) throw new IllegalArgumentException("Layout file input stream must not be null");
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
