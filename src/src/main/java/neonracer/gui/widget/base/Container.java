@@ -1,6 +1,7 @@
 package neonracer.gui.widget.base;
 
 import neonracer.gui.GuiContext;
+import neonracer.gui.events.Event;
 import neonracer.render.engine.RenderPass;
 
 import java.util.ArrayList;
@@ -45,6 +46,16 @@ public abstract class Container extends Widget {
     }
 
     @Override
+    protected void onRaiseEvent(Event event) {
+        super.onRaiseEvent(event);
+        for (Widget widget : children) {
+            widget.raiseEvent(event);
+            if (event.isConsumed())
+                return;
+        }
+    }
+
+    @Override
     public void draw(GuiContext guiContext, RenderPass renderPass) {
         for (Widget widget : children)
             widget.draw(guiContext, renderPass);
@@ -52,6 +63,7 @@ public abstract class Container extends Widget {
 
     @Override
     public void initialize(GuiContext guiContext) {
+        super.initialize(guiContext);
         for (Widget widget : children)
             widget.initialize(guiContext);
     }

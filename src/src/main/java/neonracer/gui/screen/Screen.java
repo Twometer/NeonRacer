@@ -23,12 +23,13 @@ public abstract class Screen extends Container {
     @Override
     public void initialize(GuiContext guiContext) {
         super.initialize(guiContext);
-        this.backgroundTexture = guiContext.getTextureProvider().getTexture(background);
+        if (background != null && !background.isEmpty())
+            this.backgroundTexture = guiContext.getTextureProvider().getTexture(background);
     }
 
     @Override
     public final void draw(GuiContext guiContext, RenderPass renderPass) {
-        if (renderPass == RenderPass.COLOR) {
+        if (renderPass == RenderPass.COLOR && backgroundTexture != null) {
             backgroundTexture.bind();
             guiContext.getPrimitiveRenderer().drawTexturedRect(getX(), getY(), getWidth(), getHeight());
             backgroundTexture.unbind();

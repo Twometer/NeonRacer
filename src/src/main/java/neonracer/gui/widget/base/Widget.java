@@ -1,6 +1,7 @@
 package neonracer.gui.widget.base;
 
 import neonracer.gui.GuiContext;
+import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
 import neonracer.gui.input.MouseState;
@@ -39,6 +40,8 @@ public abstract class Widget {
 
     private ForeignParameters foreignParameters = new ForeignParameters();
 
+    private MouseState mouseState;
+
     public Widget() {
         this.internalId = UUID.randomUUID();
     }
@@ -54,15 +57,26 @@ public abstract class Widget {
     }
 
     public void raiseEvent(Event event) {
+        onRaiseEvent(event);
+
+        if (event instanceof ClickEvent)
+            if (isMouseHover())
+                event.consume();
+            else return;
+
         onEvent(event);
         EventHandler handler = eventHandlers.get(event.getClass());
         if (handler != null) handler.handle(event);
+    }
+
+    protected void onRaiseEvent(Event event) {
     }
 
     private void onEvent(Event event) {
     }
 
     public void initialize(GuiContext guiContext) {
+        mouseState = guiContext.getGameContext().getMouseState();
     }
 
     public String getId() {
@@ -133,9 +147,8 @@ public abstract class Widget {
         return foreignParameters;
     }
 
-    protected final boolean isMouseHover(GuiContext context) {
-        MouseState state = context.getGameContext().getMouseState();
-        Vector2f pos = state.getPosition();
+    protected final boolean isMouseHover() {
+        Vector2f pos = mouseState.getPosition();
         return pos.x >= x && pos.y >= y && pos.x <= x + width && pos.y <= y + height;
     }
 

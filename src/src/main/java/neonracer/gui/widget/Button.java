@@ -52,7 +52,7 @@ public class Button extends Widget {
 
     @Override
     public void draw(GuiContext guiContext, RenderPass renderPass) {
-        boolean hover = isMouseHover(guiContext);
+        boolean hover = isMouseHover();
         if (hover && offset < 20)
             offset += 1;
         else if (!hover && offset > 0)
@@ -68,4 +68,5 @@ public class Button extends Widget {
     public Size measure() {
         return new Size((int) fontRenderer.getStringWidth(text, fontSize), (int) fontRenderer.getStringHeight(text, fontSize));
     }
+
 }

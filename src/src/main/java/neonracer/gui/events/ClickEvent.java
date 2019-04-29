@@ -1,4 +1,4 @@
 package neonracer.gui.events;
 
-public class ClickEvent implements Event {
+public class ClickEvent extends Event {
 }

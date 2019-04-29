@@ -3,8 +3,9 @@ package neonracer.designer;
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
 import neonracer.gui.GuiContext;
+import neonracer.gui.GuiManager;
+import neonracer.gui.events.ClickEvent;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.parser.ScreenLoader;
 import neonracer.gui.util.PrimitiveRenderer;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
@@ -31,14 +32,13 @@ import static org.lwjgl.opengl.GL11.*;
 class TrackDesigner {
 
     private GameContext gameContext = GameContextFactory.createForDesigner();
-
     private RenderContext renderContext = new RenderContext(new Camera(gameContext));
 
     private FontRenderer fontRenderer = new FontRenderer("redthinker");
-
     private PrimitiveRenderer primitiveRenderer = new PrimitiveRenderer(renderContext);
 
     private GuiContext guiContext = new GuiContext(gameContext, renderContext, fontRenderer, primitiveRenderer);
+    private GuiManager guiManager = new GuiManager(guiContext);
 
     private PostProcessing postProcessing;
 
@@ -52,17 +52,12 @@ class TrackDesigner {
 
     private Model nodeModel;
 
-    private TestScreen testScreen;
 
     void start() throws IOException {
         gameContext.initialize();
         fontRenderer.setup(renderContext, gameContext);
 
-        testScreen = ScreenLoader.loadScreen(TestScreen.class);
-        testScreen.setWidth(gameContext.getGameWindow().getWidth());
-        testScreen.setHeight(gameContext.getGameWindow().getHeight());
-        testScreen.initialize(guiContext);
-        testScreen.performLayout();
+        guiManager.show(TestScreen.class);
 
         setup();
         startRenderLoop();
@@ -101,9 +96,7 @@ class TrackDesigner {
         renderContext.getCamera().setZoomFactor(0.01f);
 
         gameContext.getGameWindow().setSizeChangedListener((width, height) -> {
-            testScreen.setWidth(width);
-            testScreen.setHeight(height);
-            testScreen.performLayout();
+            guiManager.resize(width, height);
             postProcessing.onResize(width, height);
         });
     }
@@ -168,10 +161,10 @@ class TrackDesigner {
         fontRenderer.draw("Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
         postProcessing.beginPass(RenderPass.COLOR);
-        testScreen.draw(guiContext, RenderPass.COLOR);
+        guiManager.draw(RenderPass.COLOR);
 
         postProcessing.beginPass(RenderPass.GLOW);
-        testScreen.draw(guiContext, RenderPass.GLOW);
+        guiManager.draw(RenderPass.GLOW);
 
         postProcessing.draw();
 
@@ -192,9 +185,6 @@ class TrackDesigner {
     }
 
     private void onClick() {
-
-        GameWindow gameWindow = gameContext.getGameWindow();
-
         // Check if user selected a node
         for (Node node : nodes) {
             if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
@@ -205,6 +195,9 @@ class TrackDesigner {
 
         // Add a node at mouse position
         nodes.add(new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 0, ""));
+
+        // Handle clicks at this position
+        guiManager.raiseEvent(new ClickEvent());
     }
 
     private void onScroll(float x, float y) {

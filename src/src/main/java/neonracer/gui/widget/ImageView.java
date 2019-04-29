@@ -35,6 +35,7 @@ public class ImageView extends Widget {
 
     @Override
     public void initialize(GuiContext guiContext) {
+        super.initialize(guiContext);
         srcTexture = guiContext.getTextureProvider().getTexture(src);
     }
 }
