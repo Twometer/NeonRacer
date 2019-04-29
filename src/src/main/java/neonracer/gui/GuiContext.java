@@ -1,16 +1,14 @@
 package neonracer.gui;
 
+import neonracer.core.GameContext;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.input.KeyboardState;
-import neonracer.gui.input.MouseState;
 import neonracer.gui.util.PrimitiveRenderer;
 import neonracer.render.RenderContext;
+import neonracer.render.gl.TextureProvider;
 
 public class GuiContext {
 
-    private KeyboardState keyboardState;
-
-    private MouseState mouseState;
+    private GameContext gameContext;
 
     private RenderContext renderContext;
 
@@ -18,20 +16,15 @@ public class GuiContext {
 
     private PrimitiveRenderer primitiveRenderer;
 
-    public GuiContext(KeyboardState keyboardState, MouseState mouseState, RenderContext renderContext, FontRenderer fontRenderer, PrimitiveRenderer primitiveRenderer) {
-        this.keyboardState = keyboardState;
-        this.mouseState = mouseState;
+    public GuiContext(GameContext gameContext, RenderContext renderContext, FontRenderer fontRenderer, PrimitiveRenderer primitiveRenderer) {
+        this.gameContext = gameContext;
         this.renderContext = renderContext;
         this.fontRenderer = fontRenderer;
         this.primitiveRenderer = primitiveRenderer;
     }
 
-    public KeyboardState getKeyboardState() {
-        return keyboardState;
-    }
-
-    public MouseState getMouseState() {
-        return mouseState;
+    public GameContext getGameContext() {
+        return gameContext;
     }
 
     public RenderContext getRenderContext() {
@@ -44,6 +37,10 @@ public class GuiContext {
 
     public PrimitiveRenderer getPrimitiveRenderer() {
         return primitiveRenderer;
+    }
+
+    public TextureProvider getTextureProvider() {
+        return gameContext.getTextureProvider();
     }
 
 }

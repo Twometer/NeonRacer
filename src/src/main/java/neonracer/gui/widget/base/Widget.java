@@ -1,11 +1,11 @@
 package neonracer.gui.widget.base;
 
-import neonracer.core.GameContext;
 import neonracer.gui.GuiContext;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
 import neonracer.gui.util.Alignment;
 import neonracer.gui.util.ForeignParameters;
+import neonracer.gui.util.Margin;
 import neonracer.gui.util.Size;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public abstract class Widget {
 
     private int height;
 
-    private int padding;
+    private Margin margin = new Margin();
 
     private Alignment verticalAlignment = Alignment.Fill;
 
@@ -56,10 +56,10 @@ public abstract class Widget {
         if (handler != null) handler.handle(event);
     }
 
-    protected void onEvent(Event event) {
+    private void onEvent(Event event) {
     }
 
-    public void initialize(GameContext gameContext) {
+    public void initialize(GuiContext guiContext) {
     }
 
     public String getId() {
@@ -102,12 +102,12 @@ public abstract class Widget {
         this.height = height;
     }
 
-    protected int getPadding() {
-        return padding;
+    public Margin getMargin() {
+        return margin;
     }
 
-    public void setPadding(int padding) {
-        this.padding = padding;
+    public void setMargin(Margin margin) {
+        this.margin = margin;
     }
 
     public Alignment getVerticalAlignment() {

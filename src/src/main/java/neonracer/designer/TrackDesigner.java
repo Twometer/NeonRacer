@@ -32,11 +32,11 @@ class TrackDesigner {
 
     private RenderContext renderContext = new RenderContext(new Camera(gameContext));
 
-    private FontRenderer fontRenderer = new FontRenderer("lucida");
+    private FontRenderer fontRenderer = new FontRenderer("redthinker");
 
     private PrimitiveRenderer primitiveRenderer = new PrimitiveRenderer(renderContext);
 
-    private GuiContext guiContext = new GuiContext(gameContext.getKeyboardState(), gameContext.getMouseState(), renderContext, fontRenderer, primitiveRenderer);
+    private GuiContext guiContext = new GuiContext(gameContext, renderContext, fontRenderer, primitiveRenderer);
 
     private FlatShader flatShader;
 
@@ -57,7 +57,7 @@ class TrackDesigner {
         testScreen = ScreenLoader.loadScreen(TestScreen.class);
         testScreen.setWidth(gameContext.getGameWindow().getWidth());
         testScreen.setHeight(gameContext.getGameWindow().getHeight());
-        testScreen.initialize(gameContext);
+        testScreen.initialize(guiContext);
         testScreen.performLayout();
 
         setup();
@@ -94,7 +94,11 @@ class TrackDesigner {
 
         renderContext.getCamera().setZoomFactor(0.01f);
 
-        gameContext.getGameWindow().setSizeChangedListener((width, height) -> testScreen.performLayout());
+        gameContext.getGameWindow().setSizeChangedListener((width, height) -> {
+            testScreen.setWidth(width);
+            testScreen.setHeight(height);
+            testScreen.performLayout();
+        });
     }
 
     private void startRenderLoop() {

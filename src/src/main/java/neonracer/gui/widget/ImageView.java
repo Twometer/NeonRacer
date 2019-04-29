@@ -1,6 +1,5 @@
 package neonracer.gui.widget;
 
-import neonracer.core.GameContext;
 import neonracer.gui.GuiContext;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
@@ -33,7 +32,7 @@ public class ImageView extends Widget {
     }
 
     @Override
-    public void initialize(GameContext gameContext) {
-        srcTexture = gameContext.getTextureProvider().getTexture(src);
+    public void initialize(GuiContext guiContext) {
+        srcTexture = guiContext.getTextureProvider().getTexture(src);
     }
 }

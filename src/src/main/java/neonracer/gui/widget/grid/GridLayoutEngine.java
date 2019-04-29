@@ -94,7 +94,8 @@ class GridLayoutEngine {
                     int row = widget.getForeignParameters().getInt(NAMESPACE, "Row");
                     if (row == i) {
                         Size size = widget.measure();
-                        if (size.getHeight() > height) height = size.getHeight();
+                        if (size.getHeight() + widget.getMargin().getTop() + widget.getMargin().getBottom() > height)
+                            height = size.getHeight() + widget.getMargin().getTop() + widget.getMargin().getBottom();
                     }
                 }
 
@@ -140,7 +141,9 @@ class GridLayoutEngine {
                     int col = widget.getForeignParameters().getInt(NAMESPACE, "Column");
                     if (col == i) {
                         Size size = widget.measure();
-                        if (size.getHeight() > width) width = size.getHeight();
+                        int widgetWidth = size.getWidth() + widget.getMargin().getLeft() + widget.getMargin().getRight();
+                        if (widgetWidth > width)
+                            width = widgetWidth;
                     }
                 }
 

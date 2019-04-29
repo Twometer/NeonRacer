@@ -1,6 +1,5 @@
 package neonracer.gui.widget.base;
 
-import neonracer.core.GameContext;
 import neonracer.gui.GuiContext;
 
 import java.util.ArrayList;
@@ -51,9 +50,9 @@ public abstract class Container extends Widget {
     }
 
     @Override
-    public void initialize(GameContext gameContext) {
+    public void initialize(GuiContext guiContext) {
         for (Widget widget : children)
-            widget.initialize(gameContext);
+            widget.initialize(guiContext);
     }
 
 }

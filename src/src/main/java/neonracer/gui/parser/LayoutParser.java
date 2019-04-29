@@ -165,7 +165,7 @@ class LayoutParser {
                 }
             }
         }
-        throw new LayoutParserException(String.format("For %s to automatically be loaded into a property list, %s has to declare a static method annotated with @ParserMethod that takes a String as input and %s as output.", clazz.getSimpleName(), clazz.getSimpleName(), clazz.getSimpleName()));
+        throw new LayoutParserException(String.format("For %s to automatically be parsed from string, %s has to declare a static method annotated with @ParserMethod that takes a String as input and %s as output.", clazz.getSimpleName(), clazz.getSimpleName(), clazz.getSimpleName()));
     }
 
     private void loadAttributes(NamedNodeMap attributes, Widget widget) {
@@ -209,6 +209,6 @@ class LayoutParser {
         else if (param.getName().equals(long.class.getName())) return Long.parseLong(val);
         else if (param.getName().equals(boolean.class.getName())) return Boolean.parseBoolean(val);
         else if (param.isEnum()) return Enum.valueOf((Class<? extends Enum>) param, val);
-        return val;
+        else return invokeParser(param, val);
     }
 }
