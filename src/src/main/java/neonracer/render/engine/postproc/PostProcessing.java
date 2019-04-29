@@ -40,6 +40,7 @@ public class PostProcessing {
             colorFbo.bind();
         else if (renderPass == RenderPass.GLOW)
             glowFbo.bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     public void draw() {

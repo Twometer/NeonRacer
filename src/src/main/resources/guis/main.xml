@@ -13,7 +13,8 @@
             <ColumnDefinition>200</ColumnDefinition>
         </Grid.ColumnDefinitions>
         <ImageView Src="textures/logo.png" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Start"/>
-        <Button Margin="65,5" FontSize="1.75" Text="Rennen starten" Grid.Row="1" Grid.Column="0"/>
+        <Button Margin="65,5" TextColor="98,210,249" FontSize="1.75" Text="Rennen starten" Grid.Row="1"
+                Grid.Column="0"/>
         <Button Margin="65,5" FontSize="1.75" Text="Einstellungen" Grid.Row="3" Grid.Column="0"/>
         <Button Margin="65,0,5,65" FontSize="1.75" Text="Spiel verlassen" Grid.Row="4" Grid.Column="0"/>
         <Border Padding="5" Grid.Row="2" Grid.Column="1">

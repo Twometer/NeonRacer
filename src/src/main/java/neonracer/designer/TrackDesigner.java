@@ -10,8 +10,10 @@ import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.Camera;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
+import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.gl.core.Mesh;
 import neonracer.render.gl.core.Model;
 import neonracer.render.gl.shaders.FlatShader;
@@ -37,6 +39,8 @@ class TrackDesigner {
     private PrimitiveRenderer primitiveRenderer = new PrimitiveRenderer(renderContext);
 
     private GuiContext guiContext = new GuiContext(gameContext, renderContext, fontRenderer, primitiveRenderer);
+
+    private PostProcessing postProcessing;
 
     private FlatShader flatShader;
 
@@ -90,6 +94,8 @@ class TrackDesigner {
         crosshairModel = Model.create(crosshairMesh, GL_LINES);
         crosshairMesh.destroy();
 
+        postProcessing = new PostProcessing(gameContext);
+
         primitiveRenderer.initialize();
 
         renderContext.getCamera().setZoomFactor(0.01f);
@@ -98,6 +104,7 @@ class TrackDesigner {
             testScreen.setWidth(width);
             testScreen.setHeight(height);
             testScreen.performLayout();
+            postProcessing.onResize(width, height);
         });
     }
 
@@ -160,7 +167,13 @@ class TrackDesigner {
 
         fontRenderer.draw("Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
-        testScreen.draw(guiContext);
+        postProcessing.beginPass(RenderPass.COLOR);
+        testScreen.draw(guiContext, RenderPass.COLOR);
+
+        postProcessing.beginPass(RenderPass.GLOW);
+        testScreen.draw(guiContext, RenderPass.GLOW);
+
+        postProcessing.draw();
 
         // Do the controls handling
         Vector2f curMouse = gameContext.getMouseState().getPosition();

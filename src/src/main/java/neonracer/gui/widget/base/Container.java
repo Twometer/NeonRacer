@@ -1,6 +1,7 @@
 package neonracer.gui.widget.base;
 
 import neonracer.gui.GuiContext;
+import neonracer.render.engine.RenderPass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +45,9 @@ public abstract class Container extends Widget {
     }
 
     @Override
-    public void draw(GuiContext guiContext) {
+    public void draw(GuiContext guiContext, RenderPass renderPass) {
         for (Widget widget : children)
-            widget.draw(guiContext);
+            widget.draw(guiContext, renderPass);
     }
 
     @Override

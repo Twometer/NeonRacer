@@ -3,10 +3,13 @@ package neonracer.gui.widget.base;
 import neonracer.gui.GuiContext;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
+import neonracer.gui.input.MouseState;
 import neonracer.gui.util.Alignment;
 import neonracer.gui.util.ForeignParameters;
 import neonracer.gui.util.Margin;
 import neonracer.gui.util.Size;
+import neonracer.render.engine.RenderPass;
+import org.joml.Vector2f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,7 @@ public abstract class Widget {
         eventHandlers.put(event, handler);
     }
 
-    public abstract void draw(GuiContext guiContext);
+    public abstract void draw(GuiContext guiContext, RenderPass renderPass);
 
     public Size measure() {
         return new Size(width, height);
@@ -128,6 +131,12 @@ public abstract class Widget {
 
     public ForeignParameters getForeignParameters() {
         return foreignParameters;
+    }
+
+    protected final boolean isMouseHover(GuiContext context) {
+        MouseState state = context.getGameContext().getMouseState();
+        Vector2f pos = state.getPosition();
+        return pos.x >= x && pos.y >= y && pos.x <= x + width && pos.y <= y + height;
     }
 
     @Override

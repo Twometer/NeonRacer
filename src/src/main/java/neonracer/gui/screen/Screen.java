@@ -3,6 +3,7 @@ package neonracer.gui.screen;
 import neonracer.gui.GuiContext;
 import neonracer.gui.widget.base.Container;
 import neonracer.gui.widget.base.Widget;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.gl.core.Texture;
 
 public abstract class Screen extends Container {
@@ -26,10 +27,13 @@ public abstract class Screen extends Container {
     }
 
     @Override
-    public final void draw(GuiContext guiContext) {
-        backgroundTexture.bind();
-        guiContext.getPrimitiveRenderer().drawTexturedRect(getX(), getY(), getWidth(), getHeight());
-        singleWidget().draw(guiContext);
+    public final void draw(GuiContext guiContext, RenderPass renderPass) {
+        if (renderPass == RenderPass.COLOR) {
+            backgroundTexture.bind();
+            guiContext.getPrimitiveRenderer().drawTexturedRect(getX(), getY(), getWidth(), getHeight());
+            backgroundTexture.unbind();
+        }
+        singleWidget().draw(guiContext, renderPass);
     }
 
     @Override
