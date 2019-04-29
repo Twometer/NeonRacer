@@ -52,7 +52,7 @@ class TrackDesigner {
 
     void start() throws IOException {
         gameContext.initialize();
-        fontRenderer.setup(gameContext);
+        fontRenderer.setup(renderContext, gameContext);
 
         testScreen = ScreenLoader.loadScreen(TestScreen.class);
         testScreen.setWidth(gameContext.getGameWindow().getWidth());
@@ -125,10 +125,10 @@ class TrackDesigner {
 
 
         float lh = fontRenderer.getLineHeight(0.2f);
-        fontRenderer.draw(renderContext, "node_count=" + nodes.size(), 0, 0, 0.2f);
-        fontRenderer.draw(renderContext, "scale=" + renderContext.getCamera().getZoomFactor(), 0, lh, 0.2f);
+        fontRenderer.draw("node_count=" + nodes.size(), 0, 0, 0.2f);
+        fontRenderer.draw("scale=" + renderContext.getCamera().getZoomFactor(), 0, lh, 0.2f);
 
-        fontRenderer.draw(renderContext, unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
+        fontRenderer.draw(unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
 
         // Finally, render all the nodes
         flatShader.bind();
@@ -154,7 +154,7 @@ class TrackDesigner {
 
         flatShader.unbind();
 
-        fontRenderer.draw(renderContext, "Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
+        fontRenderer.draw("Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
         testScreen.draw(guiContext);
 

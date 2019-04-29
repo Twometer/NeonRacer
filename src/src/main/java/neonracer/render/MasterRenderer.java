@@ -108,7 +108,7 @@ public class MasterRenderer {
         }
 
         for (IRenderer renderer : renderers)
-            renderer.setup(gameContext);
+            renderer.setup(renderContext, gameContext);
 
         gameContext.getTimer().reset();
 
@@ -163,7 +163,7 @@ public class MasterRenderer {
 
     private void destroy() {
         for (IRenderer renderer : renderers)
-            renderer.destroy(gameContext);
+            renderer.destroy(renderContext, gameContext);
     }
 
 }

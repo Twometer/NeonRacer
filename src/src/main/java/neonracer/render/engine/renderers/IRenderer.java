@@ -6,10 +6,10 @@ import neonracer.render.engine.RenderPass;
 
 public interface IRenderer {
 
-    void setup(GameContext context);
+    void setup(RenderContext renderContext, GameContext gameContext);
 
     void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass);
 
-    void destroy(GameContext context);
+    void destroy(RenderContext renderContext, GameContext gameContext);
 
 }
