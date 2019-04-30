@@ -101,6 +101,8 @@ public class FontRenderer {
         float cursor = x;
         for (char c : text.toCharArray()) {
             Glyph glyph = fontFace.getGlyph(c);
+            if (glyph == null)
+                continue;
 
             Rectangle charRect = createChar(cursor, y, glyph, fontSize);
             meshBuilder.putRectVertices(charRect);
