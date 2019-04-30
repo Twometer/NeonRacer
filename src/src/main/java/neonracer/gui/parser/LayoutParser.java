@@ -69,7 +69,7 @@ class LayoutParser {
                 if (method.getParameterCount() > 0) {
                     Class clazz = method.getParameterTypes()[0];
                     if (ctrl != null) {
-                        ctrl.addEventHandler(clazz, event -> {
+                        ctrl.putEventHandler(clazz, event -> {
                             try {
                                 boolean accessible = method.isAccessible();
                                 method.setAccessible(true);
@@ -114,7 +114,7 @@ class LayoutParser {
             Node node = root.getChildNodes().item(i);
             String prefix = parent.getClass().getSimpleName() + ".";
             if (node.getNodeName().startsWith(prefix)) {
-                loadSublist(node, prefix, parent);
+                loadPropertyList(node, prefix, parent);
                 continue;
             }
             if (node.getNodeType() == Node.TEXT_NODE) // Skip "#text" nodes
@@ -129,7 +129,7 @@ class LayoutParser {
         }
     }
 
-    private void loadSublist(Node root, String prefix, Widget parent) {
+    private void loadPropertyList(Node root, String prefix, Widget parent) {
         String name = root.getNodeName().substring(prefix.length());
         Method listGetterMethod = findMethod(parent.getClass().getMethods(), "get" + name, false);
         if (listGetterMethod != null) {
@@ -148,23 +148,6 @@ class LayoutParser {
                 }
             }
         }
-    }
-
-    private Object invokeParser(Class clazz, String name) {
-        for (Method method : clazz.getMethods()) {
-            if (method.isAnnotationPresent(ParserMethod.class)
-                    && method.getParameterCount() == 1
-                    && method.getParameterTypes()[0] == String.class
-                    && Modifier.isStatic(method.getModifiers())
-                    && method.getReturnType() == clazz) {
-                try {
-                    return method.invoke(null, name);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        throw new LayoutParserException(String.format("For %s to automatically be parsed from string, %s has to declare a static method annotated with @ParserMethod that takes a String as input and %s as output.", clazz.getSimpleName(), clazz.getSimpleName(), clazz.getSimpleName()));
     }
 
     private void loadAttributes(NamedNodeMap attributes, Widget widget) {
@@ -200,14 +183,38 @@ class LayoutParser {
         return null;
     }
 
-    private Object cast(Class<?> param, String val) {
-        if (param.getName().equals(String.class.getName())) return val;
-        else if (param.getName().equals(int.class.getName())) return Integer.parseInt(val);
-        else if (param.getName().equals(double.class.getName())) return Double.parseDouble(val);
-        else if (param.getName().equals(float.class.getName())) return Float.parseFloat(val);
-        else if (param.getName().equals(long.class.getName())) return Long.parseLong(val);
-        else if (param.getName().equals(boolean.class.getName())) return Boolean.parseBoolean(val);
-        else if (param.isEnum()) return Enum.valueOf((Class<? extends Enum>) param, val);
-        else return invokeParser(param, val);
+    /**
+     * Tries to convert a string to a different datatype
+     *
+     * @param targetClass The target class
+     * @param str         The string
+     * @return The cast converted object
+     */
+    private Object cast(Class<?> targetClass, String str) {
+        if (targetClass.getName().equals(String.class.getName())) return str;
+        else if (targetClass.getName().equals(int.class.getName())) return Integer.parseInt(str);
+        else if (targetClass.getName().equals(double.class.getName())) return Double.parseDouble(str);
+        else if (targetClass.getName().equals(float.class.getName())) return Float.parseFloat(str);
+        else if (targetClass.getName().equals(long.class.getName())) return Long.parseLong(str);
+        else if (targetClass.getName().equals(boolean.class.getName())) return Boolean.parseBoolean(str);
+        else if (targetClass.isEnum()) return Enum.valueOf((Class<? extends Enum>) targetClass, str);
+        else return invokeParser(targetClass, str);
+    }
+
+    private Object invokeParser(Class clazz, String name) {
+        for (Method method : clazz.getMethods()) {
+            if (method.isAnnotationPresent(ParserMethod.class)
+                    && method.getParameterCount() == 1
+                    && method.getParameterTypes()[0] == String.class
+                    && Modifier.isStatic(method.getModifiers())
+                    && method.getReturnType() == clazz) {
+                try {
+                    return method.invoke(null, name);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        throw new LayoutParserException(String.format("For %s to automatically be parsed from string, %s has to declare a static method annotated with @ParserMethod that takes a String as input and %s as output.", clazz.getSimpleName(), clazz.getSimpleName(), clazz.getSimpleName()));
     }
 }

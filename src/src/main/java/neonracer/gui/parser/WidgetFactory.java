@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Used by the LayoutParser to convert strings like "Button"
+ * to widget objects
+ */
 public class WidgetFactory {
 
     private static final List<Class<? extends Widget>> REGISTERED_WIDGETS = new ArrayList<>();

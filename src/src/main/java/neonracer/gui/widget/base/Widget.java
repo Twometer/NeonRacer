@@ -46,8 +46,12 @@ public abstract class Widget {
         this.internalId = UUID.randomUUID();
     }
 
-    public void addEventHandler(Class<? extends Event> event, EventHandler handler) {
+    public void putEventHandler(Class<? extends Event> event, EventHandler handler) {
         eventHandlers.put(event, handler);
+    }
+
+    public void removeEventHandler(Class<? extends Event> event) {
+        eventHandlers.remove(event);
     }
 
     public abstract void draw(GuiContext guiContext, RenderPass renderPass);
