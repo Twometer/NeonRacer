@@ -15,6 +15,11 @@ class GridLayoutEngine {
 
     private int[] calculatedRows;
 
+    /**
+     * Used by the grid to instantiate the layout engine
+     *
+     * @param grid The owning grid
+     */
     GridLayoutEngine(Grid grid) {
         this.grid = grid;
     }
@@ -35,28 +40,28 @@ class GridLayoutEngine {
     void layoutChild(Widget widget) {
         int row = widget.getForeignParameters().getInt(NAMESPACE, "Row");
         int col = widget.getForeignParameters().getInt(NAMESPACE, "Column");
+        int rowSpan = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "RowSpan", 1);
+        int colSpan = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "ColSpan", 1);
 
-        Vector2i cellPos = getCellPos(col, row);
-        int cellWidth = calculatedColumns[col];
-        int cellHeight = calculatedRows[row];
-
+        Vector2i cellPos = calcCellPos(col, row);
+        Size cellSize = calcCellSize(row, col, rowSpan, colSpan);
         Size widgetSize = widget.measure();
 
         switch (widget.getHorizontalAlignment()) {
             case Fill:
                 widget.setX(cellPos.x);
-                widget.setWidth(cellWidth);
+                widget.setWidth(cellSize.getWidth());
                 break;
             case Start:
                 widget.setX(cellPos.x);
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellHeight);
+                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellSize.getHeight());
                 break;
             case Center:
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellHeight);
-                widget.setX((int) (cellPos.x + cellWidth / 2f - widget.getWidth() / 2f));
+                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellSize.getHeight());
+                widget.setX((int) (cellPos.x + cellSize.getWidth() / 2f - widget.getWidth() / 2f));
                 break;
             case End:
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellHeight);
+                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellSize.getHeight());
                 widget.setX(cellPos.x - widget.getWidth());
                 break;
         }
@@ -64,7 +69,7 @@ class GridLayoutEngine {
         switch (widget.getVerticalAlignment()) {
             case Fill:
                 widget.setY(cellPos.y);
-                widget.setHeight(cellHeight);
+                widget.setHeight(cellSize.getHeight());
                 break;
             case Start: // TODO
             case Center:
@@ -168,13 +173,34 @@ class GridLayoutEngine {
     }
 
     /**
+     * Calculates the size of an (extended) cell one widget sits in
+     *
+     * @param row     The row of the widget
+     * @param col     The col of the widget
+     * @param rowSpan How many rows the widget extends down
+     * @param colSpan How many cols the widget extends to the right
+     * @return The size the cell
+     */
+    private Size calcCellSize(int row, int col, int rowSpan, int colSpan) {
+        int width = 0;
+        for (int i = col; i < col + colSpan; i++)
+            width += calculatedColumns[i];
+
+        int height = 0;
+        for (int i = row; i < row + rowSpan; i++)
+            height += calculatedRows[i];
+
+        return new Size(width, height);
+    }
+
+    /**
      * Calculates the position of the top left corner of the given cell
      *
      * @param column The column of the cell
      * @param row    The row of the celll
      * @return The position
      */
-    private Vector2i getCellPos(int column, int row) {
+    private Vector2i calcCellPos(int column, int row) {
         int x = 0;
         for (int i = 0; i < column; i++) x += calculatedColumns[i];
 
