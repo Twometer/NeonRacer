@@ -70,6 +70,7 @@ public class GameWindow {
         });
 
         glfwMakeContextCurrent(window);
+        glfwSwapInterval(1);
 
         float[] x = new float[1];
         float[] y = new float[1];
