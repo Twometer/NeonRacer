@@ -1,9 +1,6 @@
 package neonracer.gui.parser;
 
-import neonracer.gui.widget.Border;
-import neonracer.gui.widget.Button;
-import neonracer.gui.widget.ImageView;
-import neonracer.gui.widget.Label;
+import neonracer.gui.widget.*;
 import neonracer.gui.widget.base.Widget;
 import neonracer.gui.widget.grid.Grid;
 
@@ -25,6 +22,7 @@ public class WidgetFactory {
         register(Button.class);
         register(Border.class);
         register(Label.class);
+        register(ProgressBar.class);
     }
 
     private WidgetFactory() {
