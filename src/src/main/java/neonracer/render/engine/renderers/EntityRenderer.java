@@ -22,7 +22,7 @@ public class EntityRenderer implements IRenderer {
     private Model rectangle;
 
     @Override
-    public void setup(GameContext context) {
+    public void setup(RenderContext renderContext, GameContext gameContext) {
         entityShader = new EntityShader();
 
         MeshBuilder meshBuilder = new MeshBuilder(6);
@@ -55,7 +55,7 @@ public class EntityRenderer implements IRenderer {
     }
 
     @Override
-    public void destroy(GameContext context) {
+    public void destroy(RenderContext renderContext, GameContext gameContext) {
         rectangle.destroy();
         entityShader.destroy();
     }

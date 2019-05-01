@@ -15,6 +15,8 @@ public class FlatShader extends Shader {
 
     private int color;
 
+    private int hasTexture;
+
     public FlatShader() {
         super("flat");
     }
@@ -24,6 +26,7 @@ public class FlatShader extends Shader {
         this.projectionMatrix = glGetUniformLocation(program, "projectionMatrix");
         this.transformationMatrix = glGetUniformLocation(program, "transformationMatrix");
         this.color = glGetUniformLocation(program, "color");
+        this.hasTexture = glGetUniformLocation(program, "hasTexture");
     }
 
     public void setProjectionMatrix(Matrix4f matrix) {
@@ -40,6 +43,10 @@ public class FlatShader extends Shader {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
         matrix.get(buffer);
         glUniformMatrix4fv(transformationMatrix, false, buffer);
+    }
+
+    public void setHasTexture(boolean texture) {
+        glUniform1i(hasTexture, texture ? 1 : 0);
     }
 
 }
