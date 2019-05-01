@@ -14,7 +14,7 @@ public class TrackRenderer implements IRenderer {
     private WorldShader worldShader;
 
     @Override
-    public void setup(RenderContext renderContext, GameContext gameContext) {
+    public void setup(GameContext context) {
         worldShader = new WorldShader();
     }
 
@@ -32,7 +32,7 @@ public class TrackRenderer implements IRenderer {
     }
 
     @Override
-    public void destroy(RenderContext renderContext, GameContext gameContext) {
+    public void destroy(GameContext context) {
         worldShader.destroy();
     }
 }

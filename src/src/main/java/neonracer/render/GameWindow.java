@@ -138,7 +138,7 @@ public class GameWindow {
         return glfwGetKey(window, key) == GLFW_PRESS;
     }
 
-    public void setSizeChangedListener(SizeChangedListener sizeChangedListener) {
+    void setSizeChangedListener(SizeChangedListener sizeChangedListener) {
         this.sizeChangedListener = sizeChangedListener;
     }
 

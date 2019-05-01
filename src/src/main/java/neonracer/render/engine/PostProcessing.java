@@ -1,4 +1,4 @@
-package neonracer.render.engine.postproc;
+package neonracer.render.engine;
 
 import neonracer.render.gl.core.Fbo;
 
@@ -10,17 +10,13 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-class FboManager {
+public class PostProcessing {
 
     private float[] POSITIONS = {-1, 1, -1, -1, 1, 1, 1, -1};
 
     private int vao;
 
-    FboManager() {
-        initialize();
-    }
-
-    private void initialize() {
+    public void initialize() {
         this.vao = glGenVertexArrays();
         glBindVertexArray(vao);
 
@@ -33,12 +29,12 @@ class FboManager {
         glBindVertexArray(0);
     }
 
-    void begin() {
+    public void begin() {
         glBindVertexArray(vao);
         glEnableVertexAttribArray(0);
     }
 
-    void copyFbo(Fbo src, Fbo target) {
+    public void copyFbo(Fbo src, Fbo target) {
         if (target != null) target.bind();
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, src.getColorTexture());
@@ -47,11 +43,11 @@ class FboManager {
         if (target != null) target.unbind();
     }
 
-    void fullscreenQuad() {
+    public void fullscreenQuad() {
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    void end() {
+    public void end() {
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);
     }

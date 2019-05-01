@@ -1,4 +1,4 @@
-package neonracer.gui.font;
+package neonracer.render.engine.font;
 
 class Glyph {
 

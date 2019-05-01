@@ -2,19 +2,13 @@ package neonracer.designer;
 
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
-import neonracer.gui.GuiContext;
-import neonracer.gui.GuiManager;
-import neonracer.gui.events.ClickEvent;
-import neonracer.gui.font.FontRenderer;
-import neonracer.gui.util.PrimitiveRenderer;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.Camera;
-import neonracer.render.engine.RenderPass;
+import neonracer.render.engine.font.FontRenderer;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
-import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.gl.core.Mesh;
 import neonracer.render.gl.core.Model;
 import neonracer.render.gl.shaders.FlatShader;
@@ -32,15 +26,12 @@ import static org.lwjgl.opengl.GL11.*;
 class TrackDesigner {
 
     private GameContext gameContext = GameContextFactory.createForDesigner();
+
     private RenderContext renderContext = new RenderContext(new Camera(gameContext));
 
-    private FontRenderer fontRenderer = new FontRenderer("redthinker");
-    private PrimitiveRenderer primitiveRenderer = new PrimitiveRenderer(renderContext);
+    private FontRenderer fontRenderer = new FontRenderer("lucida");
 
-    private GuiContext guiContext = new GuiContext(gameContext, renderContext, fontRenderer, primitiveRenderer);
-    private GuiManager guiManager = new GuiManager(guiContext);
-
-    private PostProcessing postProcessing;
+    private BasicButton testButton = new BasicButton(fontRenderer, 10, 30, "New Node");
 
     private FlatShader flatShader;
 
@@ -52,13 +43,9 @@ class TrackDesigner {
 
     private Model nodeModel;
 
-
     void start() throws IOException {
         gameContext.initialize();
-        fontRenderer.setup(renderContext, gameContext);
-
-        guiManager.show(TestScreen.class);
-
+        fontRenderer.setup(gameContext);
         setup();
         startRenderLoop();
     }
@@ -89,16 +76,9 @@ class TrackDesigner {
         crosshairModel = Model.create(crosshairMesh, GL_LINES);
         crosshairMesh.destroy();
 
-        postProcessing = new PostProcessing(gameContext);
-
-        primitiveRenderer.initialize();
+        testButton.setOnClickListener(() -> System.out.println("Button pressed"));
 
         renderContext.getCamera().setZoomFactor(0.01f);
-
-        gameContext.getGameWindow().setSizeChangedListener((width, height) -> {
-            guiManager.resize(width, height);
-            postProcessing.onResize(width, height);
-        });
     }
 
     private void startRenderLoop() {
@@ -128,11 +108,13 @@ class TrackDesigner {
         this.unprojected = new Vector2f(unprojected4.x, unprojected4.y);
 
 
-        float lh = fontRenderer.getLineHeight(0.2f);
-        fontRenderer.draw("node_count=" + nodes.size(), 0, 0, 0.2f);
-        fontRenderer.draw("scale=" + renderContext.getCamera().getZoomFactor(), 0, lh, 0.2f);
+        testButton.draw(renderContext, gameContext);
 
-        fontRenderer.draw(unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
+        float lh = fontRenderer.getLineHeight(0.2f);
+        fontRenderer.draw(renderContext, "node_count=" + nodes.size(), 0, 0, 0.2f);
+        fontRenderer.draw(renderContext, "scale=" + renderContext.getCamera().getZoomFactor(), 0, lh, 0.2f);
+
+        fontRenderer.draw(renderContext, unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
 
         // Finally, render all the nodes
         flatShader.bind();
@@ -158,15 +140,7 @@ class TrackDesigner {
 
         flatShader.unbind();
 
-        fontRenderer.draw("Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
-
-        postProcessing.beginPass(RenderPass.COLOR);
-        guiManager.draw(RenderPass.COLOR);
-
-        postProcessing.beginPass(RenderPass.GLOW);
-        guiManager.draw(RenderPass.GLOW);
-
-        postProcessing.draw();
+        fontRenderer.draw(renderContext, "Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
         // Do the controls handling
         Vector2f curMouse = gameContext.getMouseState().getPosition();
@@ -185,6 +159,11 @@ class TrackDesigner {
     }
 
     private void onClick() {
+        if (testButton.click(gameContext))
+            return;
+
+        GameWindow gameWindow = gameContext.getGameWindow();
+
         // Check if user selected a node
         for (Node node : nodes) {
             if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
@@ -195,9 +174,6 @@ class TrackDesigner {
 
         // Add a node at mouse position
         nodes.add(new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 0, ""));
-
-        // Handle clicks at this position
-        guiManager.raiseEvent(new ClickEvent());
     }
 
     private void onScroll(float x, float y) {

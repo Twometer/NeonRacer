@@ -1,4 +1,4 @@
-package neonracer.gui.input;
+package neonracer.gui;
 
 import neonracer.render.GameWindow;
 
