@@ -118,6 +118,8 @@ class TrackDesigner {
         Vector4f unprojected4 = renderContext.getWorldMatrix().unproject(gameWindow.getCursorPosition().x, gameWindow.getHeight() - gameWindow.getCursorPosition().y, 0.0f, viewport, new Vector4f());
         this.unprojected = new Vector2f(unprojected4.x, unprojected4.y);
 
+        postProcessing.beginPass(RenderPass.COLOR);
+
         // Draw some debug information
         FontRenderer fontRenderer = renderContext.getFonts().getContentFont();
         float lh = fontRenderer.getLineHeight(0.2f);
@@ -127,7 +129,6 @@ class TrackDesigner {
         fontRenderer.draw(unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
 
         // Render all drawn nodes to the screen
-        postProcessing.beginPass(RenderPass.COLOR);
         flatShader.bind();
         flatShader.setProjectionMatrix(renderContext.getWorldMatrix());
 

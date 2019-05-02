@@ -26,10 +26,10 @@ public class Color {
 
     @ParserMethod
     public static Color fromString(String str) {
-        int[] i = Arrays.stream(str.split(",")).mapToInt(Integer::parseInt).toArray();
-        if (i.length != 3)
+        double[] f = Arrays.stream(str.split(",")).mapToDouble(Double::parseDouble).toArray();
+        if (f.length != 3)
             throw new IllegalArgumentException(str + " is not a valid Color string");
-        return new Color(i[0], i[1], i[2]);
+        return new Color((float) f[0], (float) f[1], (float) f[2]);
     }
 
     /**
