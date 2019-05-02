@@ -68,7 +68,7 @@ public class MasterRenderer {
 
         gameWindow.setSizeChangedListener(postProcessing::onResize);
 
-
+        renderContext.initialize();
         renderContext.getCamera().setZoomFactor(0.02f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
