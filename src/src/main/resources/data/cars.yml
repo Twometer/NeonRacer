@@ -4,30 +4,30 @@
   color_texture: "textures/kart.png"
   glow_texture: "textures/kart-glow.png"
   primary_ability: ""
-  max_forward_speed: 110
-  max_reverse_speed: -55
-  max_force_front: 140
-  max_force_back: 140
-  max_lateral_force: 9.8
+  max_forward_speed: 70
+  max_reverse_speed: -100
+  max_force_front: 112
+  max_force_back: 112
+  max_lateral_force: 7
 - id: "rocketcar"
   name: "Raketenauto"
   desc: "Das Raketenauto ist wahnsinnig schnell, dafür aber auch sehr groß."
   color_texture: "textures/rocketcar.png"
   glow_texture: "textures/rocketcar-glow.png"
   primary_ability: ""
-  max_forward_speed: 110
-  max_reverse_speed: -55
-  max_force_front: 140
-  max_force_back: 140
-  max_lateral_force: 9.8
+  max_forward_speed: 400
+  max_reverse_speed: -300
+  max_force_front: 150
+  max_force_back: 100
+  max_lateral_force: 20
 - id: "sportscar"
   name: "Sportwagen"
   desc: "Der Sportwagen bietet eine Balance zwischen Kurvenlage und Geschwindigkeit"
   color_texture: "textures/sportscar.png"
   glow_texture: "textures/sportscar-glow.png"
   primary_ability: ""
-  max_forward_speed: 110
+  max_forward_speed: 91
   max_reverse_speed: -55
-  max_force_front: 140
-  max_force_back: 140
-  max_lateral_force: 9.8
+  max_force_front: 122
+  max_force_back: 122
+  max_lateral_force: 12
