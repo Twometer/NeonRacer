@@ -1,0 +1,24 @@
+<Screen>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition>*</RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>*</ColumnDefinition>
+            <ColumnDefinition>300</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Border Padding="0" Grid.Row="0" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition>*</RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition>*</ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label TextColor="0,0,0" Text="Node properties" Grid.Row="0" Grid.Column="0" FontSize="0.7"/>
+            </Grid>
+        </Border>
+    </Grid>
+
+</Screen>

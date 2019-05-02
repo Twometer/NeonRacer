@@ -13,7 +13,7 @@ public class Label extends Widget {
 
     private String text;
 
-    private float fontSize;
+    private float fontSize = 1.0f;
 
     private Color textColor = Color.WHITE;
 

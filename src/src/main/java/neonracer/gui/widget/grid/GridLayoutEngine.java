@@ -207,7 +207,7 @@ class GridLayoutEngine {
         int y = 0;
         for (int i = 0; i < row; i++) y += calculatedRows[i];
 
-        return new Vector2i(x, y);
+        return new Vector2i(grid.getX() + x, grid.getY() + y);
     }
 
 }

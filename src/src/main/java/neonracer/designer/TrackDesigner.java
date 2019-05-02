@@ -5,10 +5,10 @@ import neonracer.core.GameContextFactory;
 import neonracer.gui.GuiManager;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.screen.MainScreen;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
+import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.engine.postproc.PostProcessing;
@@ -50,7 +50,7 @@ class TrackDesigner {
         gameContext.initialize();
         renderContext.initialize();
 
-        guiManager.show(MainScreen.class);
+        guiManager.show(DesignerScreen.class);
 
         setup();
         startRenderLoop();
@@ -106,19 +106,19 @@ class TrackDesigner {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, gameWindow.getWidth(), gameWindow.getHeight());
-        viewport[2] = gameWindow.getWidth();
-        viewport[3] = gameWindow.getHeight();
 
-        renderContext.updateMatrices(gameContext);
+        renderContext.updateMatrices();
 
         gameContext.getKeyboardState().update(gameWindow);
         gameContext.getMouseState().update(gameWindow);
 
         // Figure out where the mouse cursor would be in world space
+        viewport[2] = gameWindow.getWidth();
+        viewport[3] = gameWindow.getHeight();
         Vector4f unprojected4 = renderContext.getWorldMatrix().unproject(gameWindow.getCursorPosition().x, gameWindow.getHeight() - gameWindow.getCursorPosition().y, 0.0f, viewport, new Vector4f());
         this.unprojected = new Vector2f(unprojected4.x, unprojected4.y);
 
-
+        // Draw some debug information
         FontRenderer fontRenderer = renderContext.getFonts().getContentFont();
         float lh = fontRenderer.getLineHeight(0.2f);
         fontRenderer.draw("node_count=" + nodes.size(), 0, 0, 0.2f);
@@ -126,7 +126,8 @@ class TrackDesigner {
 
         fontRenderer.draw(unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
 
-        // Finally, render all the nodes
+        // Render all drawn nodes to the screen
+        postProcessing.beginPass(RenderPass.COLOR);
         flatShader.bind();
         flatShader.setProjectionMatrix(renderContext.getWorldMatrix());
 
@@ -150,17 +151,20 @@ class TrackDesigner {
 
         flatShader.unbind();
 
-        fontRenderer.draw("Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
-
-        /*postProcessing.beginPass(RenderPass.COLOR);
+        // Draw the GUI
         guiManager.draw(RenderPass.COLOR);
 
+        // Now, draw the glowing parts
         postProcessing.beginPass(RenderPass.GLOW);
         guiManager.draw(RenderPass.GLOW);
 
-        postProcessing.draw();*/
+        // And send all that to the screen
+        postProcessing.draw();
 
-        // Do the controls handling
+        handleControls();
+    }
+
+    private void handleControls() {
         Vector2f curMouse = gameContext.getMouseState().getPosition();
         if (gameContext.getMouseState().isMiddle()) {
             float dx = curMouse.x - lastMouse.x;
@@ -177,6 +181,9 @@ class TrackDesigner {
     }
 
     private void onClick() {
+        // Notify the GUI of the click
+        guiManager.raiseEvent(new ClickEvent());
+
         // Check if user selected a node
         for (Node node : nodes) {
             if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
@@ -187,9 +194,6 @@ class TrackDesigner {
 
         // Add a node at mouse position
         nodes.add(new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 0, ""));
-
-        // Handle clicks at this position
-        guiManager.raiseEvent(new ClickEvent());
     }
 
     private void onScroll(float x, float y) {

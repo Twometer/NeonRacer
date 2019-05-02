@@ -34,7 +34,7 @@ public class RenderContext {
         primitiveRenderer.initialize();
     }
 
-    public void updateMatrices(GameContext gameContext) {
+    public void updateMatrices() {
         GameWindow gameWindow = gameContext.getGameWindow();
         worldMatrix = camera.calculateMatrix();
         guiMatrix.setOrtho2D(0.0f, gameWindow.getWidth(), gameWindow.getHeight(), 0.0f);

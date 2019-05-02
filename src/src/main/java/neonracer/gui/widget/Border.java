@@ -2,6 +2,7 @@ package neonracer.gui.widget;
 
 import neonracer.gui.util.Color;
 import neonracer.gui.widget.base.Container;
+import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
@@ -27,6 +28,13 @@ public class Border extends Container {
     @Override
     public void performLayout() {
         checkSingleWidget();
+        if (children.size() > 0) {
+            Widget singleChild = children.get(0);
+            singleChild.setX(getX());
+            singleChild.setY(getY());
+            singleChild.setWidth(getWidth());
+            singleChild.setHeight(getHeight());
+        }
         super.performLayout();
     }
 

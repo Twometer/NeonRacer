@@ -92,7 +92,7 @@ public class MasterRenderer {
     }
 
     private void render() {
-        renderContext.updateMatrices(gameContext);
+        renderContext.updateMatrices();
 
         postProcessing.beginPass(RenderPass.COLOR);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
