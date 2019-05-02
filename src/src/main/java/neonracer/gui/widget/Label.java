@@ -1,10 +1,10 @@
 package neonracer.gui.widget;
 
-import neonracer.gui.GuiContext;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
+import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
 public class Label extends Widget {
@@ -42,13 +42,13 @@ public class Label extends Widget {
     }
 
     @Override
-    public void initialize(GuiContext guiContext) {
-        super.initialize(guiContext);
-        this.fontRenderer = guiContext.getFontRenderer();
+    public void initialize(RenderContext renderContext) {
+        super.initialize(renderContext);
+        this.fontRenderer = renderContext.getFonts().getTitleFont();
     }
 
     @Override
-    public void draw(GuiContext guiContext, RenderPass renderPass) {
+    public void draw(RenderContext renderContext, RenderPass renderPass) {
         if (renderPass == RenderPass.COLOR)
             fontRenderer.draw(text, getX() + getMargin().getLeft(), getY() + getMargin().getTop(), fontSize, textColor.toVector(1.0f));
     }

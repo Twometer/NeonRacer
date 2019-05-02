@@ -1,6 +1,5 @@
 package neonracer.gui.widget.base;
 
-import neonracer.gui.GuiContext;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
@@ -9,6 +8,7 @@ import neonracer.gui.util.Alignment;
 import neonracer.gui.util.ForeignParameters;
 import neonracer.gui.util.Margin;
 import neonracer.gui.util.Size;
+import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import org.joml.Vector2f;
 
@@ -54,7 +54,7 @@ public abstract class Widget {
         eventHandlers.remove(event);
     }
 
-    public abstract void draw(GuiContext guiContext, RenderPass renderPass);
+    public abstract void draw(RenderContext renderContext, RenderPass renderPass);
 
     public Size measure() {
         return new Size(width, height);
@@ -79,8 +79,8 @@ public abstract class Widget {
     private void onEvent(Event event) {
     }
 
-    public void initialize(GuiContext guiContext) {
-        mouseState = guiContext.getGameContext().getMouseState();
+    public void initialize(RenderContext renderContext) {
+        mouseState = renderContext.getGameContext().getMouseState();
     }
 
     public String getId() {

@@ -3,6 +3,7 @@ package neonracer.gui;
 import neonracer.gui.events.Event;
 import neonracer.gui.parser.ScreenLoader;
 import neonracer.gui.screen.Screen;
+import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
 import java.util.HashMap;
@@ -10,30 +11,30 @@ import java.util.Map;
 
 public class GuiManager {
 
-    private GuiContext guiContext;
+    private RenderContext renderContext;
 
     private Map<Class<? extends Screen>, Screen> cache = new HashMap<>();
 
     private Screen currentScreen;
 
-    public GuiManager(GuiContext guiContext) {
-        this.guiContext = guiContext;
+    public GuiManager(RenderContext renderContext) {
+        this.renderContext = renderContext;
     }
 
     public void show(Class<? extends Screen> screenClass) {
         Screen screen = cache.containsKey(screenClass) ? cache.get(screenClass) : ScreenLoader.loadScreen(screenClass);
         cache.put(screenClass, screen);
 
-        screen.setWidth(guiContext.getGameContext().getGameWindow().getWidth());
-        screen.setHeight(guiContext.getGameContext().getGameWindow().getHeight());
-        screen.initialize(guiContext);
+        screen.setWidth(renderContext.getGameContext().getGameWindow().getWidth());
+        screen.setHeight(renderContext.getGameContext().getGameWindow().getHeight());
+        screen.initialize(renderContext);
         screen.performLayout();
         currentScreen = screen;
     }
 
     public void draw(RenderPass renderPass) {
         if (currentScreen != null)
-            currentScreen.draw(guiContext, renderPass);
+            currentScreen.draw(renderContext, renderPass);
     }
 
     public void resize(int width, int height) {

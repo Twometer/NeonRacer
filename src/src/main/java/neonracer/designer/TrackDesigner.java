@@ -2,16 +2,13 @@ package neonracer.designer;
 
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
-import neonracer.gui.GuiContext;
 import neonracer.gui.GuiManager;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.util.PrimitiveRenderer;
+import neonracer.gui.screen.MainScreen;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
-import neonracer.render.engine.Camera;
-import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.engine.postproc.PostProcessing;
@@ -32,13 +29,9 @@ import static org.lwjgl.opengl.GL11.*;
 class TrackDesigner {
 
     private GameContext gameContext = GameContextFactory.createForDesigner();
-    private RenderContext renderContext = new RenderContext(new Camera(gameContext));
+    private RenderContext renderContext = new RenderContext(gameContext);
 
-    private FontRenderer fontRenderer = new FontRenderer("redthinker");
-    private PrimitiveRenderer primitiveRenderer = new PrimitiveRenderer(renderContext);
-
-    private GuiContext guiContext = new GuiContext(gameContext, renderContext, fontRenderer, primitiveRenderer);
-    private GuiManager guiManager = new GuiManager(guiContext);
+    private GuiManager guiManager = new GuiManager(renderContext);
 
     private PostProcessing postProcessing;
 
@@ -55,9 +48,9 @@ class TrackDesigner {
 
     void start() throws IOException {
         gameContext.initialize();
-        fontRenderer.setup(renderContext, gameContext);
+        renderContext.initialize();
 
-        guiManager.show(TestScreen.class);
+        guiManager.show(MainScreen.class);
 
         setup();
         startRenderLoop();
@@ -90,8 +83,6 @@ class TrackDesigner {
         crosshairMesh.destroy();
 
         postProcessing = new PostProcessing(gameContext);
-
-        primitiveRenderer.initialize();
 
         renderContext.getCamera().setZoomFactor(0.01f);
 
@@ -128,6 +119,7 @@ class TrackDesigner {
         this.unprojected = new Vector2f(unprojected4.x, unprojected4.y);
 
 
+        FontRenderer fontRenderer = renderContext.getFonts().getContentFont();
         float lh = fontRenderer.getLineHeight(0.2f);
         fontRenderer.draw("node_count=" + nodes.size(), 0, 0, 0.2f);
         fontRenderer.draw("scale=" + renderContext.getCamera().getZoomFactor(), 0, lh, 0.2f);
@@ -160,13 +152,13 @@ class TrackDesigner {
 
         fontRenderer.draw("Node Properties", gameWindow.getWidth() - 150 - fontRenderer.getStringWidth("Node Properties", 0.3f) / 2, 10, 0.3f);
 
-        postProcessing.beginPass(RenderPass.COLOR);
+        /*postProcessing.beginPass(RenderPass.COLOR);
         guiManager.draw(RenderPass.COLOR);
 
         postProcessing.beginPass(RenderPass.GLOW);
         guiManager.draw(RenderPass.GLOW);
 
-        postProcessing.draw();
+        postProcessing.draw();*/
 
         // Do the controls handling
         Vector2f curMouse = gameContext.getMouseState().getPosition();

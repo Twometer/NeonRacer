@@ -1,10 +1,10 @@
 package neonracer.gui.widget;
 
-import neonracer.gui.GuiContext;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
+import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import org.joml.Vector4f;
 
@@ -41,9 +41,9 @@ public class Button extends Widget {
     }
 
     @Override
-    public void initialize(GuiContext guiContext) {
-        super.initialize(guiContext);
-        this.fontRenderer = guiContext.getFontRenderer();
+    public void initialize(RenderContext renderContext) {
+        super.initialize(renderContext);
+        this.fontRenderer = renderContext.getFonts().getTitleFont();
     }
 
     public void setTextColor(Color textColor) {
@@ -51,7 +51,7 @@ public class Button extends Widget {
     }
 
     @Override
-    public void draw(GuiContext guiContext, RenderPass renderPass) {
+    public void draw(RenderContext renderContext, RenderPass renderPass) {
         boolean hover = isMouseHover();
         if (hover && offset < 20)
             offset += 1;

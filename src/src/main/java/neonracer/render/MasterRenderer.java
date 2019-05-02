@@ -4,7 +4,6 @@ import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.phys.entity.car.CarPhysicsFactory;
-import neonracer.render.engine.Camera;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.DebugRenderer;
@@ -34,7 +33,7 @@ public class MasterRenderer {
     public MasterRenderer(GameContext context) {
         this.gameContext = context;
         this.gameWindow = gameContext.getGameWindow();
-        this.renderContext = new RenderContext(new Camera(context));
+        this.renderContext = new RenderContext(gameContext);
     }
 
     public void startLoop() {
@@ -56,7 +55,7 @@ public class MasterRenderer {
 
         gameContext.getPhysicsEngine().onTick();
 
-        renderContext.getCameraManager().smoothFollow(gameContext.getGameState().getPlayerEntity());
+        renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
     }
 
     private void setup() {

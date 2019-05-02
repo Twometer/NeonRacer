@@ -29,11 +29,11 @@ public class FontRenderer {
 
     private Model textModel;
 
-    public FontRenderer(String fontFace) {
+    FontRenderer(String fontFace) {
         this.fontFaceName = fontFace;
     }
 
-    public void setup(RenderContext renderContext, GameContext gameContext) {
+    public void initialize(RenderContext renderContext, GameContext gameContext) {
         this.renderContext = renderContext;
         this.gameContext = gameContext;
         fontShader = new FontShader();

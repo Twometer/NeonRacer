@@ -1,8 +1,8 @@
 package neonracer.gui.widget;
 
-import neonracer.gui.GuiContext;
 import neonracer.gui.util.Color;
 import neonracer.gui.widget.base.Container;
+import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
 public class Border extends Container {
@@ -18,10 +18,10 @@ public class Border extends Container {
     }
 
     @Override
-    public void draw(GuiContext guiContext, RenderPass renderPass) {
+    public void draw(RenderContext renderContext, RenderPass renderPass) {
         if (renderPass == RenderPass.COLOR)
-            guiContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), color.toVector(1.0f));
-        super.draw(guiContext, renderPass);
+            renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), color.toVector(1.0f));
+        super.draw(renderContext, renderPass);
     }
 
     @Override

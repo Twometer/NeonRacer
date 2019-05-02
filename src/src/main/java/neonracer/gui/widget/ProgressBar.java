@@ -1,7 +1,7 @@
 package neonracer.gui.widget;
 
-import neonracer.gui.GuiContext;
 import neonracer.gui.widget.base.Widget;
+import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
 public class ProgressBar extends Widget {
@@ -17,7 +17,7 @@ public class ProgressBar extends Widget {
     }
 
     @Override
-    public void draw(GuiContext guiContext, RenderPass renderPass) {
+    public void draw(RenderContext renderContext, RenderPass renderPass) {
         // TODO
     }
 

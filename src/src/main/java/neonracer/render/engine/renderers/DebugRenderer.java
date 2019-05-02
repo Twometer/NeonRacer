@@ -14,17 +14,14 @@ public class DebugRenderer implements IRenderer {
     private int fps = 0;
     private int frames = 0;
 
-    private FontRenderer fontRenderer = new FontRenderer("lucida");
-
     @Override
     public void setup(RenderContext renderContext, GameContext gameContext) {
-        fontRenderer.setup(renderContext, gameContext);
     }
-
 
     @Override
     public void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass) {
         if (renderPass != RenderPass.COLOR) return;
+        FontRenderer fontRenderer = renderContext.getFonts().getContentFont();
         float lh = fontRenderer.getLineHeight(0.3f);
         fontRenderer.draw(BuildInfo.getGameTitle() + " v" + BuildInfo.getGameVersion(), 0.0f, 0.0f, 0.3f);
         fontRenderer.draw("fps=" + fps, 0.0f, lh, 0.3f);
@@ -41,7 +38,6 @@ public class DebugRenderer implements IRenderer {
 
     @Override
     public void destroy(RenderContext renderContext, GameContext gameContext) {
-        fontRenderer.destroy();
     }
 
 }
