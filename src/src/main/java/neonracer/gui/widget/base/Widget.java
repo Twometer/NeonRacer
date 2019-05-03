@@ -61,19 +61,17 @@ public abstract class Widget {
     }
 
     public void raiseEvent(Event event) {
-        onRaiseEvent(event);
-
         if (event instanceof ClickEvent)
             if (isMouseHover())
                 event.consume();
             else return;
+        handleEvent(event);
+    }
 
+    void handleEvent(Event event) {
         onEvent(event);
         EventHandler handler = eventHandlers.get(event.getClass());
         if (handler != null) handler.handle(event);
-    }
-
-    protected void onRaiseEvent(Event event) {
     }
 
     private void onEvent(Event event) {

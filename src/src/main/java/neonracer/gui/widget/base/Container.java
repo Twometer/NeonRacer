@@ -46,13 +46,13 @@ public abstract class Container extends Widget {
     }
 
     @Override
-    protected void onRaiseEvent(Event event) {
-        super.onRaiseEvent(event);
+    public void raiseEvent(Event event) {
         for (Widget widget : children) {
             widget.raiseEvent(event);
             if (event.isConsumed())
                 return;
         }
+        handleEvent(event);
     }
 
     @Override

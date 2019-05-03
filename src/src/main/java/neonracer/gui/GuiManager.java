@@ -24,7 +24,11 @@ public class GuiManager {
     public void show(Class<? extends Screen> screenClass) {
         Screen screen = cache.containsKey(screenClass) ? cache.get(screenClass) : ScreenLoader.loadScreen(screenClass);
         cache.put(screenClass, screen);
+        show(screen);
+    }
 
+    public void show(Screen screen) {
+        ScreenLoader.loadScreen(screen);
         screen.setWidth(renderContext.getGameContext().getGameWindow().getWidth());
         screen.setHeight(renderContext.getGameContext().getGameWindow().getHeight());
         screen.initialize(renderContext);

@@ -3,8 +3,11 @@ package neonracer.designer;
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
 import neonracer.gui.GuiManager;
+import neonracer.gui.annotation.EventHandler;
+import neonracer.gui.annotation.LayoutFile;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.font.FontRenderer;
+import neonracer.gui.screen.Screen;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
@@ -26,7 +29,8 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
-class TrackDesigner {
+@LayoutFile("guis/designer.xml")
+public class TrackDesigner extends Screen {
 
     private GameContext gameContext = GameContextFactory.createForDesigner();
     private RenderContext renderContext = new RenderContext(gameContext);
@@ -45,15 +49,24 @@ class TrackDesigner {
 
     private Model nodeModel;
 
-
     void start() throws IOException {
         gameContext.initialize();
         renderContext.initialize();
 
-        guiManager.show(DesignerScreen.class);
+        guiManager.show(this);
 
         setup();
         startRenderLoop();
+    }
+
+    @EventHandler("btnDeleteNode")
+    public void onDeleteNode(ClickEvent event) {
+        for (Node node : nodes) {
+            if (node.getPosition() == selectedNode) {
+                nodes.remove(node);
+                return;
+            }
+        }
     }
 
     private Matrix4f transformation = new Matrix4f();
@@ -177,7 +190,10 @@ class TrackDesigner {
 
     private void onClick() {
         // Notify the GUI of the click
-        guiManager.raiseEvent(new ClickEvent());
+        ClickEvent event = new ClickEvent();
+        guiManager.raiseEvent(event);
+        if (event.isConsumed())
+            return;
 
         // Check if user selected a node
         for (Node node : nodes) {

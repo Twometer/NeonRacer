@@ -20,9 +20,9 @@ public class Grid extends Container {
     public void performLayout() {
         layoutEngine.calculate();
         for (Widget widget : getChildren()) {
+            layoutEngine.layoutChild(widget);
             if (widget instanceof Container)
                 ((Container) widget).performLayout();
-            layoutEngine.layoutChild(widget);
         }
     }
 
