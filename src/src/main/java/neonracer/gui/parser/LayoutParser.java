@@ -117,7 +117,7 @@ class LayoutParser {
                 loadPropertyList(node, prefix, parent);
                 continue;
             }
-            if (node.getNodeType() == Node.TEXT_NODE) // Skip "#text" nodes
+            if (node.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
             Widget widget = WidgetFactory.create(node.getNodeName());
