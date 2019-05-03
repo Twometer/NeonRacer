@@ -144,12 +144,6 @@ class TrackDesigner {
         flatShader.setTransformationMatrix(new Matrix4f());
         flatShader.setColor(1f, 1f, 1f, 1f);
         crosshairModel.draw();
-
-        flatShader.setProjectionMatrix(renderContext.getGuiMatrix());
-        flatShader.setTransformationMatrix(new Matrix4f().translate(gameWindow.getWidth() - 300f, 0, 0).scale(300.0f, gameWindow.getHeight(), 1.0f));
-        flatShader.setColor(0.5f, 0.5f, 0.5f, 0.95f);
-        nodeModel.draw();
-
         flatShader.unbind();
 
         // Draw the GUI
