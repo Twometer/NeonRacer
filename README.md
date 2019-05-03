@@ -1,8 +1,11 @@
 ﻿# NeonRacer
 
+Die Dokumentation befindet sich im [GitHub Wiki](https://github.com/Twometer/NeonRacer/wiki).
+
 ## Konfiguration
 
-Neon Racer wurde mit _IntelliJ Idea_ entwickelt. Zusätzlich sind noch _Git_ und ein _JDK_ erforderlich.
+Neon Racer wurde mit _IntelliJ Idea_ entwickelt. Zusätzlich sind noch _Git_ und ein _JDK 1.8_ erforderlich.
+Für Änderungen am Protokoll ist außerdem das `Protobuf Support` IntelliJ-Plugin empfehlenswert.
 
 1. Das Repository klonen  
 `git clone https://github.com/Twometer/NeonRacer`
