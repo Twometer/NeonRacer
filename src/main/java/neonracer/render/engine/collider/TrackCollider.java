@@ -23,13 +23,13 @@ public class TrackCollider implements ICollider<Track, TrackColliderResult> {
         float sampleRate = 1.0f / TRACK_COLLIDER_SAMPLES;
 
         // Find closest T
-        float closestDistance = Float.MAX_VALUE;
+        float closestDistanceSquared = Float.MAX_VALUE;
         float closestT = 0.0f;
         for (float t = 0; t <= 1.0f; t += sampleRate) {
             Vector2f vec = spline.interpolate(t);
             float dist = vec.distanceSquared(vector2f);
-            if (dist < closestDistance) {
-                closestDistance = dist;
+            if (dist < closestDistanceSquared) {
+                closestDistanceSquared = dist;
                 closestT = t;
             }
         }
@@ -41,7 +41,9 @@ public class TrackCollider implements ICollider<Track, TrackColliderResult> {
         float widthFrom = node.getTrackWidth();
         float widthTo = track.getPath().get(segment.getIndex() == spline.pointsSize() - 1 ? 0 : segment.getIndex() + 1).getTrackWidth();
         float width = widthFrom * (1 - segment.getT()) + widthTo * segment.getT();
+        float radius = width / 2;
 
-        return new TrackColliderResult(closestDistance <= width, node.getMaterial());
+        float closestDistance = (float) Math.sqrt(closestDistanceSquared);
+        return new TrackColliderResult(closestDistance <= radius, node.getMaterial());
     }
 }
