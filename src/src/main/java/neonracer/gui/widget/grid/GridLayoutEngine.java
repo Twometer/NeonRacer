@@ -110,7 +110,8 @@ class GridLayoutEngine {
                 remainingRows--;
             } else if (definition != RowDefinition.FILL_REMAINING) {
                 // Absolute pixel values are just copied
-                calculatedRows[i] = rowDefinitions.get(i).getValue();
+                RowDefinition def = rowDefinitions.get(i);
+                calculatedRows[i] = def.getMode() == BaseDefinition.Mode.Absolute ? def.getValue() : (int) (def.getValue() / 100.0f * grid.getHeight());
                 remainingHeight -= calculatedRows[i];
                 remainingRows--;
             }
@@ -158,7 +159,8 @@ class GridLayoutEngine {
                 remainingCols--;
             } else if (definition != ColumnDefinition.FILL_REMAINING) {
                 // Absolute pixel values are just copied
-                calculatedColumns[i] = columnDefinitions.get(i).getValue();
+                ColumnDefinition def = columnDefinitions.get(i);
+                calculatedColumns[i] = def.getMode() == BaseDefinition.Mode.Absolute ? def.getValue() : (int) (def.getValue() / 100.0f * grid.getWidth());
                 remainingWidth -= calculatedColumns[i];
                 remainingCols--;
             }
