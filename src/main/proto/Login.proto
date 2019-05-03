@@ -1,0 +1,24 @@
+
+syntax = "proto3";
+package neonracer;
+
+option java_package = "neonracer.network.proto";
+option java_outer_classname = "Login";
+
+enum Status {
+    SUCCESS = 0;
+    NICKNAME_TAKEN = 1;
+}
+
+message Request {
+    /* Has to be unique */
+    string nickname = 1;
+}
+
+message Response {
+
+    Status status = 1;
+
+    /* Incremental ID only present if Login.Status.SUCCESS */
+    uint32 clientId = 2;
+}
