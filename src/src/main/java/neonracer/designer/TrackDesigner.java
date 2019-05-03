@@ -41,7 +41,7 @@ public class TrackDesigner extends Screen {
 
     private FlatShader flatShader;
 
-    private Vector2f selectedNode;
+    private Node selectedNode;
 
     private List<Node> nodes = new ArrayList<>();
 
@@ -61,12 +61,17 @@ public class TrackDesigner extends Screen {
 
     @EventHandler("btnDeleteNode")
     public void onDeleteNode(ClickEvent event) {
-        for (Node node : nodes) {
-            if (node.getPosition() == selectedNode) {
-                nodes.remove(node);
-                return;
-            }
-        }
+        nodes.remove(selectedNode);
+    }
+
+    @EventHandler("btnRepositionNode")
+    public void onRepositionNode(ClickEvent event) {
+
+    }
+
+    @EventHandler("btnRebuildPreview")
+    public void onRebuildPreview(ClickEvent event) {
+
     }
 
     private Matrix4f transformation = new Matrix4f();
@@ -147,7 +152,7 @@ public class TrackDesigner extends Screen {
 
         for (Node node : nodes) {
             flatShader.setTransformationMatrix(transformation.setTranslation(node.getPosition().x, node.getPosition().y, 0));
-            if (selectedNode == node.getPosition())
+            if (selectedNode == node)
                 flatShader.setColor(1f, 1f, 0f, 1f);
             else
                 flatShader.setColor(1f, 0f, 0f, 1f);
@@ -198,7 +203,7 @@ public class TrackDesigner extends Screen {
         // Check if user selected a node
         for (Node node : nodes) {
             if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
-                selectedNode = node.getPosition();
+                selectedNode = node;
                 return;
             }
         }

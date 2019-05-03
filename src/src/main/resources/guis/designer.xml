@@ -17,6 +17,8 @@
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>*</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition>*</ColumnDefinition>
@@ -29,6 +31,8 @@
                 <Button Id="btnRepositionNode" TextColor="0,0.2,0.8" FontSize="0.5" Grid.Row="4" Grid.Column="0"
                         Text="Reposition node"/>
                 <Label TextColor="0,0,0" Text="SETTINGS" Grid.Row="5" Grid.Column="0" FontSize="0.7"/>
+                <Button Id="btnRebuildPreview" TextColor="0,0,0" FontSize="0.5" Grid.Row="7" Grid.Column="0"
+                        Text="Rebuild preview"/>
             </Grid>
         </Border>
     </Grid>
