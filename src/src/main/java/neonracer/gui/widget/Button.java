@@ -1,5 +1,6 @@
 package neonracer.gui.widget;
 
+import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
@@ -43,7 +44,7 @@ public class Button extends Widget {
     @Override
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
-        this.fontRenderer = renderContext.getFonts().getTitleFont();
+        this.fontRenderer = renderContext.getFonts().get(FontFamily.Title);
     }
 
     public void setTextColor(Color textColor) {

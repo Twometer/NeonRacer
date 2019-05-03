@@ -24,7 +24,8 @@
                     <ColumnDefinition>*</ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label TextColor="0,0,0" Text="Node properties" Grid.Row="0" Grid.Column="0" FontSize="0.7"/>
-                <Label TextColor="0,0,0" Text="Node position: [0|0]" Grid.Row="1" Grid.Column="0" FontSize="0.5"/>
+                <Label Id="lbNodePosition" TextColor="0,0,0" Text="Position: None" Grid.Row="1" Grid.Column="0"
+                       FontSize="0.5" FontFamily="Content"/>
                 <Label TextColor="0,0,0" Text="COMMANDS" Grid.Row="2" Grid.Column="0" FontSize="0.7"/>
                 <Button Id="btnDeleteNode" TextColor="1,0,0" FontSize="0.5" Grid.Row="3" Grid.Column="0"
                         Text="Delete node"/>

@@ -1,5 +1,6 @@
 package neonracer.gui.widget;
 
+import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
@@ -8,6 +9,8 @@ import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
 public class Label extends Widget {
+
+    private FontFamily fontFamily = FontFamily.Title;
 
     private FontRenderer fontRenderer;
 
@@ -23,6 +26,14 @@ public class Label extends Widget {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public FontFamily getFontFamily() {
+        return fontFamily;
+    }
+
+    public void setFontFamily(FontFamily fontFamily) {
+        this.fontFamily = fontFamily;
     }
 
     public float getFontSize() {
@@ -44,7 +55,7 @@ public class Label extends Widget {
     @Override
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
-        this.fontRenderer = renderContext.getFonts().getTitleFont();
+        this.fontRenderer = renderContext.getFonts().get(fontFamily);
     }
 
     @Override

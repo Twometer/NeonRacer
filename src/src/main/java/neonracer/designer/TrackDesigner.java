@@ -3,11 +3,14 @@ package neonracer.designer;
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
 import neonracer.gui.GuiManager;
+import neonracer.gui.annotation.BindWidget;
 import neonracer.gui.annotation.EventHandler;
 import neonracer.gui.annotation.LayoutFile;
 import neonracer.gui.events.ClickEvent;
+import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.screen.Screen;
+import neonracer.gui.widget.Label;
 import neonracer.model.track.Node;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
@@ -49,6 +52,9 @@ public class TrackDesigner extends Screen {
 
     private Model nodeModel;
 
+    @BindWidget("lbNodePosition")
+    private Label nodePositionLabel;
+
     void start() throws IOException {
         gameContext.initialize();
         renderContext.initialize();
@@ -62,6 +68,8 @@ public class TrackDesigner extends Screen {
     @EventHandler("btnDeleteNode")
     public void onDeleteNode(ClickEvent event) {
         nodes.remove(selectedNode);
+        selectedNode = null;
+        nodePositionLabel.setText("Position: None");
     }
 
     @EventHandler("btnRepositionNode")
@@ -139,7 +147,7 @@ public class TrackDesigner extends Screen {
         postProcessing.beginPass(RenderPass.COLOR);
 
         // Draw some debug information
-        FontRenderer fontRenderer = renderContext.getFonts().getContentFont();
+        FontRenderer fontRenderer = renderContext.getFonts().get(FontFamily.Content);
         float lh = fontRenderer.getLineHeight(0.2f);
         fontRenderer.draw("node_count=" + nodes.size(), 0, 0, 0.2f);
         fontRenderer.draw("scale=" + renderContext.getCamera().getZoomFactor(), 0, lh, 0.2f);
@@ -204,6 +212,7 @@ public class TrackDesigner extends Screen {
         for (Node node : nodes) {
             if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
                 selectedNode = node;
+                nodePositionLabel.setText("Position: " + node.getPosition().toString(NumberFormat.getIntegerInstance()));
                 return;
             }
         }
