@@ -12,12 +12,15 @@ import neonracer.gui.font.FontRenderer;
 import neonracer.gui.screen.Screen;
 import neonracer.gui.widget.Label;
 import neonracer.model.track.Node;
+import neonracer.model.track.Track;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.engine.postproc.PostProcessing;
+import neonracer.render.engine.renderers.IRenderer;
+import neonracer.render.engine.renderers.TrackRenderer;
 import neonracer.render.gl.core.Mesh;
 import neonracer.render.gl.core.Model;
 import neonracer.render.gl.shaders.FlatShader;
@@ -52,12 +55,17 @@ public class TrackDesigner extends Screen {
 
     private Model nodeModel;
 
+    private IRenderer[] renderers = new IRenderer[]{
+            new TrackRenderer()
+    };
+
     @BindWidget("lbNodePosition")
     private Label nodePositionLabel;
 
     void start() throws IOException {
         gameContext.initialize();
         renderContext.initialize();
+
 
         guiManager.show(this);
 
@@ -79,7 +87,15 @@ public class TrackDesigner extends Screen {
 
     @EventHandler("btnRebuildPreview")
     public void onRebuildPreview(ClickEvent event) {
+        List<Node> path = new ArrayList<>();
+        for (Node node : nodes) {
+            path.add(new Node((int) node.getPosition().x, (int) node.getPosition().y, 8.0f, "street"));
+        }
 
+        Track track = new Track("preview", "", "", "", "grass", path, null);
+        track.initialize(gameContext);
+
+        gameContext.getGameState().setCurrentTrack(track);
     }
 
     private Matrix4f transformation = new Matrix4f();
@@ -116,6 +132,12 @@ public class TrackDesigner extends Screen {
             guiManager.resize(width, height);
             postProcessing.onResize(width, height);
         });
+
+
+        for (IRenderer renderer : renderers)
+            renderer.setup(renderContext, gameContext);
+
+
     }
 
     private void startRenderLoop() {
@@ -154,6 +176,11 @@ public class TrackDesigner extends Screen {
 
         fontRenderer.draw(unprojected.toString(NumberFormat.getNumberInstance()), gameContext.getMouseState().getPosition().x + 10f, gameContext.getMouseState().getPosition().y + 10f, 0.3f);
 
+        // Render the track, if there is any
+        handleControls();
+        for (IRenderer renderer : renderers)
+            renderer.render(renderContext, gameContext, RenderPass.COLOR);
+
         // Render all drawn nodes to the screen
         flatShader.bind();
         flatShader.setProjectionMatrix(renderContext.getWorldMatrix());
@@ -182,7 +209,7 @@ public class TrackDesigner extends Screen {
         // And send all that to the screen
         postProcessing.draw();
 
-        handleControls();
+
     }
 
     private void handleControls() {

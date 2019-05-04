@@ -21,6 +21,7 @@ public class TrackRenderer implements IRenderer {
     @Override
     public void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass) {
         if (renderPass != RenderPass.COLOR) return;
+        if (gameContext.getGameState().getCurrentTrack() == null) return;
         worldShader.bind();
         worldShader.setProjectionMatrix(renderContext.getWorldMatrix());
         Texture texture = gameContext.getGameState().getCurrentTrack().getBaseMaterial().getTexture();

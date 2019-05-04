@@ -50,8 +50,6 @@ public class FontRenderer {
 
     public void draw(String text, float x, float y, float fontSize, Vector4f color) {
         fontSize *= gameContext.getGameWindow().getScale();
-        if (textModel != null)
-            textModel.destroy();
         textModel = build(text, fontSize, x, y);
         fontShader.bind();
         fontShader.setProjectionMatrix(renderContext.getGuiMatrix());

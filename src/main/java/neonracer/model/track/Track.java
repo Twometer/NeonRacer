@@ -49,9 +49,23 @@ public class Track implements IData {
 
     private TrackDef trackDef;
 
+    public Track() {
+    }
+
+    public Track(String id, String name, String description, String thumbnailPath, String baseMaterialId, List<Node> path, List<Entity> entities) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.thumbnailPath = thumbnailPath;
+        this.baseMaterialId = baseMaterialId;
+        this.path = path;
+        this.entities = entities;
+    }
+
     @Override
     public void initialize(GameContext context) {
-        thumbnail = context.getTextureProvider().getTexture(thumbnailPath);
+        if (thumbnailPath != null && !thumbnailPath.isEmpty())
+            thumbnail = context.getTextureProvider().getTexture(thumbnailPath);
         baseMaterial = context.getDataManager().getMaterial(baseMaterialId);
         for (Node node : path)
             node.initialize(context);
