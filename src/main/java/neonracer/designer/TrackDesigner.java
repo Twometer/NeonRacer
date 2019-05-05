@@ -9,18 +9,16 @@ import neonracer.gui.annotation.LayoutFile;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.screen.MainScreen;
 import neonracer.gui.screen.Screen;
 import neonracer.gui.util.Color;
 import neonracer.gui.widget.Button;
 import neonracer.gui.widget.Label;
+import neonracer.model.track.Material;
 import neonracer.model.track.Node;
 import neonracer.model.track.Track;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
-import neonracer.render.engine.mesh.MeshBuilder;
-import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
@@ -39,9 +37,10 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 // Yes, I know this is ugly. Yes, I could do it better.
-// But I don't have time to do it better, so this class is ugly.
-// The rest of the game is not ugly. Also, this designer is nothing
+// But I don't have the time to do it better, so this class is ugly.
+// The rest of the game is not ugly, but this designer is nothing
 // the user will ever see.
+// If you want to avoid eye bleeding, do not read this file :)
 
 @LayoutFile("guis/designer.xml")
 public class TrackDesigner extends Screen {
@@ -61,8 +60,6 @@ public class TrackDesigner extends Screen {
 
     private Model crosshairModel;
 
-    private Model nodeModel;
-
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer()
     };
@@ -78,7 +75,27 @@ public class TrackDesigner extends Screen {
     @BindWidget("btnRepositionNode")
     private Button repositionButton;
 
-    private boolean repositioning;
+    @BindWidget("btnAddNode")
+    private Button btnAddNode;
+
+    @BindWidget("lbWidth")
+    private Label lbWidth;
+
+    @BindWidget("lbMaterial")
+    private Label lbMaterial;
+
+    @BindWidget("btnAddEntity")
+    private Button btnAddEntity;
+    private Mode mode = Mode.None;
+
+    @EventHandler("btnSave")
+    public void onSave(ClickEvent event) {
+        System.out.printf("- samples: %d%n", samples);
+        System.out.println("  path:");
+        for (Node node : nodes) {
+            System.out.printf("    - {x: %f, y: %f, w: %f, mat: \"%s\"}%n", node.getPosition().x, node.getPosition().y, node.getTrackWidth(), node.getMaterial().getId());
+        }
+    }
 
     void start() throws IOException {
         gameContext.initialize();
@@ -89,6 +106,13 @@ public class TrackDesigner extends Screen {
 
         setup();
         startRenderLoop();
+    }
+
+    @EventHandler("btnRepositionNode")
+    public void onRepositionNode(ClickEvent event) {
+        if (selectedNode == null)
+            return;
+        toggleMode(Mode.Repositioning);
     }
 
     @EventHandler("addSamples")
@@ -113,15 +137,16 @@ public class TrackDesigner extends Screen {
         rebuild();
     }
 
-    @EventHandler("btnRepositionNode")
-    public void onRepositionNode(ClickEvent event) {
-        if (!repositioning) {
-            repositionButton.setFontColor(Color.GREEN);
-            repositioning = true;
-        } else {
-            repositionButton.setFontColor(Color.BLUE);
-            repositioning = false;
-        }
+    @EventHandler("btnAddNode")
+    public void onAddNode(ClickEvent event) {
+        toggleMode(Mode.CreatingNodes);
+    }
+
+    @EventHandler("widthIncr")
+    public void onIncrWidth(ClickEvent event) {
+        selectedNode.setTrackWidth(selectedNode.getTrackWidth() + 1);
+        lbWidth.setText("Width: " + selectedNode.getTrackWidth());
+        rebuild();
     }
 
     @EventHandler("btnRebuildPreview")
@@ -129,16 +154,101 @@ public class TrackDesigner extends Screen {
         rebuild();
     }
 
-    private void rebuild() {
-        List<Node> path = new ArrayList<>();
-        for (Node node : nodes) {
-            path.add(new Node((int) node.getPosition().x, (int) node.getPosition().y, 8.0f, "street"));
-        }
+    @EventHandler("widthDecr")
+    public void onDecrWidth(ClickEvent event) {
+        selectedNode.setTrackWidth(selectedNode.getTrackWidth() - 1);
+        lbWidth.setText("Width: " + selectedNode.getTrackWidth());
+        rebuild();
+    }
 
-        Track track = new Track("preview", "", "", "", "grass", path, null, samples);
+    @EventHandler("switchMaterial")
+    public void onSwitchMat(ClickEvent event) {
+        Material[] mat = gameContext.getDataManager().getMaterials();
+        Material nextMaterial = null;
+
+        for (int i = 0; i < mat.length; i++) {
+            if (selectedNode.getMaterial().getId().equalsIgnoreCase(mat[i].getId())) {
+                nextMaterial = mat[(i + 1) % mat.length];
+                break;
+            }
+        }
+        selectedNode.setMaterial(nextMaterial);
+        lbMaterial.setText("Material: " + selectedNode.getMaterial().getId());
+        rebuild();
+    }
+
+    @EventHandler("btnAddEntity")
+    public void onAddEntities(ClickEvent event) {
+        toggleMode(Mode.CreatingEntities);
+    }
+
+    private void toggleMode(Mode mode) {
+        if (this.mode != mode)
+            setMode(mode);
+        else
+            setMode(Mode.None);
+    }
+
+    private void setMode(Mode mode) {
+        if (mode == Mode.Repositioning)
+            repositionButton.setFontColor(Color.GREEN);
+        else
+            repositionButton.setFontColor(Color.BLUE);
+
+        if (mode == Mode.CreatingNodes)
+            btnAddNode.setFontColor(Color.GREEN);
+        else
+            btnAddNode.setFontColor(Color.BLACK);
+
+        if (mode == Mode.CreatingEntities)
+            btnAddEntity.setFontColor(Color.GREEN);
+        else
+            btnAddEntity.setFontColor(Color.BLACK);
+
+        this.mode = mode;
+    }
+
+    private void rebuild() {
+        Track track = new Track("", "", "", "", "grass", nodes, null, samples);
         track.initialize(gameContext);
 
         gameContext.getGameState().setCurrentTrack(track);
+    }
+
+    private void onClick() {
+        // Notify the GUI of the click
+        ClickEvent event = new ClickEvent();
+        guiManager.raiseEvent(event);
+        if (event.isConsumed())
+            return;
+
+        // Check if user selected a node
+        for (Node node : nodes) {
+            if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
+                selectedNode = node;
+                nodePositionLabel.setText("Position: " + node.getPosition().toString(NumberFormat.getIntegerInstance()));
+                lbWidth.setText("Width: " + node.getTrackWidth());
+                lbMaterial.setText("Material: " + node.getMaterial().getId());
+                return;
+            }
+        }
+
+        // Add a node at mouse position
+        switch (mode) {
+            case CreatingNodes:
+                Node node = new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 8.0f, "street");
+                node.initialize(gameContext);
+                nodes.add(node);
+                if (nodes.size() > 2)
+                    rebuild();
+                break;
+            case Repositioning:
+                if (selectedNode == null) return;
+                selectedNode.getPosition().x = (int) Math.floor(unprojected.x);
+                selectedNode.getPosition().y = (int) Math.floor(unprojected.y);
+                rebuild();
+                break;
+        }
     }
 
     private Vector2f lastMouse;
@@ -260,33 +370,11 @@ public class TrackDesigner extends Screen {
         if (!gameContext.getMouseState().isLeft()) lastPressed = false;
     }
 
-    private void onClick() {
-        // Notify the GUI of the click
-        ClickEvent event = new ClickEvent();
-        guiManager.raiseEvent(event);
-        if (event.isConsumed())
-            return;
-
-        // Check if user selected a node
-        for (Node node : nodes) {
-            if (node.getPosition().x == (int) Math.floor(unprojected.x) && node.getPosition().y == (int) Math.floor(unprojected.y)) {
-                selectedNode = node;
-                nodePositionLabel.setText("Position: " + node.getPosition().toString(NumberFormat.getIntegerInstance()));
-                return;
-            }
-        }
-
-        // Add a node at mouse position
-        if (repositioning && selectedNode != null) {
-            selectedNode.getPosition().x =(int) Math.floor(unprojected.x);
-            selectedNode.getPosition().y =(int) Math.floor(unprojected.y);
-            onRepositionNode(null);
-            rebuild();
-        } else {
-            nodes.add(new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 0, ""));
-            if(nodes.size() > 2)
-            rebuild();
-        }
+    enum Mode {
+        None,
+        Repositioning,
+        CreatingNodes,
+        CreatingEntities
     }
 
     private void onScroll(float x, float y) {

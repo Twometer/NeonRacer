@@ -44,4 +44,12 @@ public class Node implements IData {
         return material;
     }
 
+    public void setTrackWidth(float trackWidth) {
+        this.trackWidth = trackWidth;
+    }
+
+    public void setMaterial(Material material) {
+        this.materialId = material.getId();
+        this.material = material;
+    }
 }
