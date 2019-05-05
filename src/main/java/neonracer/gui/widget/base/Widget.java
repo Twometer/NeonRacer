@@ -3,11 +3,10 @@ package neonracer.gui.widget.base;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.EventHandler;
+import neonracer.gui.font.FontFamily;
+import neonracer.gui.font.FontRenderer;
 import neonracer.gui.input.MouseState;
-import neonracer.gui.util.Alignment;
-import neonracer.gui.util.ForeignParameters;
-import neonracer.gui.util.Margin;
-import neonracer.gui.util.Size;
+import neonracer.gui.util.*;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import org.joml.Vector2f;
@@ -35,6 +34,12 @@ public abstract class Widget {
     private Alignment verticalAlignment = Alignment.Fill;
 
     private Alignment horizontalAlignment = Alignment.Fill;
+
+    private FontFamily fontFamily = FontFamily.Content;
+
+    private Color fontColor = Color.WHITE;
+
+    private float fontSize = 1.0f;
 
     private Map<Class<? extends Event>, EventHandler> eventHandlers = new HashMap<>();
 
@@ -75,6 +80,10 @@ public abstract class Widget {
     }
 
     private void onEvent(Event event) {
+    }
+
+    protected FontRenderer getFontRenderer(RenderContext renderContext) {
+        return renderContext.getFonts().get(fontFamily);
     }
 
     public void initialize(RenderContext renderContext) {
@@ -143,6 +152,30 @@ public abstract class Widget {
 
     public void setHorizontalAlignment(Alignment horizontalAlignment) {
         this.horizontalAlignment = horizontalAlignment;
+    }
+
+    public FontFamily getFontFamily() {
+        return fontFamily;
+    }
+
+    public void setFontFamily(FontFamily fontFamily) {
+        this.fontFamily = fontFamily;
+    }
+
+    protected Color getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(Color fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    protected float getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(float fontSize) {
+        this.fontSize = fontSize;
     }
 
     public ForeignParameters getForeignParameters() {

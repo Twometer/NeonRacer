@@ -59,8 +59,13 @@ public class TrackDesigner extends Screen {
             new TrackRenderer()
     };
 
+    private int samples = 100;
+
     @BindWidget("lbNodePosition")
     private Label nodePositionLabel;
+
+    @BindWidget("lbSamples")
+    private Label samplesLabel;
 
     void start() throws IOException {
         gameContext.initialize();
@@ -73,11 +78,26 @@ public class TrackDesigner extends Screen {
         startRenderLoop();
     }
 
+    @EventHandler("addSamples")
+    public void onAddSamples(ClickEvent event) {
+        this.samples += 100;
+        samplesLabel.setText("Samples: " + samples);
+        rebuild();
+    }
+
+    @EventHandler("remSamples")
+    public void onRemSamplles(ClickEvent event) {
+        this.samples -= 100;
+        samplesLabel.setText("Samples: " + samples);
+        rebuild();
+    }
+
     @EventHandler("btnDeleteNode")
     public void onDeleteNode(ClickEvent event) {
         nodes.remove(selectedNode);
         selectedNode = null;
         nodePositionLabel.setText("Position: None");
+        rebuild();
     }
 
     @EventHandler("btnRepositionNode")
@@ -87,12 +107,16 @@ public class TrackDesigner extends Screen {
 
     @EventHandler("btnRebuildPreview")
     public void onRebuildPreview(ClickEvent event) {
+        rebuild();
+    }
+
+    private void rebuild() {
         List<Node> path = new ArrayList<>();
         for (Node node : nodes) {
             path.add(new Node((int) node.getPosition().x, (int) node.getPosition().y, 8.0f, "street"));
         }
 
-        Track track = new Track("preview", "", "", "", "grass", path, null);
+        Track track = new Track("preview", "", "", "", "grass", path, null, samples);
         track.initialize(gameContext);
 
         gameContext.getGameState().setCurrentTrack(track);

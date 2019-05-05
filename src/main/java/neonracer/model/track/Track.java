@@ -40,6 +40,9 @@ public class Track implements IData {
     private Material baseMaterial;
 
     @JsonProperty
+    private int samples;
+
+    @JsonProperty
     private List<Node> path;
 
     @JsonProperty
@@ -52,7 +55,7 @@ public class Track implements IData {
     public Track() {
     }
 
-    public Track(String id, String name, String description, String thumbnailPath, String baseMaterialId, List<Node> path, List<Entity> entities) {
+    public Track(String id, String name, String description, String thumbnailPath, String baseMaterialId, List<Node> path, List<Entity> entities, int samples) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -60,6 +63,7 @@ public class Track implements IData {
         this.baseMaterialId = baseMaterialId;
         this.path = path;
         this.entities = entities;
+        this.samples = samples;
     }
 
     @Override
@@ -94,6 +98,10 @@ public class Track implements IData {
 
     public Material getBaseMaterial() {
         return baseMaterial;
+    }
+
+    public int getSamples() {
+        return samples;
     }
 
     public List<Node> getPath() {

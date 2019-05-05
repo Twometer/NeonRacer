@@ -19,20 +19,31 @@
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>*</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition>*</ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label TextColor="0,0,0" Text="Node properties" Grid.Row="0" Grid.Column="0" FontSize="0.7"/>
-                <Label Id="lbNodePosition" TextColor="0,0,0" Text="Position: None" Grid.Row="1" Grid.Column="0"
-                       FontSize="0.5" FontFamily="Content"/>
-                <Label TextColor="0,0,0" Text="COMMANDS" Grid.Row="2" Grid.Column="0" FontSize="0.7"/>
-                <Button Id="btnDeleteNode" TextColor="1,0,0" FontSize="0.5" Grid.Row="3" Grid.Column="0"
+                <Label FontColor="0,0,0" Text="Node properties" Grid.Row="0" Grid.Column="0" FontSize="0.5" Margin="10"/>
+
+                <Label Id="lbNodePosition" FontColor="0,0,0" Text="Position: None" Grid.Row="1" Grid.Column="0" FontSize="0.4"/>
+
+                <Label FontColor="0,0,0" Text="COMMANDS" Grid.Row="2" Grid.Column="0" FontSize="0.5" Margin="5"/>
+                <Button Id="btnDeleteNode" FontColor="1,0,0" FontSize="0.5" Grid.Row="3" Grid.Column="0"
                         Text="Delete node"/>
-                <Button Id="btnRepositionNode" TextColor="0,0.2,0.8" FontSize="0.5" Grid.Row="4" Grid.Column="0"
+                <Button Id="btnRepositionNode" FontColor="0,0.2,0.8" FontSize="0.5" Grid.Row="4" Grid.Column="0"
                         Text="Reposition node"/>
-                <Label TextColor="0,0,0" Text="SETTINGS" Grid.Row="5" Grid.Column="0" FontSize="0.7"/>
-                <Button Id="btnRebuildPreview" TextColor="0,0,0" FontSize="0.5" Grid.Row="7" Grid.Column="0"
+
+                <Label FontColor="0,0,0" Text="SETTINGS" Grid.Row="5" Grid.Column="0" FontSize="0.5" Margin="5"/>
+
+                <Label Id="lbSamples" FontColor="0,0,0" Text="Samples: 100" Grid.Row="7" Grid.Column="0" FontSize="0.3"/>
+                <Button Id="addSamples" FontColor="0,0,0" FontSize="0.3" Grid.Row="8" Grid.Column="0"
+                        Text="+100" />
+                <Button Id="remSamples" FontColor="0,0,0" FontSize="0.3" Grid.Row="9" Grid.Column="0"
+                        Text="-100"/>
+                <Button Id="btnRebuildPreview" FontColor="0,0,0" FontSize="0.3" Grid.Row="10" Grid.Column="0"
                         Text="Rebuild preview"/>
             </Grid>
         </Border>

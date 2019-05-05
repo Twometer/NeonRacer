@@ -1,8 +1,6 @@
 package neonracer.gui.widget;
 
-import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
@@ -11,13 +9,11 @@ import org.joml.Vector4f;
 
 public class Button extends Widget {
 
-    private FontRenderer fontRenderer;
-
     private String text;
 
-    private float fontSize;
+    private int offset;
 
-    private Color textColor = Color.WHITE;
+    private FontRenderer fontRenderer;
 
     public String getText() {
         return text;
@@ -27,47 +23,31 @@ public class Button extends Widget {
         this.text = text;
     }
 
-    public float getFontSize() {
-        return fontSize;
-    }
-
-    public void setFontSize(float fontSize) {
-        this.fontSize = fontSize;
-    }
-
-    private int offset;
-
-    public Color getTextColor() {
-        return textColor;
-    }
-
     @Override
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
-        this.fontRenderer = renderContext.getFonts().get(FontFamily.Title);
-    }
-
-    public void setTextColor(Color textColor) {
-        this.textColor = textColor;
+        fontRenderer = getFontRenderer(renderContext);
     }
 
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
+        FontRenderer fontRenderer = getFontRenderer(renderContext);
+
         boolean hover = isMouseHover();
         if (hover && offset < 20)
             offset += 1;
         else if (!hover && offset > 0)
             offset -= 1;
 
-        fontRenderer.draw(text, getX() + getMargin().getLeft() + offset, getY() + getMargin().getTop(), fontSize, textColor.toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
+        fontRenderer.draw(text, getX() + getMargin().getLeft() + offset, getY() + getMargin().getTop(), getFontSize(), getFontColor().toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
         if (offset > 0)
-            fontRenderer.draw("> ", getX() + getMargin().getLeft() + offset - fontRenderer.getStringWidth("> ", fontSize), getY() + getMargin().getTop(), fontSize, new Vector4f(textColor.getR(), textColor.getG(), textColor.getB(), offset / 20f));
+            fontRenderer.draw("> ", getX() + getMargin().getLeft() + offset - fontRenderer.getStringWidth("> ", getFontSize()), getY() + getMargin().getTop(), getFontSize(), new Vector4f(getFontColor().getR(), getFontColor().getG(), getFontColor().getB(), offset / 20f));
 
     }
 
     @Override
     public Size measure() {
-        return new Size((int) fontRenderer.getStringWidth(text, fontSize), (int) fontRenderer.getStringHeight(text, fontSize));
+        return new Size((int) fontRenderer.getStringWidth(text, getFontSize()), (int) fontRenderer.getStringHeight(text, getFontSize()));
     }
 
 }
