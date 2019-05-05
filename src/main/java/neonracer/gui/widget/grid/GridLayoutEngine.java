@@ -38,8 +38,8 @@ class GridLayoutEngine {
      * @param widget The child to be layouted
      */
     void layoutChild(Widget widget) {
-        int row = widget.getForeignParameters().getInt(NAMESPACE, "Row");
-        int col = widget.getForeignParameters().getInt(NAMESPACE, "Column");
+        int row = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "Row", 0);
+        int col = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "Column", 0);
         int rowSpan = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "RowSpan", 1);
         int colSpan = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "ColSpan", 1);
 

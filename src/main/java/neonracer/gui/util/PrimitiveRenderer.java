@@ -34,8 +34,12 @@ public class PrimitiveRenderer {
     }
 
     public void drawRect(float x, float y, float width, float height, Vector4f color) {
+        drawRect(x, y, width, height, color, renderContext.getGuiMatrix());
+    }
+
+    public void drawRect(float x, float y, float width, float height, Vector4f color, Matrix4f projectionMatrix) {
         flatShader.bind();
-        flatShader.setProjectionMatrix(renderContext.getGuiMatrix());
+        flatShader.setProjectionMatrix(projectionMatrix);
         flatShader.setTransformationMatrix(new Matrix4f().translate(x, y, 0).scale(width, height, 1.0f));
         flatShader.setColor(color.x, color.y, color.z, color.w);
         flatShader.setHasTexture(false);

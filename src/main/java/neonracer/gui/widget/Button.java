@@ -1,6 +1,7 @@
 package neonracer.gui.widget;
 
 import neonracer.gui.font.FontRenderer;
+import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
@@ -10,8 +11,6 @@ import org.joml.Vector4f;
 public class Button extends Widget {
 
     private String text;
-
-    private int offset;
 
     private FontRenderer fontRenderer;
 
@@ -32,22 +31,15 @@ public class Button extends Widget {
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
         FontRenderer fontRenderer = getFontRenderer(renderContext);
-
-        boolean hover = isMouseHover();
-        if (hover && offset < 20)
-            offset += 1;
-        else if (!hover && offset > 0)
-            offset -= 1;
-
-        fontRenderer.draw(text, getX() + getMargin().getLeft() + offset, getY() + getMargin().getTop(), getFontSize(), getFontColor().toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
-        if (offset > 0)
-            fontRenderer.draw("> ", getX() + getMargin().getLeft() + offset - fontRenderer.getStringWidth("> ", getFontSize()), getY() + getMargin().getTop(), getFontSize(), new Vector4f(getFontColor().getR(), getFontColor().getG(), getFontColor().getB(), offset / 20f));
-
+        if (renderPass == RenderPass.COLOR) {
+            renderContext.getPrimitiveRenderer().drawRect(getX() + getMargin().getLeft(), getY() + getMargin().getTop(), getWidth(), getHeight(), Color.GRAY.toVector( isMouseHover() ? 0.5f : 1.0f));
+            fontRenderer.draw(text, getX() + getMargin().getLeft() + 5, getY() + getMargin().getTop() + 2, getFontSize(), getFontColor().toVector(1.0f));
+        }
     }
 
     @Override
     public Size measure() {
-        return new Size((int) fontRenderer.getStringWidth(text, getFontSize()), (int) fontRenderer.getStringHeight(text, getFontSize()));
+        return new Size((int) fontRenderer.getStringWidth(text, getFontSize()) + 10, (int) fontRenderer.getStringHeight(text, getFontSize()) + 4);
     }
 
 }

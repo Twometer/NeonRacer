@@ -12,6 +12,8 @@ public class Color {
     public static final Color RED = new Color(1.0f, 0.0f, 0.0f);
     public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f);
     public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f);
+    public static final Color GRAY = new Color(0.66f, 0.66f, 0.66f);
+
 
     private float r;
 
@@ -58,6 +60,15 @@ public class Color {
      */
     public float getB() {
         return b > 1.0f ? b / 255.0f : b;
+    }
+
+    /**
+     * Converts this color to a Vector4f object using an alpha value of 1.0.
+     *
+     * @return A Vector4f object with x=r y=g z=b and w=1.0
+     */
+    public Vector4f toVector() {
+        return new Vector4f(getR(), getG(), getB(), 1.0f);
     }
 
     /**

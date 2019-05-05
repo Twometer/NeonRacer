@@ -2,13 +2,31 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition>30</RowDefinition>
             <RowDefinition>*</RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition>*</ColumnDefinition>
             <ColumnDefinition>25%</ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Border Grid.Row="0" Grid.Column="1">
+        <Border Grid.Row="0" Grid.Column="0" Color="1,1,1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition>*</RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition>Auto</ColumnDefinition>
+                    <ColumnDefinition>Auto</ColumnDefinition>
+                    <ColumnDefinition>Auto</ColumnDefinition>
+                    <ColumnDefinition>Auto</ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Id="btnSave" FontColor="0,0,0" Text="Save" Grid.Column="0" FontSize="0.3"/>
+                <Button Id="btnLoad" FontColor="0,0,0" Text="Load" Grid.Column="1" FontSize="0.3"/>
+                <Button Id="btnAddNode" FontColor="0,0,0" Text="Add Node" Grid.Column="2" FontSize="0.3"/>
+                <Button Id="btnAddEntity" FontColor="0,0,0" Text="Add Entity" Grid.Column="3" FontSize="0.3"/>
+            </Grid>
+        </Border>
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition>Auto</RowDefinition>

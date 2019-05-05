@@ -1,8 +1,6 @@
 package neonracer.gui.widget;
 
-import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
-import neonracer.gui.util.Color;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;

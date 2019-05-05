@@ -9,7 +9,10 @@ import neonracer.gui.annotation.LayoutFile;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
+import neonracer.gui.screen.MainScreen;
 import neonracer.gui.screen.Screen;
+import neonracer.gui.util.Color;
+import neonracer.gui.widget.Button;
 import neonracer.gui.widget.Label;
 import neonracer.model.track.Node;
 import neonracer.model.track.Track;
@@ -34,6 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
+
+// Yes, I know this is ugly. Yes, I could do it better.
+// But I don't have time to do it better, so this class is ugly.
+// The rest of the game is not ugly. Also, this designer is nothing
+// the user will ever see.
 
 @LayoutFile("guis/designer.xml")
 public class TrackDesigner extends Screen {
@@ -66,6 +74,11 @@ public class TrackDesigner extends Screen {
 
     @BindWidget("lbSamples")
     private Label samplesLabel;
+
+    @BindWidget("btnRepositionNode")
+    private Button repositionButton;
+
+    private boolean repositioning;
 
     void start() throws IOException {
         gameContext.initialize();
@@ -102,7 +115,13 @@ public class TrackDesigner extends Screen {
 
     @EventHandler("btnRepositionNode")
     public void onRepositionNode(ClickEvent event) {
-
+        if (!repositioning) {
+            repositionButton.setFontColor(Color.GREEN);
+            repositioning = true;
+        } else {
+            repositionButton.setFontColor(Color.BLUE);
+            repositioning = false;
+        }
     }
 
     @EventHandler("btnRebuildPreview")
@@ -122,7 +141,6 @@ public class TrackDesigner extends Screen {
         gameContext.getGameState().setCurrentTrack(track);
     }
 
-    private Matrix4f transformation = new Matrix4f();
     private Vector2f lastMouse;
     private boolean lastPressed;
     private int[] viewport = new int[4];
@@ -133,12 +151,6 @@ public class TrackDesigner extends Screen {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         flatShader = new FlatShader();
-
-        MeshBuilder meshBuilder = new MeshBuilder(6);
-        meshBuilder.putRectVertices(new Rectangle(0, 0, 1, 1));
-        Mesh mesh = meshBuilder.getMesh();
-        nodeModel = Model.create(mesh, GL_TRIANGLES);
-        mesh.destroy();
 
         Mesh crosshairMesh = new Mesh(4);
         crosshairMesh.putVertex(0f, -10000f);
@@ -205,19 +217,15 @@ public class TrackDesigner extends Screen {
         for (IRenderer renderer : renderers)
             renderer.render(renderContext, gameContext, RenderPass.COLOR);
 
-        // Render all drawn nodes to the screen
-        flatShader.bind();
-        flatShader.setProjectionMatrix(renderContext.getWorldMatrix());
-
+        // Render nodes
         for (Node node : nodes) {
-            flatShader.setTransformationMatrix(transformation.setTranslation(node.getPosition().x, node.getPosition().y, 0));
-            if (selectedNode == node)
-                flatShader.setColor(1f, 1f, 0f, 1f);
-            else
-                flatShader.setColor(1f, 0f, 0f, 1f);
-            nodeModel.draw();
+            Vector4f color = selectedNode == node ? Color.GREEN.toVector() : Color.RED.toVector();
+            renderContext.getPrimitiveRenderer().drawRect(node.getPosition().x, node.getPosition().y, 1.0f, 1.0f, color, renderContext.getWorldMatrix());
         }
 
+        // Render crosshair
+        flatShader.bind();
+        flatShader.setProjectionMatrix(renderContext.getWorldMatrix());
         flatShader.setTransformationMatrix(new Matrix4f());
         flatShader.setColor(1f, 1f, 1f, 1f);
         crosshairModel.draw();
@@ -269,7 +277,16 @@ public class TrackDesigner extends Screen {
         }
 
         // Add a node at mouse position
-        nodes.add(new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 0, ""));
+        if (repositioning && selectedNode != null) {
+            selectedNode.getPosition().x =(int) Math.floor(unprojected.x);
+            selectedNode.getPosition().y =(int) Math.floor(unprojected.y);
+            onRepositionNode(null);
+            rebuild();
+        } else {
+            nodes.add(new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 0, ""));
+            if(nodes.size() > 2)
+            rebuild();
+        }
     }
 
     private void onScroll(float x, float y) {

@@ -20,6 +20,7 @@ public class WidgetFactory {
         register(Grid.class);
         register(ImageView.class);
         register(Button.class);
+        register(TitleButton.class);
         register(Border.class);
         register(Label.class);
         register(ProgressBar.class);
