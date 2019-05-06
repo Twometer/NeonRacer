@@ -1,0 +1,45 @@
+
+syntax = "proto3";
+package neonracer;
+
+option java_package = "neonracer.network.proto";
+option java_outer_classname = "Race";
+
+message Request {
+    uint32 clientId = 1;
+    string nickname = 2;
+}
+
+message Prepare {
+    /* Milliseconds until race starts */
+    uint32 remainingMilliseconds = 1;
+}
+
+/* Fields of this packet are only sent by the server. */
+/* This packet can be sent to request the preparation for a new game. */
+message Join {
+    uint32 clientId = 1;
+    string nickname = 2;
+}
+
+/* Fields of this packet are only sent by the server. */
+/* This packet can be used by the server to kick clients. */
+message Leave {
+    uint32 clientId = 1;
+}
+
+message Start {
+    /* Negative values indicate time until race start to select a car. */
+    sint32 elapsedMilliseconds = 1;
+    uint32 lapCount = 2;
+}
+
+/* A race ends when all participants have sent this packet. */
+/* This packet can be used by the server to disqualify players
+   and thereby forcefully end a race. */
+message Finish {
+    /* Clients can omit their ID. */
+    uint32 clientId = 1;
+    /* Position -1 means disqualified. */
+    sint32 position = 2;
+}

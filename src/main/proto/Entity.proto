@@ -24,6 +24,7 @@ message Update {
     float y = 3;
     float rotation = 4;
     float velocity = 5;
+    uint32 lapsPassed = 6;
 }
 
 message Delete {
