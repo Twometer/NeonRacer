@@ -1,5 +1,7 @@
 package neonracer.core;
 
+import neonracer.gui.input.KeyboardState;
+import neonracer.gui.input.MouseState;
 import neonracer.phys.PhysicsEngine;
 import neonracer.render.GameWindow;
 import neonracer.render.gl.TextureProvider;
@@ -21,22 +23,25 @@ public class GameContext {
 
     private GameState gameState;
 
-    private ControlState controlState;
+    private MouseState mouseState;
 
-    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, ControlState controlState) {
+    private KeyboardState keyboardState;
+
+    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, MouseState mouseState, KeyboardState keyboardState) {
         this.gameWindow = gameWindow;
         this.textureProvider = textureProvider;
         this.dataManager = dataManager;
         this.gameState = gameState;
         this.physicsEngine = physicsEngine;
         this.timer = timer;
-        this.controlState = controlState;
+        this.mouseState = mouseState;
+        this.keyboardState = keyboardState;
     }
 
     public void initialize() throws IOException {
         gameWindow.create();
         dataManager.load(this);
-        physicsEngine.initialize(this);
+        if (physicsEngine != null) physicsEngine.initialize(this);
         gameState.initialize(this);
     }
 
@@ -68,8 +73,12 @@ public class GameContext {
         return timer;
     }
 
-    public ControlState getControlState() {
-        return controlState;
+    public MouseState getMouseState() {
+        return mouseState;
+    }
+
+    public KeyboardState getKeyboardState() {
+        return keyboardState;
     }
 
 }

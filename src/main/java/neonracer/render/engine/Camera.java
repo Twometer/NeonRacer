@@ -1,10 +1,13 @@
 package neonracer.render.engine;
 
 import neonracer.core.GameContext;
+import neonracer.model.entity.EntityCar;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
 public class Camera {
+
+    private static final float ROTATION_SPEED = 0.01f;
 
     private GameContext gameContext;
 
@@ -20,7 +23,7 @@ public class Camera {
         this.gameContext = gameContext;
     }
 
-    void setCenterPoint(Vector2f centerPoint) {
+    private void setCenterPoint(Vector2f centerPoint) {
         this.centerPoint = centerPoint;
     }
 
@@ -36,8 +39,17 @@ public class Camera {
         this.centerPoint.add(x, y);
     }
 
+    public float getZoomFactor() {
+        return zoomFactor;
+    }
+
     public void setZoomFactor(float zoomFactor) {
         this.zoomFactor = zoomFactor;
+    }
+
+    public void zoom(float zoomFactor) {
+        this.zoomFactor += zoomFactor;
+        this.zoomFactor = Math.max(0.0f, this.zoomFactor);
     }
 
     void setRotation(float rotation) {
@@ -52,6 +64,18 @@ public class Camera {
         matrix = matrix.mul(new Matrix4f().setRotationXYZ(0, 0, -rotation));
         matrix = matrix.mul(new Matrix4f().setTranslation(-centerPoint.x, -centerPoint.y, 0));
         return matrix;
+    }
+
+    public void smoothFollow(EntityCar car) {
+        setCenterPoint(car.getPosition());
+
+        float rot = car.getRotation();
+
+        float diff = Math.abs(rot - rotation);
+        if (rot > rotation)
+            rotation += ROTATION_SPEED * diff;
+        else if (rot < rotation)
+            rotation -= ROTATION_SPEED * diff;
     }
 
 }

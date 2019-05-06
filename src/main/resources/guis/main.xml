@@ -1,0 +1,25 @@
+<Screen Background="textures/background.png">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>*</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>*</ColumnDefinition>
+            <ColumnDefinition>200</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ImageView Src="textures/logo.png" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Start"/>
+        <TitleButton Id="BtnStartRace" Margin="65,5" TextColor="98,210,249" FontSize="1.75" Text="Rennen starten"
+                Grid.Row="1" Grid.Column="0"/>
+        <TitleButton Margin="65,5" FontSize="1.75" Text="Einstellungen" Grid.Row="3" Grid.Column="0"/>
+        <TitleButton Margin="65,0,5,65" FontSize="1.75" Text="Spiel verlassen" Grid.Row="4" Grid.Column="0"/>
+        <Border Grid.Row="2" Grid.Column="1">
+            <Label Text="Some text goes here" TextColor="0,0,0"/>
+        </Border>
+    </Grid>
+
+</Screen>

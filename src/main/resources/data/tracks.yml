@@ -2,7 +2,8 @@
   name: "Test track"
   desc: "This track is used for testing"
   thumbnail: "textures/test.png"
-  base_material: "street"
+  samples: 100
+  base_material: "grass"
   path:
     - {x: 0, y: 0, w: 8, mat: "street"}
     - {x: 0, y: 50, w: 8, mat: "street"}

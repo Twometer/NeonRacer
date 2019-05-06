@@ -1,46 +1,67 @@
 package neonracer.render;
 
+import neonracer.core.GameContext;
+import neonracer.gui.font.Fonts;
+import neonracer.gui.util.PrimitiveRenderer;
 import neonracer.render.engine.Camera;
-import neonracer.render.engine.CameraManager;
 import org.joml.Matrix4f;
 
 public class RenderContext {
 
+    private GameContext gameContext;
+
     private Camera camera;
 
-    private CameraManager cameraManager;
+    private Fonts fonts;
 
-    private Matrix4f worldMatrix;
+    private PrimitiveRenderer primitiveRenderer;
 
-    private Matrix4f guiMatrix;
+    private Matrix4f worldMatrix = new Matrix4f();
 
-    RenderContext(Camera camera) {
-        this.camera = camera;
-        this.cameraManager = new CameraManager(camera);
+    private Matrix4f guiMatrix = new Matrix4f();
+
+    public RenderContext(GameContext gameContext) {
+        this.gameContext = gameContext;
+    }
+
+    public void initialize() {
+        camera = new Camera(gameContext);
+
+        fonts = new Fonts();
+        fonts.initialize(this, gameContext);
+
+        primitiveRenderer = new PrimitiveRenderer(this);
+        primitiveRenderer.initialize();
+    }
+
+    public void updateMatrices() {
+        GameWindow gameWindow = gameContext.getGameWindow();
+        worldMatrix = camera.calculateMatrix();
+        guiMatrix.setOrtho2D(0.0f, gameWindow.getWidth(), gameWindow.getHeight(), 0.0f);
+    }
+
+    public GameContext getGameContext() {
+        return gameContext;
     }
 
     public Camera getCamera() {
         return camera;
     }
 
-    CameraManager getCameraManager() {
-        return cameraManager;
+    public Fonts getFonts() {
+        return fonts;
+    }
+
+    public PrimitiveRenderer getPrimitiveRenderer() {
+        return primitiveRenderer;
     }
 
     public Matrix4f getWorldMatrix() {
         return worldMatrix;
     }
 
-    void setWorldMatrix(Matrix4f worldMatrix) {
-        this.worldMatrix = worldMatrix;
-    }
-
     public Matrix4f getGuiMatrix() {
         return guiMatrix;
-    }
-
-    void setGuiMatrix(Matrix4f guiMatrix) {
-        this.guiMatrix = guiMatrix;
     }
 
 }

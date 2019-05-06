@@ -14,13 +14,14 @@ public class TrackRenderer implements IRenderer {
     private WorldShader worldShader;
 
     @Override
-    public void setup(GameContext context) {
+    public void setup(RenderContext renderContext, GameContext gameContext) {
         worldShader = new WorldShader();
     }
 
     @Override
     public void render(RenderContext renderContext, GameContext gameContext, RenderPass renderPass) {
         if (renderPass != RenderPass.COLOR) return;
+        if (gameContext.getGameState().getCurrentTrack() == null) return;
         worldShader.bind();
         worldShader.setProjectionMatrix(renderContext.getWorldMatrix());
         Texture texture = gameContext.getGameState().getCurrentTrack().getBaseMaterial().getTexture();
@@ -32,7 +33,7 @@ public class TrackRenderer implements IRenderer {
     }
 
     @Override
-    public void destroy(GameContext context) {
+    public void destroy(RenderContext renderContext, GameContext gameContext) {
         worldShader.destroy();
     }
 }

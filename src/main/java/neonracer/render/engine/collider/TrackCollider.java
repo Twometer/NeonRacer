@@ -7,8 +7,6 @@ import org.joml.Vector2f;
 
 public class TrackCollider implements ICollider<Track, TrackColliderResult> {
 
-    private static final int TRACK_COLLIDER_SAMPLES = 100;
-
     private Track track;
 
     @Override
@@ -20,7 +18,7 @@ public class TrackCollider implements ICollider<Track, TrackColliderResult> {
     public TrackColliderResult collides(Vector2f vector2f) {
         Spline2D spline = track.getTrackDef().getSpline2D();
 
-        float sampleRate = 1.0f / TRACK_COLLIDER_SAMPLES;
+        float sampleRate = 1.0f / track.getSamples();
 
         // Find closest T
         float closestDistanceSquared = Float.MAX_VALUE;

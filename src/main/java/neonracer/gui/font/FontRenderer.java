@@ -1,4 +1,4 @@
-package neonracer.render.engine.font;
+package neonracer.gui.font;
 
 import neonracer.core.GameContext;
 import neonracer.render.RenderContext;
@@ -7,6 +7,7 @@ import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.gl.core.Model;
 import neonracer.render.gl.shaders.FontShader;
 import neonracer.util.Log;
+import org.joml.Vector4f;
 
 import java.io.IOException;
 
@@ -15,6 +16,8 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 public class FontRenderer {
+
+    private RenderContext renderContext;
 
     private GameContext gameContext;
 
@@ -26,36 +29,63 @@ public class FontRenderer {
 
     private Model textModel;
 
-    public FontRenderer(String fontFace) {
+    FontRenderer(String fontFace) {
         this.fontFaceName = fontFace;
     }
 
-    public void setup(GameContext context) {
-        this.gameContext = context;
+    public void initialize(RenderContext renderContext, GameContext gameContext) {
+        this.renderContext = renderContext;
+        this.gameContext = gameContext;
         fontShader = new FontShader();
         try {
-            fontFace = FontFace.load(context, fontFaceName);
+            fontFace = FontFace.load(gameContext, fontFaceName);
         } catch (IOException e) {
             Log.e(e);
         }
     }
 
-    public void draw(RenderContext renderContext, String text, float x, float y, float fontSize) {
+    public void draw(String text, float x, float y, float fontSize) {
+        draw(text, x, y, fontSize, new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
+    }
+
+    public void draw(String text, float x, float y, float fontSize, Vector4f color) {
         fontSize *= gameContext.getGameWindow().getScale();
-        if (textModel != null)
-            textModel.destroy();
         textModel = build(text, fontSize, x, y);
         fontShader.bind();
         fontShader.setProjectionMatrix(renderContext.getGuiMatrix());
+        fontShader.setColor(color.x, color.y, color.z, color.w);
         glActiveTexture(GL_TEXTURE0);
         fontFace.getFontTexture().bind();
         textModel.draw();
         fontFace.getFontTexture().unbind();
         fontShader.unbind();
+        textModel.destroy();
     }
 
     public float getLineHeight(float fontSize) {
         return 50f * fontSize * gameContext.getGameWindow().getScale();
+    }
+
+    public float getStringHeight(String string, float fontSize) {
+        fontSize *= gameContext.getGameWindow().getScale();
+        float height = 0;
+        for (char c : string.toCharArray()) {
+            Glyph glyph = fontFace.getGlyph(c);
+            float glyphHeight = (glyph.getHeight() + glyph.getyOffset()) * fontSize;
+            if (height < glyphHeight)
+                height = glyphHeight;
+        }
+        return height;
+    }
+
+    public float getStringWidth(String string, float fontSize) {
+        fontSize *= gameContext.getGameWindow().getScale();
+        float cursor = 0;
+        for (char c : string.toCharArray()) {
+            Glyph glyph = fontFace.getGlyph(c);
+            cursor += (glyph.getAdvance() - 15) * fontSize;
+        }
+        return cursor;
     }
 
     public void destroy() {
@@ -69,6 +99,8 @@ public class FontRenderer {
         float cursor = x;
         for (char c : text.toCharArray()) {
             Glyph glyph = fontFace.getGlyph(c);
+            if (glyph == null)
+                continue;
 
             Rectangle charRect = createChar(cursor, y, glyph, fontSize);
             meshBuilder.putRectVertices(charRect);

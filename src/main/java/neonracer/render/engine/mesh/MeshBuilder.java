@@ -27,6 +27,11 @@ public class MeshBuilder {
         mesh.putVertex(x1, y1);
     }
 
+    public void putRectColors(float r, float g, float b) {
+        for (int i = 0; i < 6; i++)
+            mesh.putColor(r, g, b);
+    }
+
     public void putRectTexCoords(float u1, float v1, float u2, float v2) {
         mesh.putTexCoord(u1, v1);
         mesh.putTexCoord(u1, v2);

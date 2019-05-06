@@ -1,27 +1,18 @@
 package neonracer.render;
 
-import neonracer.core.ControlState;
 import neonracer.core.GameContext;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.phys.entity.car.CarPhysicsFactory;
-import neonracer.render.engine.Camera;
-import neonracer.render.engine.PostProcessing;
 import neonracer.render.engine.RenderPass;
+import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
-import neonracer.render.gl.core.Fbo;
-import neonracer.render.gl.shaders.HGaussShader;
-import neonracer.render.gl.shaders.MixShader;
-import neonracer.render.gl.shaders.VGaussShader;
 import neonracer.util.Log;
-import org.joml.Matrix4f;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
 
 public class MasterRenderer {
 
@@ -39,22 +30,10 @@ public class MasterRenderer {
 
     private PostProcessing postProcessing;
 
-    private Fbo colorFbo;
-
-    private Fbo glowFbo;
-
-    private Fbo gaussFbo;
-
-    private Fbo gaussFbo2;
-
-    private HGaussShader hGaussShader;
-    private VGaussShader vGaussShader;
-    private MixShader mixShader;
-
     public MasterRenderer(GameContext context) {
         this.gameContext = context;
         this.gameWindow = gameContext.getGameWindow();
-        this.renderContext = new RenderContext(new Camera(context));
+        this.renderContext = new RenderContext(gameContext);
     }
 
     public void startLoop() {
@@ -70,16 +49,13 @@ public class MasterRenderer {
     }
 
     private void tick() {
-        ControlState controlState = gameContext.getControlState();
-        controlState.setForward(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_W));
-        controlState.setLeft(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_A));
-        controlState.setReverse(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_S));
-        controlState.setRight(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_D));
-        controlState.setSpacebar(gameContext.getGameWindow().isKeyPressed(GLFW_KEY_SPACE));
+        GameWindow gameWindow = gameContext.getGameWindow();
+        gameContext.getKeyboardState().update(gameWindow);
+        gameContext.getMouseState().update(gameWindow);
 
         gameContext.getPhysicsEngine().onTick();
 
-        renderContext.getCameraManager().smoothFollow(gameContext.getGameState().getPlayerEntity());
+        renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
     }
 
     private void setup() {
@@ -88,17 +64,11 @@ public class MasterRenderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-        postProcessing = new PostProcessing();
-        postProcessing.initialize();
+        postProcessing = new PostProcessing(gameContext);
 
-        gameWindow.setSizeChangedListener(this::onResize);
+        gameWindow.setSizeChangedListener(postProcessing::onResize);
 
-        initFBOs(gameWindow.getWidth(), gameWindow.getHeight());
-
-        hGaussShader = new HGaussShader();
-        vGaussShader = new VGaussShader();
-        mixShader = new MixShader();
-
+        renderContext.initialize();
         renderContext.getCamera().setZoomFactor(0.02f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
@@ -113,10 +83,8 @@ public class MasterRenderer {
             gameContext.getGameState().addEntity(e);
         }
 
-        renderContext.setGuiMatrix(new Matrix4f());
-
         for (IRenderer renderer : renderers)
-            renderer.setup(gameContext);
+            renderer.setup(renderContext, gameContext);
 
         gameContext.getTimer().reset();
 
@@ -124,55 +92,24 @@ public class MasterRenderer {
     }
 
     private void render() {
-        renderContext.setWorldMatrix(renderContext.getCamera().calculateMatrix());
-        renderContext.getGuiMatrix().setOrtho2D(0.0f, gameContext.getGameWindow().getWidth(), gameContext.getGameWindow().getHeight(), 0.0f);
+        renderContext.updateMatrices();
 
-        colorFbo.bind();
+        postProcessing.beginPass(RenderPass.COLOR);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         for (IRenderer renderer : renderers)
             renderer.render(renderContext, gameContext, RenderPass.COLOR);
 
-        glowFbo.bind();
+        postProcessing.beginPass(RenderPass.GLOW);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         for (IRenderer renderer : renderers)
             renderer.render(renderContext, gameContext, RenderPass.GLOW);
-        glowFbo.unbind();
 
-        // Beautiful postproc pipeline in 3.. 2... 1..
-        postProcessing.begin();
-        hGaussShader.bind();
-        hGaussShader.setTargetWidth(gaussFbo.getWidth());
-        postProcessing.copyFbo(glowFbo, gaussFbo);
-        hGaussShader.unbind();
-        vGaussShader.bind();
-        vGaussShader.setTargetHeight(gaussFbo2.getHeight());
-        postProcessing.copyFbo(gaussFbo, gaussFbo2);
-        vGaussShader.unbind();
-        mixShader.bind();
-        glClear(GL_COLOR_BUFFER_BIT);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, colorFbo.getColorTexture());
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, gaussFbo2.getColorTexture());
-        postProcessing.fullscreenQuad();
-        mixShader.unbind();
-        postProcessing.end();
-    }
-
-    private void onResize(int width, int height) {
-        initFBOs(width, height);
-    }
-
-    private void initFBOs(int width, int height) {
-        colorFbo = new Fbo(gameWindow, width, height, Fbo.DepthBufferType.NONE);
-        glowFbo = new Fbo(gameWindow, width, height, Fbo.DepthBufferType.NONE);
-        gaussFbo = new Fbo(gameWindow, width / 2, height / 2, Fbo.DepthBufferType.NONE);
-        gaussFbo2 = new Fbo(gameWindow, width / 2, height / 2, Fbo.DepthBufferType.NONE);
+        postProcessing.draw();
     }
 
     private void destroy() {
         for (IRenderer renderer : renderers)
-            renderer.destroy(gameContext);
+            renderer.destroy(renderContext, gameContext);
     }
 
 }

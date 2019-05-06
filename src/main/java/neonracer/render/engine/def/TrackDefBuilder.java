@@ -14,16 +14,14 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
 
 public class TrackDefBuilder implements IDefBuilder<Track, TrackDef> {
 
-    private static final int TRACK_SAMPLES = 100;
-
     @Override
     public TrackDef build(Track track) {
         List<Vector2f> points = track.getPath().stream().map(Node::getPosition).collect(Collectors.toList());
         Spline2D spline = new Spline2D(points, true, 0.8f);
 
-        Mesh mesh = new Mesh(TRACK_SAMPLES * 2 + 2);
+        Mesh mesh = new Mesh(track.getSamples() * 2 + 2);
 
-        float sampleRate = 1.0f / TRACK_SAMPLES;
+        float sampleRate = 1.0f / track.getSamples();
         for (float t = 0; t <= 1.0f; t += sampleRate) {
             Spline2D.Segment segment = spline.getSegment(t);
             float widthFrom = track.getPath().get(segment.getIndex()).getTrackWidth();

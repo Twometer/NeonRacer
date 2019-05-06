@@ -1,7 +1,7 @@
 package neonracer.phys.entity.car;
 
-import neonracer.core.ControlState;
 import neonracer.core.GameContext;
+import neonracer.gui.input.KeyboardState;
 import neonracer.model.track.Material;
 import neonracer.phys.Box2dHelper;
 import neonracer.render.engine.collider.TrackColliderResult;
@@ -74,11 +74,11 @@ public class Tire {
         body.applyForce(currentForwardNormal.mul(dragForceMagnitude).mul(currentMaterial.getTraction()), body.getWorldCenter());
     }
 
-    void updateDrive(ControlState controlState) {
+    void updateDrive(KeyboardState keyboardState) {
         float desiredSpeed = 0;
-        if (controlState.isForward())
+        if (keyboardState.isForward())
             desiredSpeed = maxForwardSpeed;
-        else if (controlState.isReverse())
+        else if (keyboardState.isReverse())
             desiredSpeed = maxReverseSpeed;
 
         updateDrive(desiredSpeed);

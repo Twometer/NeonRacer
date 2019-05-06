@@ -1,5 +1,6 @@
 package neonracer.render;
 
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -28,6 +29,8 @@ public class GameWindow {
     private float scaleY;
 
     private SizeChangedListener sizeChangedListener;
+
+    private MouseScrollListener mouseScrollListener;
 
     public GameWindow(int width, int height, String title) {
         this.width = width;
@@ -61,7 +64,13 @@ public class GameWindow {
                 sizeChangedListener.onSizeChanged(width, height);
         });
 
+        glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
+            if (mouseScrollListener != null)
+                mouseScrollListener.onMouseScroll((float) xoffset, (float) yoffset);
+        });
+
         glfwMakeContextCurrent(window);
+        glfwSwapInterval(1);
 
         float[] x = new float[1];
         float[] y = new float[1];
@@ -89,7 +98,7 @@ public class GameWindow {
     /**
      * Swaps back and front buffer and does event/message pumping
      */
-    void update() {
+    public void update() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -99,7 +108,7 @@ public class GameWindow {
      *
      * @return Whether the user requested the window to close
      */
-    boolean shouldClose() {
+    public boolean shouldClose() {
         return glfwWindowShouldClose(window);
     }
 
@@ -115,12 +124,27 @@ public class GameWindow {
         return (scaleX + scaleY) / 2;
     }
 
-    boolean isKeyPressed(int key) {
+    public Vector2f getCursorPosition() {
+        double[] xPos = new double[1];
+        double[] yPos = new double[1];
+        glfwGetCursorPos(window, xPos, yPos);
+        return new Vector2f((float) xPos[0], (float) yPos[0]);
+    }
+
+    public boolean isMouseButtonPressed(int mouseButton) {
+        return glfwGetMouseButton(window, mouseButton) == GLFW_PRESS;
+    }
+
+    public boolean isKeyPressed(int key) {
         return glfwGetKey(window, key) == GLFW_PRESS;
     }
 
-    void setSizeChangedListener(SizeChangedListener sizeChangedListener) {
+    public void setSizeChangedListener(SizeChangedListener sizeChangedListener) {
         this.sizeChangedListener = sizeChangedListener;
+    }
+
+    public void setMouseScrollListener(MouseScrollListener mouseScrollListener) {
+        this.mouseScrollListener = mouseScrollListener;
     }
 
     private void setSize(int width, int height) {
@@ -131,6 +155,10 @@ public class GameWindow {
 
     public interface SizeChangedListener {
         void onSizeChanged(int width, int height);
+    }
+
+    public interface MouseScrollListener {
+        void onMouseScroll(float x, float y);
     }
 
 }

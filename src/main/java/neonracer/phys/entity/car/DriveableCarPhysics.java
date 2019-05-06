@@ -1,7 +1,7 @@
 package neonracer.phys.entity.car;
 
-import neonracer.core.ControlState;
 import neonracer.core.GameContext;
+import neonracer.gui.input.KeyboardState;
 import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
@@ -16,18 +16,18 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
 
     @Override
     public void update() {
-        ControlState controlState = gameContext.getControlState();
+        KeyboardState keyboardState = gameContext.getKeyboardState();
         for (Tire tire : tires) {
             tire.updateFriction();
-            tire.updateDrive(controlState);
+            tire.updateDrive(keyboardState);
         }
         float lockAngle = (float) Math.toRadians(35);
         float turnSpeedPerSec = (float) Math.toRadians(320);//from lock to lock in 0.25 sec
         float turnPerTimeStep = turnSpeedPerSec / 60.0f;
         float desiredAngle = 0;
-        if (controlState.isLeft())
+        if (keyboardState.isLeft())
             desiredAngle = lockAngle;
-        else if (controlState.isRight())
+        else if (keyboardState.isRight())
             desiredAngle = -lockAngle;
         float angleNow = flJoint.getJointAngle();
         float angleToTurn = desiredAngle - angleNow;
