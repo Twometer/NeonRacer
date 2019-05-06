@@ -1,0 +1,37 @@
+
+syntax = "proto3";
+package neonracer;
+
+option java_package = "neonracer.network.proto";
+option java_outer_classname = "Entity";
+
+/*
+These packets are forwarded to all connected clients.
+New clients get the Create message with the latest entity state which is cached by the server.
+*/
+
+/*
+An entityId is composed of the clientId and an entityCounter per client:
+long entityId = clientId << 32 | entityCounter;
+*/
+
+message Create {
+    uint64 entityId = 1;
+    float x = 2;
+    float y = 3;
+    float rotation = 4;
+    string type = 5;
+}
+
+message Update {
+    uint64 entityId = 1;
+    float x = 2;
+    float y = 3;
+    float rotation = 4;
+    float velocity = 5;
+    uint32 lapsPassed = 6;
+}
+
+message Delete {
+    uint64 entityId = 1;
+}

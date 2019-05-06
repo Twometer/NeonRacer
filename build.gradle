@@ -1,9 +1,24 @@
-plugins {
-    id 'java'
+// First apply all plugins
+
+apply plugin: "java"
+apply plugin: "com.google.protobuf"
+apply plugin: "idea"
+
+repositories {
+    mavenCentral()
 }
 
-group 'neonracer'
-version '0.1.0'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.8"
+    }
+}
+
+group "neonracer"
+version "0.1.0"
 
 sourceCompatibility = 1.8
 
@@ -11,20 +26,17 @@ project.ext.mainClass = "neonracer.NeonRacerMain"
 project.ext.lwjglVersion = "3.2.1"
 project.ext.lwjglNatives = "natives-windows"
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation "org.lwjgl:lwjgl:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-glfw:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-openal:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-opengl:$lwjglVersion"
     implementation "org.lwjgl:lwjgl-stb:$lwjglVersion"
-    implementation 'org.joml:joml:1.9.12'
+    implementation "org.joml:joml:1.9.12"
     implementation "org.jbox2d:jbox2d-library:2.2.1.1"
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.9.8"
+    implementation "com.google.protobuf:protobuf-java:3.7.1"
 
     runtimeOnly "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
@@ -32,7 +44,13 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: "junit", name: "junit", version: "4.12"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.7.1"
+    }
 }
 
 jar {
