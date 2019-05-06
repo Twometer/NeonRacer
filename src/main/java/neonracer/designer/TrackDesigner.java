@@ -1,5 +1,7 @@
 package neonracer.designer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import neonracer.core.GameContext;
 import neonracer.core.GameContextFactory;
 import neonracer.gui.GuiManager;
@@ -29,10 +31,13 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -89,6 +94,16 @@ public class TrackDesigner extends Screen {
     private Button btnAddEntity;
     private Mode mode = Mode.None;
 
+    @Override
+    public void initialize(RenderContext renderContext) {
+        super.initialize(renderContext);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+    }
+
     @EventHandler("btnSave")
     public void onSave(ClickEvent event) {
         System.out.printf("- samples: %d%n", samples);
@@ -100,6 +115,32 @@ public class TrackDesigner extends Screen {
                     format.format(node.getPosition().y),
                     format.format(node.getTrackWidth()),
                     node.getMaterial().getId());
+        }
+    }
+
+    @EventHandler("btnLoad")
+    public void onLoad(ClickEvent event) throws IOException {
+        JFileChooser chooser = new JFileChooser();
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            Track[] tracks = mapper.readValue(file, Track[].class);
+            String s = (String) JOptionPane.showInputDialog(
+                    null,
+                    "Select which track you want to load",
+                    "Load file",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    Arrays.stream(tracks).map(c -> c.getName() + " (" + c.getId() + ")").toArray(),
+                    tracks[0].getName() + " (" + tracks[0].getId() + ")");
+            for (Track track : tracks) {
+                if ((track.getName() + " (" + track.getId() + ")").equals(s)) {
+                    track.initialize(gameContext);
+                    gameContext.getGameState().setCurrentTrack(track);
+                    nodes = gameContext.getGameState().getCurrentTrack().getPath();
+                    return;
+                }
+            }
         }
     }
 
