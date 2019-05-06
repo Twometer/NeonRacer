@@ -219,6 +219,8 @@ public class TrackDesigner extends Screen {
                 break;
             }
         }
+        if (nextMaterial == null) return;
+
         selectedNode.setMaterial(nextMaterial);
         lbMaterial.setText("Material: " + selectedNode.getMaterial().getId());
         rebuild();
@@ -245,12 +247,12 @@ public class TrackDesigner extends Screen {
         if (mode == Mode.CreatingNodes)
             btnAddNode.setFontColor(Color.GREEN);
         else
-            btnAddNode.setFontColor(Color.BLACK);
+            btnAddNode.setFontColor(Color.WHITE);
 
         if (mode == Mode.CreatingEntities)
             btnAddEntity.setFontColor(Color.GREEN);
         else
-            btnAddEntity.setFontColor(Color.BLACK);
+            btnAddEntity.setFontColor(Color.WHITE);
 
         this.mode = mode;
     }

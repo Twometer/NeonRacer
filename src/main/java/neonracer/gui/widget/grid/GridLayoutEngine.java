@@ -58,7 +58,8 @@ class GridLayoutEngine {
                 widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * targetSize.getHeight());
                 break;
             case Center:
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * targetSize.getHeight());
+                if (widget.getWidth() == 0)
+                    widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * targetSize.getHeight());
                 widget.setX((int) (cellPos.x + targetSize.getWidth() / 2f - widget.getWidth() / 2f));
                 break;
             case End:

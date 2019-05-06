@@ -20,10 +20,10 @@
                     <ColumnDefinition>Auto</ColumnDefinition>
                     <ColumnDefinition>Auto</ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Id="btnSave" FontColor="0,0,0" Text="Save" Grid.Column="0" FontSize="0.3"/>
-                <Button Id="btnLoad" FontColor="0,0,0" Text="Load" Grid.Column="1" FontSize="0.3"/>
-                <Button Id="btnAddNode" FontColor="0,0,0" Text="Add Node" Grid.Column="2" FontSize="0.3"/>
-                <Button Id="btnAddEntity" FontColor="0,0,0" Text="Add Entity" Grid.Column="3" FontSize="0.3"/>
+                <Button Id="btnSave" Text="Save" Grid.Column="0" FontSize="0.3"/>
+                <Button Id="btnLoad" Text="Load" Grid.Column="1" FontSize="0.3"/>
+                <Button Id="btnAddNode" Text="Add Node" Grid.Column="2" FontSize="0.3"/>
+                <Button Id="btnAddEntity" Text="Add Entity" Grid.Column="3" FontSize="0.3"/>
             </Grid>
         </Border>
         <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
@@ -49,9 +49,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition>*</ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label FontColor="0,0,0" Text="Node properties" Grid.Row="0" Grid.Column="0" FontSize="0.5" Margin="10"/>
+                <Label FontColor="0,0,0" Text="Node properties" Grid.Row="0" Grid.Column="0" FontSize="0.5"
+                       Margin="10"/>
 
-                <Label Id="lbNodePosition" FontColor="0,0,0" Text="Position: None" Grid.Row="1" Grid.Column="0" FontSize="0.4"/>
+                <Label Id="lbNodePosition" FontColor="0,0,0" Text="Position: None" Grid.Row="1" Grid.Column="0"
+                       FontSize="0.4"/>
 
                 <Label FontColor="0,0,0" Text="COMMANDS" Grid.Row="2" Grid.Column="0" FontSize="0.5" Margin="5"/>
                 <Button Id="btnDeleteNode" FontColor="1,0,0" FontSize="0.3" Grid.Row="3" Grid.Column="0"
@@ -61,19 +63,19 @@
 
                 <Label FontColor="0,0,0" Text="SETTINGS" Grid.Row="5" Grid.Column="0" FontSize="0.5" Margin="5"/>
                 <Label Id="lbWidth" FontColor="0,0,0" FontSize="0.3" Grid.Row="6" Text="Width: -"/>
-                <Button Id="widthIncr" FontColor="0,0,0" FontSize="0.3" Grid.Row="7" Text="+1"/>
-                <Button Id="widthDecr" FontColor="0,0,0" FontSize="0.3" Grid.Row="8" Text="-1"/>
+                <Button Id="widthIncr" FontSize="0.3" Grid.Row="7" Text="+1"/>
+                <Button Id="widthDecr" FontSize="0.3" Grid.Row="8" Text="-1"/>
 
                 <Label Id="lbMaterial" FontColor="0,0,0" FontSize="0.3" Grid.Row="9" Text="Material: -"/>
-                <Button Id="switchMaterial" FontColor="0,0,0" FontSize="0.3" Grid.Row="10" Text="Switch Material"/>
+                <Button Id="switchMaterial" FontSize="0.3" Grid.Row="10" Text="Switch Material"/>
 
                 <Label Id="lbSamples" FontColor="0,0,0" Text="Samples: 100" Grid.Row="12" Grid.Column="0"
                        FontSize="0.3"/>
-                <Button Id="addSamples" FontColor="0,0,0" FontSize="0.3" Grid.Row="13" Grid.Column="0"
-                        Text="+100" />
-                <Button Id="remSamples" FontColor="0,0,0" FontSize="0.3" Grid.Row="14" Grid.Column="0"
+                <Button Id="addSamples" FontSize="0.3" Grid.Row="13" Grid.Column="0"
+                        Text="+100"/>
+                <Button Id="remSamples" FontSize="0.3" Grid.Row="14" Grid.Column="0"
                         Text="-100"/>
-                <Button Id="btnRebuildPreview" FontColor="0,0,0" FontSize="0.3" Grid.Row="15" Grid.Column="0"
+                <Button Id="btnRebuildPreview" FontSize="0.3" Grid.Row="15" Grid.Column="0"
                         Text="Rebuild preview"/>
             </Grid>
         </Border>
