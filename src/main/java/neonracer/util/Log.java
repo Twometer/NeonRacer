@@ -24,6 +24,17 @@ public class Log {
     }
 
     /**
+     * Logs an error message and then a thrown exception
+     *
+     * @param msg       The error message
+     * @param throwable The exception
+     */
+    public static void e(String msg, Throwable throwable) {
+        e(msg);
+        throwable.printStackTrace();
+    }
+
+    /**
      * Logs an error to the console with the specified message
      *
      * @param msg The message to log

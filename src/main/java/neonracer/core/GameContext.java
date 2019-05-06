@@ -40,6 +40,8 @@ public class GameContext {
 
     public void initialize() throws IOException {
         gameWindow.create();
+        gameWindow.setIcon("icon.png");
+
         dataManager.load(this);
         if (physicsEngine != null) physicsEngine.initialize(this);
         gameState.initialize(this);
