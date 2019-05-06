@@ -1,5 +1,6 @@
 package neonracer.gui.widget;
 
+import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
@@ -23,6 +24,11 @@ public class TitleButton extends Widget {
         this.text = text;
     }
 
+    public TitleButton() {
+        // Default settings here
+        setFontFamily(FontFamily.Title);
+    }
+
     @Override
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
@@ -39,9 +45,9 @@ public class TitleButton extends Widget {
         else if (!hover && offset > 0)
             offset -= 1;
 
-        fontRenderer.draw(text, getX() + getMargin().getLeft() + offset, getY() + getMargin().getTop(), getFontSize(), getFontColor().toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
+        fontRenderer.draw(text, getX() + offset, getY(), getFontSize(), getFontColor().toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
         if (offset > 0)
-            fontRenderer.draw("> ", getX() + getMargin().getLeft() + offset - fontRenderer.getStringWidth("> ", getFontSize()), getY() + getMargin().getTop(), getFontSize(), new Vector4f(getFontColor().getR(), getFontColor().getG(), getFontColor().getB(), offset / 20f));
+            fontRenderer.draw("> ", getX() + offset - fontRenderer.getStringWidth("> ", getFontSize()), getY(), getFontSize(), new Vector4f(getFontColor().getR(), getFontColor().getG(), getFontColor().getB(), offset / 20f));
 
     }
 

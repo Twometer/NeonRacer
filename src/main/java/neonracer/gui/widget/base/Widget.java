@@ -79,7 +79,7 @@ public abstract class Widget {
         if (handler != null) handler.handle(event);
     }
 
-    private void onEvent(Event event) {
+    protected void onEvent(Event event) {
     }
 
     protected FontRenderer getFontRenderer(RenderContext renderContext) {

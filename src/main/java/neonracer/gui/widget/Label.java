@@ -29,7 +29,7 @@ public class Label extends Widget {
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
         if (renderPass == RenderPass.COLOR)
-            fontRenderer.draw(text, getX() + getMargin().getLeft(), getY() + getMargin().getTop(), getFontSize(), getFontColor().toVector(1.0f));
+            fontRenderer.draw(text, getX(), getY(), getFontSize(), getFontColor().toVector(1.0f));
     }
 
     @Override

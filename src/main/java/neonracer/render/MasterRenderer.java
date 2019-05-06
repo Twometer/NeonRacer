@@ -1,6 +1,8 @@
 package neonracer.render;
 
 import neonracer.core.GameContext;
+import neonracer.gui.GuiManager;
+import neonracer.gui.screen.ConnectScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.phys.entity.car.CarPhysicsFactory;
@@ -16,11 +18,15 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class MasterRenderer {
 
-    private RenderContext renderContext;
-
     private GameContext gameContext;
 
+    private RenderContext renderContext;
+
     private GameWindow gameWindow;
+
+    private GuiManager guiManager;
+
+    private PostProcessing postProcessing;
 
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
@@ -28,12 +34,11 @@ public class MasterRenderer {
             new DebugRenderer()
     };
 
-    private PostProcessing postProcessing;
-
     public MasterRenderer(GameContext context) {
         this.gameContext = context;
         this.gameWindow = gameContext.getGameWindow();
         this.renderContext = new RenderContext(gameContext);
+        this.guiManager = new GuiManager(renderContext);
     }
 
     public void startLoop() {
@@ -48,16 +53,6 @@ public class MasterRenderer {
         destroy();
     }
 
-    private void tick() {
-        GameWindow gameWindow = gameContext.getGameWindow();
-        gameContext.getKeyboardState().update(gameWindow);
-        gameContext.getMouseState().update(gameWindow);
-
-        gameContext.getPhysicsEngine().onTick();
-
-        renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
-    }
-
     private void setup() {
         Log.i("Initializing renderer...");
         glEnable(GL_BLEND);
@@ -66,7 +61,10 @@ public class MasterRenderer {
 
         postProcessing = new PostProcessing(gameContext);
 
-        gameWindow.setSizeChangedListener(postProcessing::onResize);
+        gameWindow.setSizeChangedListener((width, height) -> {
+            guiManager.resize(width, height);
+            postProcessing.onResize(width, height);
+        });
 
         renderContext.initialize();
         renderContext.getCamera().setZoomFactor(0.02f);
@@ -86,6 +84,8 @@ public class MasterRenderer {
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);
 
+        guiManager.show(ConnectScreen.class);
+
         gameContext.getTimer().reset();
 
         Log.i("Initialization completed");
@@ -94,17 +94,32 @@ public class MasterRenderer {
     private void render() {
         renderContext.updateMatrices();
 
+        gameContext.getKeyboardState().update(gameWindow);
+        gameContext.getMouseState().update(gameWindow);
+
         postProcessing.beginPass(RenderPass.COLOR);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         for (IRenderer renderer : renderers)
             renderer.render(renderContext, gameContext, RenderPass.COLOR);
+        guiManager.draw(RenderPass.COLOR);
 
         postProcessing.beginPass(RenderPass.GLOW);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         for (IRenderer renderer : renderers)
             renderer.render(renderContext, gameContext, RenderPass.GLOW);
+        guiManager.draw(RenderPass.GLOW);
 
         postProcessing.draw();
+    }
+
+    private void tick() {
+        GameWindow gameWindow = gameContext.getGameWindow();
+        gameContext.getKeyboardState().update(gameWindow);
+        gameContext.getMouseState().update(gameWindow);
+
+        gameContext.getPhysicsEngine().onTick();
+
+        renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
     }
 
     private void destroy() {
