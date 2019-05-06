@@ -30,6 +30,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,12 @@ public class TrackDesigner extends Screen {
         System.out.printf("- samples: %d%n", samples);
         System.out.println("  path:");
         for (Node node : nodes) {
-            System.out.printf("    - {x: %f, y: %f, w: %f, mat: \"%s\"}%n", node.getPosition().x, node.getPosition().y, node.getTrackWidth(), node.getMaterial().getId());
+            DecimalFormat format = new DecimalFormat("#.##");
+            System.out.printf("    - {x: %s, y: %s, w: %s, mat: \"%s\"}%n",
+                    format.format(node.getPosition().x),
+                    format.format(node.getPosition().y),
+                    format.format(node.getTrackWidth()),
+                    node.getMaterial().getId());
         }
     }
 
