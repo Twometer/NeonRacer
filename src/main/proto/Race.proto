@@ -5,13 +5,14 @@ package neonracer;
 option java_package = "neonracer.network.proto";
 option java_outer_classname = "Race";
 
-message Request {
-    uint32 clientId = 1;
-    string nickname = 2;
-}
+/*
+These packets are forwarded to all connected clients.
+New clients receive the current race state with the same messages cached by the server.
+*/
 
+/* This packet is sent by the server to ask connected clients to join the race. */
 message Prepare {
-    /* Milliseconds until race starts */
+    /* Milliseconds until ready check times out. */
     uint32 remainingMilliseconds = 1;
 }
 
@@ -28,6 +29,8 @@ message Leave {
     uint32 clientId = 1;
 }
 
+/* The server sends this packet to indicate the start of the race.
+   Only clients which have joined so far are permitted to take part. */
 message Start {
     /* Negative values indicate time until race start to select a car. */
     sint32 elapsedMilliseconds = 1;

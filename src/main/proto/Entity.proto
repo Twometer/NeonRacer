@@ -6,7 +6,12 @@ option java_package = "neonracer.network.proto";
 option java_outer_classname = "Entity";
 
 /*
-An entityId is composed of the clientId and an entityCounter per client
+These packets are forwarded to all connected clients.
+New clients get the Create message with the latest entity state which is cached by the server.
+*/
+
+/*
+An entityId is composed of the clientId and an entityCounter per client:
 long entityId = clientId << 32 | entityCounter;
 */
 
