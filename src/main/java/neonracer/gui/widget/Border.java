@@ -1,6 +1,7 @@
 package neonracer.gui.widget;
 
 import neonracer.gui.util.Color;
+import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Container;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
@@ -53,4 +54,12 @@ public class Border extends Container {
             throw new IllegalStateException("Borders are not a layout manager and can therefore only house one child");
     }
 
+    @Override
+    public Size measure() {
+        if (children.size() > 0) {
+            Widget singleChild = children.get(0);
+            return singleChild.measure();
+        }
+        return super.measure();
+    }
 }
