@@ -4,6 +4,7 @@ import neonracer.gui.input.KeyboardState;
 import neonracer.gui.input.MouseState;
 import neonracer.phys.PhysicsEngine;
 import neonracer.render.GameWindow;
+import neonracer.render.gl.ShaderProvider;
 import neonracer.render.gl.TextureProvider;
 import neonracer.resource.DataManager;
 
@@ -14,6 +15,8 @@ public class GameContext {
     private GameWindow gameWindow;
 
     private TextureProvider textureProvider;
+
+    private ShaderProvider shaderProvider;
 
     private DataManager dataManager;
 
@@ -27,9 +30,10 @@ public class GameContext {
 
     private KeyboardState keyboardState;
 
-    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, MouseState mouseState, KeyboardState keyboardState) {
+    GameContext(GameWindow gameWindow, TextureProvider textureProvider, ShaderProvider shaderProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, MouseState mouseState, KeyboardState keyboardState) {
         this.gameWindow = gameWindow;
         this.textureProvider = textureProvider;
+        this.shaderProvider = shaderProvider;
         this.dataManager = dataManager;
         this.gameState = gameState;
         this.physicsEngine = physicsEngine;
@@ -57,6 +61,10 @@ public class GameContext {
 
     public TextureProvider getTextureProvider() {
         return textureProvider;
+    }
+
+    public ShaderProvider getShaderProvider() {
+        return shaderProvider;
     }
 
     public DataManager getDataManager() {

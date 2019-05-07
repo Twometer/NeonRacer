@@ -25,8 +25,8 @@ public class TrackRenderer implements IRenderer {
 
     @Override
     public void setup(RenderContext renderContext, GameContext gameContext) {
-        worldShader = new WorldShader();
-        flatShader = new FlatShader();
+        worldShader = renderContext.getShader(WorldShader.class);
+        flatShader = renderContext.getShader(FlatShader.class);
 
         MeshBuilder builder = new MeshBuilder(6);
         Rectangle rectangle = new Rectangle(-1000, -1000, 1000, 1000);

@@ -37,7 +37,7 @@ public class FontRenderer {
     public void initialize(RenderContext renderContext, GameContext gameContext) {
         this.renderContext = renderContext;
         this.gameContext = gameContext;
-        fontShader = new FontShader();
+        fontShader = gameContext.getShaderProvider().getShader(FontShader.class);
         try {
             fontFace = FontFace.load(gameContext, fontFaceName);
         } catch (IOException e) {

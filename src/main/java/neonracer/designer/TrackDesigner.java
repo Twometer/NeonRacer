@@ -334,7 +334,7 @@ public class TrackDesigner extends Screen {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        flatShader = new FlatShader();
+        flatShader = renderContext.getShader(FlatShader.class);
 
         Mesh crosshairMesh = new Mesh(4);
         crosshairMesh.putVertex(0f, -10000f);

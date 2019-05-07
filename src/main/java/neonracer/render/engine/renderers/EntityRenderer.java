@@ -23,7 +23,7 @@ public class EntityRenderer implements IRenderer {
 
     @Override
     public void setup(RenderContext renderContext, GameContext gameContext) {
-        entityShader = new EntityShader();
+        entityShader = renderContext.getShader(EntityShader.class);
 
         MeshBuilder meshBuilder = new MeshBuilder(6);
         meshBuilder.putRectVertices(new Rectangle(0, 0, 1, 1));
