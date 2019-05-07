@@ -1,0 +1,40 @@
+<Screen Background="textures/background.png">
+
+    <Grid Margin="50">
+        <Grid.RowDefinitions>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>*</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>*</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Margin="80" Grid.Row="0" HorizontalAlignment="Center" Text="Autoauswahl" FontFamily="Title"
+               FontSize="2.0"/>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition>*</RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition>*</ColumnDefinition>
+                <ColumnDefinition>Auto</ColumnDefinition>
+                <ColumnDefinition>Auto</ColumnDefinition>
+                <ColumnDefinition>Auto</ColumnDefinition>
+                <ColumnDefinition>*</ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ImageButton Grid.Row="0" Grid.Column="1" Margin="40" HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Src="textures/kart.png" Width="150" Height="150"/>
+            <ImageButton Grid.Row="0" Grid.Column="2" Margin="40" HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Src="textures/sportscar.png" Width="150" Height="150"/>
+            <ImageButton Grid.Row="0" Grid.Column="3" Margin="40" HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Src="textures/rocketcar.png" Width="150" Height="150"/>
+        </Grid>
+        <ProgressBar Margin="20" Value="75" Grid.Row="2" HorizontalAlignment="Center" Height="15" Width="550"/>
+        <Label Margin="40" Text="Noch 10 Sekunden" Grid.Row="3" HorizontalAlignment="Center"/>
+    </Grid>
+
+</Screen>

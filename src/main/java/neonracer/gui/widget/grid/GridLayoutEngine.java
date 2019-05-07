@@ -43,36 +43,43 @@ class GridLayoutEngine {
         int rowSpan = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "RowSpan", 1);
         int colSpan = widget.getForeignParameters().getIntOrDefault(NAMESPACE, "ColSpan", 1);
 
-        Vector2i cellPos = calcCellPos(col, row);
+        Vector2i cellPos = calcCellPos(col, row).add(widget.getMargin().getLeft(), widget.getMargin().getTop());
         Size cellSize = calcCellSize(row, col, rowSpan, colSpan);
+        Size targetSize = new Size(cellSize.getWidth() - widget.getMargin().getWidth(), cellSize.getHeight() - widget.getMargin().getHeight());
         Size widgetSize = widget.measure();
 
         switch (widget.getHorizontalAlignment()) {
             case Fill:
                 widget.setX(cellPos.x);
-                widget.setWidth(cellSize.getWidth());
+                widget.setWidth(targetSize.getWidth());
                 break;
             case Start:
                 widget.setX(cellPos.x);
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellSize.getHeight());
+                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * targetSize.getHeight());
                 break;
             case Center:
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellSize.getHeight());
-                widget.setX((int) (cellPos.x + cellSize.getWidth() / 2f - widget.getWidth() / 2f));
+                if (widget.getWidth() == 0)
+                    widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * targetSize.getHeight());
+                widget.setX((int) (cellPos.x + targetSize.getWidth() / 2f - widget.getWidth() / 2f));
                 break;
             case End:
-                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * cellSize.getHeight());
+                widget.setWidth((widgetSize.getWidth() / widgetSize.getHeight()) * targetSize.getHeight());
                 widget.setX(cellPos.x - widget.getWidth());
                 break;
         }
 
+
         switch (widget.getVerticalAlignment()) {
             case Fill:
                 widget.setY(cellPos.y);
-                widget.setHeight(cellSize.getHeight());
+                widget.setHeight(targetSize.getHeight());
                 break;
             case Start: // TODO
+                widget.setY(cellPos.y);
+                break;
             case Center:
+                widget.setY((int) (cellPos.y + cellSize.getHeight() / 2f - widget.getHeight() / 2f));
+                break;
             case End:
         }
     }
@@ -99,8 +106,8 @@ class GridLayoutEngine {
                     int row = widget.getForeignParameters().getInt(NAMESPACE, "Row");
                     if (row == i) {
                         Size size = widget.measure();
-                        if (size.getHeight() + widget.getMargin().getTop() + widget.getMargin().getBottom() > height)
-                            height = size.getHeight() + widget.getMargin().getTop() + widget.getMargin().getBottom();
+                        if (size.getHeight() + widget.getMargin().getHeight() > height)
+                            height = size.getHeight() + widget.getMargin().getHeight();
                     }
                 }
 
@@ -147,9 +154,8 @@ class GridLayoutEngine {
                     int col = widget.getForeignParameters().getInt(NAMESPACE, "Column");
                     if (col == i) {
                         Size size = widget.measure();
-                        int widgetWidth = size.getWidth() + widget.getMargin().getLeft() + widget.getMargin().getRight();
-                        if (widgetWidth > width)
-                            width = widgetWidth;
+                        if (size.getWidth() + widget.getMargin().getWidth() > width)
+                            width = size.getWidth() + widget.getMargin().getWidth();
                     }
                 }
 

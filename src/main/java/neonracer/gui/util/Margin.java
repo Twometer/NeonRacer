@@ -45,7 +45,7 @@ public class Margin {
         this.left = left;
     }
 
-    public int getRight() {
+    private int getRight() {
         return right;
     }
 
@@ -61,7 +61,7 @@ public class Margin {
         this.top = top;
     }
 
-    public int getBottom() {
+    private int getBottom() {
         return bottom;
     }
 
@@ -69,4 +69,11 @@ public class Margin {
         this.bottom = bottom;
     }
 
+    public int getHeight() {
+        return getTop() + getBottom();
+    }
+
+    public int getWidth() {
+        return getLeft() + getRight();
+    }
 }

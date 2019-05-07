@@ -24,7 +24,7 @@ public class PrimitiveRenderer {
     }
 
     public void initialize() {
-        flatShader = new FlatShader();
+        flatShader = renderContext.getShader(FlatShader.class);
         MeshBuilder meshBuilder = new MeshBuilder(6);
         meshBuilder.putRectVertices(new Rectangle(0, 0, 1, 1));
         meshBuilder.putRectTexCoords(0, 0, 1, 1);

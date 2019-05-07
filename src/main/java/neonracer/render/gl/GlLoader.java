@@ -68,6 +68,27 @@ public class GlLoader {
     }
 
     /**
+     * Loads pixel data for a BufferedImage
+     *
+     * @param image The BufferedImage
+     * @return A ByteBuffer containing the pixel data in format RGBA
+     */
+    public static ByteBuffer loadPixels(BufferedImage image) {
+        ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL);
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                Color color = new Color(image.getRGB(x, y), true);
+                buffer.put((byte) color.getRed());
+                buffer.put((byte) color.getGreen());
+                buffer.put((byte) color.getBlue());
+                buffer.put((byte) color.getAlpha());
+            }
+        }
+        buffer.flip();
+        return buffer;
+    }
+
+    /**
      * Loads an image from the embedded jar resources and uploads it to the video memory as a 2D texture
      *
      * @param path The virtual path to the image file
@@ -76,17 +97,7 @@ public class GlLoader {
     public static Texture loadTexture(String path) {
         try {
             BufferedImage image = ResourceLoader.loadImage(path);
-            ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL);
-            for (int y = 0; y < image.getHeight(); y++) {
-                for (int x = 0; x < image.getWidth(); x++) {
-                    Color color = new Color(image.getRGB(x, y), true);
-                    buffer.put((byte) color.getRed());
-                    buffer.put((byte) color.getGreen());
-                    buffer.put((byte) color.getBlue());
-                    buffer.put((byte) color.getAlpha());
-                }
-            }
-            buffer.flip();
+            ByteBuffer buffer = loadPixels(image);
 
             int textureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, textureId);

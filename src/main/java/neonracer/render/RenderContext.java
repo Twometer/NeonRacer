@@ -4,6 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.gui.font.Fonts;
 import neonracer.gui.util.PrimitiveRenderer;
 import neonracer.render.engine.Camera;
+import neonracer.render.gl.shaders.Shader;
 import org.joml.Matrix4f;
 
 public class RenderContext {
@@ -62,6 +63,10 @@ public class RenderContext {
 
     public Matrix4f getGuiMatrix() {
         return guiMatrix;
+    }
+
+    public <T extends Shader> T getShader(Class<T> shaderClass) {
+        return gameContext.getShaderProvider().getShader(shaderClass);
     }
 
 }

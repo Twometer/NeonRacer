@@ -1,0 +1,19 @@
+<Screen>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>*</RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>Auto</ColumnDefinition>
+            <ColumnDefinition>*</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="0" Grid.Column="0">
+            <Label Text="1/10"/>
+        </Border>
+
+    </Grid>
+
+</Screen>

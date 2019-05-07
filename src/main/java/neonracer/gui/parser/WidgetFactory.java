@@ -17,13 +17,15 @@ public class WidgetFactory {
     private static final List<Class<? extends Widget>> REGISTERED_WIDGETS = new ArrayList<>();
 
     static {
-        register(Grid.class);
-        register(ImageView.class);
+        register(Label.class);
         register(Button.class);
         register(TitleButton.class);
-        register(Border.class);
-        register(Label.class);
+        register(TextBox.class);
         register(ProgressBar.class);
+        register(ImageView.class);
+        register(ImageButton.class);
+        register(Grid.class);
+        register(Border.class);
     }
 
     private WidgetFactory() {

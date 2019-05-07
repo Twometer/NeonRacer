@@ -6,52 +6,58 @@ import neonracer.gui.screen.Screen;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiManager {
 
     private RenderContext renderContext;
 
-    private Map<Class<? extends Screen>, Screen> cache = new HashMap<>();
-
-    private Screen currentScreen;
+    private List<Screen> currentScreens = new ArrayList<>();
 
     public GuiManager(RenderContext renderContext) {
         this.renderContext = renderContext;
     }
 
-    public void show(Class<? extends Screen> screenClass) {
-        Screen screen = cache.containsKey(screenClass) ? cache.get(screenClass) : ScreenLoader.loadScreen(screenClass);
-        cache.put(screenClass, screen);
-        show(screen);
-    }
-
     public void show(Screen screen) {
-        ScreenLoader.loadScreen(screen);
+        screen.setParent(this);
+        if (!screen.isLoaded()) {
+            ScreenLoader.loadScreen(screen);
+            screen.initialize(renderContext);
+        }
         screen.setWidth(renderContext.getGameContext().getGameWindow().getWidth());
         screen.setHeight(renderContext.getGameContext().getGameWindow().getHeight());
-        screen.initialize(renderContext);
         screen.performLayout();
-        currentScreen = screen;
+        currentScreens.add(screen);
+    }
+
+    public void close(Screen screen) {
+        currentScreens.remove(screen);
     }
 
     public void draw(RenderPass renderPass) {
-        if (currentScreen != null)
-            currentScreen.draw(renderContext, renderPass);
+        for (Screen screen : currentScreens)
+            screen.draw(renderContext, renderPass);
     }
 
     public void resize(int width, int height) {
-        if (currentScreen != null) {
-            currentScreen.setWidth(width);
-            currentScreen.setHeight(height);
-            currentScreen.performLayout();
+        for (Screen screen : currentScreens) {
+            screen.setWidth(width);
+            screen.setHeight(height);
+            screen.performLayout();
         }
     }
 
     public void raiseEvent(Event event) {
-        if (currentScreen != null)
-            currentScreen.raiseEvent(event);
+        for (Screen screen : currentScreens)
+            screen.raiseEvent(event);
+    }
+
+    public <T extends Screen> T getScreen(Class<T> screenClass) {
+        for (Screen screen : currentScreens)
+            if (screenClass.isInstance(screen))
+                return screenClass.cast(screen);
+        return null;
     }
 
 }
