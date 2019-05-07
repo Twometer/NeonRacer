@@ -42,6 +42,7 @@ public class NetworkChannel implements Closeable {
         stream.write((byte) buffer.length);
         stream.write((byte) (buffer.length >> 8));
         stream.write(buffer);
+        stream.flush();
     }
 
     @Override
