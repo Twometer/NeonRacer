@@ -68,13 +68,18 @@ class GridLayoutEngine {
                 break;
         }
 
+
         switch (widget.getVerticalAlignment()) {
             case Fill:
                 widget.setY(cellPos.y);
                 widget.setHeight(targetSize.getHeight());
                 break;
             case Start: // TODO
+                widget.setY(cellPos.y);
+                break;
             case Center:
+                widget.setY((int) (cellPos.y + cellSize.getHeight() / 2f - widget.getHeight() / 2f));
+                break;
             case End:
         }
     }

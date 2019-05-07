@@ -12,7 +12,7 @@ import neonracer.util.BuildInfo;
 public class GameContextFactory {
 
     public static GameContext createDefault() {
-        GameWindow gameWindow = new GameWindow(1100, 700, BuildInfo.getGameTitle());
+        GameWindow gameWindow = new GameWindow(1366, 768, BuildInfo.getGameTitle());
         TextureProvider textureProvider = new TextureProvider();
         ShaderProvider shaderProvider = new ShaderProvider();
         DataManager dataManager = new DataManager();

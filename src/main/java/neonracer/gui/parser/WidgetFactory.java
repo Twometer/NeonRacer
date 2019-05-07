@@ -23,6 +23,7 @@ public class WidgetFactory {
         register(TextBox.class);
         register(ProgressBar.class);
         register(ImageView.class);
+        register(ImageButton.class);
         register(Grid.class);
         register(Border.class);
     }

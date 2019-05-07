@@ -4,7 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.gui.GuiManager;
 import neonracer.gui.events.CharInputEvent;
 import neonracer.gui.events.ClickEvent;
-import neonracer.gui.screen.CarSelectorScreen;
+import neonracer.gui.screen.MainScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.phys.entity.car.CarPhysicsFactory;
@@ -90,7 +90,7 @@ public class MasterRenderer {
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);
 
-        guiManager.show(CarSelectorScreen.class);
+        guiManager.show(MainScreen.class);
 
         gameContext.getTimer().reset();
 
