@@ -58,11 +58,5 @@ public class ImageButton extends Widget {
         }
     }
 
-
-    //@Override
-    //p ublic Size measure() {
-    //return new Size(texture.getWidth(), texture.getHeight());
-    // }
-
 }
 
