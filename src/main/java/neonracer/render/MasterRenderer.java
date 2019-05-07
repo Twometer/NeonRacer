@@ -90,7 +90,7 @@ public class MasterRenderer {
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);
 
-        guiManager.show(CarSelectorScreen.class);
+        guiManager.show(new CarSelectorScreen());
 
         gameContext.getTimer().reset();
 

@@ -14,6 +14,8 @@ public abstract class Screen extends Container {
 
     private String background;
 
+    private boolean loaded;
+
     public String getBackground() {
         return background;
     }
@@ -58,4 +60,11 @@ public abstract class Screen extends Container {
         return children.get(0);
     }
 
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
 }
