@@ -9,6 +9,6 @@
   drag: 30
 
 - id: "street"
-  texture: "textures/test.png"
+  texture: "textures/street.png"
   traction: 1.2
   drag: 27
