@@ -1,5 +1,6 @@
 package neonracer.network;
 
+import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import neonracer.network.proto.Entity;
 import neonracer.network.proto.Login;
@@ -24,16 +25,28 @@ public class Message {
         return messages[id];
     }
 
-    private final Class<?> clazz;
-    private final MessageParser parser;
+    public static int getId(Class<? extends AbstractMessage> clazz) {
+        for (int i = 0; i < messages.length; i++) {
+            if (messages[i].clazz == clazz)
+                return i;
+        }
+        throw new IllegalArgumentException("Undefined message " + clazz.getName());
+    }
 
-    private Message(Class<?> clazz, MessageParser parser) {
+    private final Class<? extends AbstractMessage> clazz;
+    private final Parser parser;
+
+    private Message(Class<? extends AbstractMessage> clazz, Parser parser) {
         this.clazz = clazz;
         this.parser = parser;
     }
 
-    public void handle(byte[] buffer, MessageHandler handler) throws InvalidProtocolBufferException {
+    void handle(byte[] buffer, MessageHandler handler) throws InvalidProtocolBufferException {
         parser.invoke(buffer, handler);
+    }
+
+    private interface Parser {
+        void invoke(byte[] buffer, MessageHandler handler) throws InvalidProtocolBufferException;
     }
 
 }
