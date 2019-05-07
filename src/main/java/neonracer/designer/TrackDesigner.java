@@ -415,8 +415,7 @@ public class TrackDesigner extends Screen {
         if (gameContext.getMouseState().isLeft()) {
             if (!lastPressed) onClick();
             lastPressed = true;
-        }
-        if (!gameContext.getMouseState().isLeft()) lastPressed = false;
+        } else lastPressed = false;
     }
 
     enum Mode {

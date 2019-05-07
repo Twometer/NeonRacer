@@ -4,8 +4,7 @@ import neonracer.render.gl.GlLoader;
 import neonracer.resource.ResourceLoader;
 import neonracer.util.Log;
 import org.joml.Vector2f;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWImage;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 
 import java.awt.image.BufferedImage;
@@ -38,6 +37,8 @@ public class GameWindow {
     private SizeChangedListener sizeChangedListener;
 
     private MouseScrollListener mouseScrollListener;
+
+    private CharInputListener charInputListener;
 
     public GameWindow(int width, int height, String title) {
         this.width = width;
@@ -74,6 +75,11 @@ public class GameWindow {
         glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
             if (mouseScrollListener != null)
                 mouseScrollListener.onMouseScroll((float) xoffset, (float) yoffset);
+        });
+
+        glfwSetCharCallback(window, (window, codepoint) -> {
+            if (charInputListener != null)
+                charInputListener.onChar((char) codepoint);
         });
 
         glfwMakeContextCurrent(window);
@@ -193,6 +199,10 @@ public class GameWindow {
         this.mouseScrollListener = mouseScrollListener;
     }
 
+    void setCharInputListener(CharInputListener charInputListener) {
+        this.charInputListener = charInputListener;
+    }
+
     private void setSize(int width, int height) {
         this.width = width;
         this.height = height;
@@ -205,6 +215,10 @@ public class GameWindow {
 
     public interface MouseScrollListener {
         void onMouseScroll(float x, float y);
+    }
+
+    public interface CharInputListener {
+        void onChar(char chr);
     }
 
 }

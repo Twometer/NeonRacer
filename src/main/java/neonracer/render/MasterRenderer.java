@@ -2,6 +2,8 @@ package neonracer.render;
 
 import neonracer.core.GameContext;
 import neonracer.gui.GuiManager;
+import neonracer.gui.events.CharInputEvent;
+import neonracer.gui.events.ClickEvent;
 import neonracer.gui.screen.ConnectScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
@@ -27,6 +29,8 @@ public class MasterRenderer {
     private GuiManager guiManager;
 
     private PostProcessing postProcessing;
+
+    private boolean lastPressed;
 
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
@@ -65,6 +69,8 @@ public class MasterRenderer {
             guiManager.resize(width, height);
             postProcessing.onResize(width, height);
         });
+
+        gameWindow.setCharInputListener(chr -> guiManager.raiseEvent(new CharInputEvent(chr)));
 
         renderContext.initialize();
         renderContext.getCamera().setZoomFactor(0.02f);
@@ -110,6 +116,8 @@ public class MasterRenderer {
         guiManager.draw(RenderPass.GLOW);
 
         postProcessing.draw();
+
+        handleControls();
     }
 
     private void tick() {
@@ -120,6 +128,13 @@ public class MasterRenderer {
         gameContext.getPhysicsEngine().onTick();
 
         renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
+    }
+
+    private void handleControls() {
+        if (gameContext.getMouseState().isLeft()) {
+            if (!lastPressed) guiManager.raiseEvent(new ClickEvent());
+            lastPressed = true;
+        } else lastPressed = false;
     }
 
     private void destroy() {

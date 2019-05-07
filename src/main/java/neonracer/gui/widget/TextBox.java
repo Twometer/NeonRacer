@@ -1,5 +1,6 @@
 package neonracer.gui.widget;
 
+import neonracer.gui.events.CharInputEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Color;
@@ -7,6 +8,9 @@ import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import org.joml.Vector4f;
+import org.lwjgl.glfw.GLFW;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE;
 
 public class TextBox extends Widget {
 
@@ -16,6 +20,8 @@ public class TextBox extends Widget {
     private String text = "";
 
     private FontRenderer fontRenderer;
+
+    private boolean lastPressed;
 
     public String getText() {
         return text;
@@ -33,19 +39,26 @@ public class TextBox extends Widget {
 
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
-        FontRenderer fontRenderer = getFontRenderer(renderContext);
         if (renderPass == RenderPass.COLOR) {
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), BACKGROUND);
             fontRenderer.draw(text, getX(), getY() + 2, getFontSize(), getFontColor().toVector(1.0f));
         } else if (renderPass == RenderPass.GLOW) {
-            renderContext.getPrimitiveRenderer().drawRect(getX() - 5, getY() - 5, getWidth() + 10, getHeight() + 10, GLOW);
+            float glowRadius = isMouseHover() ? 10 : 5;
+            renderContext.getPrimitiveRenderer().drawRect(getX() - glowRadius, getY() - glowRadius, getWidth() + glowRadius * 2, getHeight() + glowRadius * 2, GLOW);
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), Color.BLACK.toVector());
         }
+
+        if (renderContext.getGameContext().getGameWindow().isKeyPressed(GLFW_KEY_BACKSPACE) && !text.isEmpty()) {
+            if (!lastPressed) text = text.substring(0, text.length() - 1);
+            lastPressed = true;
+        } else lastPressed = false;
     }
 
     @Override
     protected void onEvent(Event event) {
         super.onEvent(event);
+        if (event instanceof CharInputEvent)
+            text += ((CharInputEvent) event).getChar();
     }
 
 }
