@@ -10,26 +10,16 @@ import org.joml.Vector2f;
  * One node in the spline curve that
  * defines the race track.
  */
-public class Node implements IData {
+public class Node {
 
     private Vector2f position;
 
     private float trackWidth;
 
-    private String materialId;
-
-    private Material material;
-
     @JsonCreator
-    public Node(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("w") float trackWidth, @JsonProperty("mat") String materialId) {
+    public Node(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("w") float trackWidth) {
         this.position = new Vector2f(x, y);
         this.trackWidth = trackWidth;
-        this.materialId = materialId;
-    }
-
-    @Override
-    public void initialize(GameContext context) {
-        material = context.getDataManager().getMaterial(materialId);
     }
 
     public Vector2f getPosition() {
@@ -40,16 +30,8 @@ public class Node implements IData {
         return trackWidth;
     }
 
-    public Material getMaterial() {
-        return material;
-    }
-
     public void setTrackWidth(float trackWidth) {
         this.trackWidth = trackWidth;
     }
 
-    public void setMaterial(Material material) {
-        this.materialId = material.getId();
-        this.material = material;
-    }
 }

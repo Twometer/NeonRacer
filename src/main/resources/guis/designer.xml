@@ -38,9 +38,9 @@
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
-                    <RowDefinition>Auto</RowDefinition>
-                    <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>*</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
@@ -66,15 +66,14 @@
                 <Button Id="widthIncr" FontSize="0.3" Grid.Row="7" Text="+1"/>
                 <Button Id="widthDecr" FontSize="0.3" Grid.Row="8" Text="-1"/>
 
-                <Label Id="lbMaterial" FontColor="0,0,0" FontSize="0.3" Grid.Row="9" Text="Material: -"/>
-                <Button Id="switchMaterial" FontSize="0.3" Grid.Row="10" Text="Switch Material"/>
-
-                <Label Id="lbSamples" FontColor="0,0,0" Text="Samples: 100" Grid.Row="12" Grid.Column="0"
+                <Label Id="lbSamples" FontColor="0,0,0" Text="Samples: 100" Grid.Row="10" Grid.Column="0"
                        FontSize="0.3"/>
-                <Button Id="addSamples" FontSize="0.3" Grid.Row="13" Grid.Column="0"
+                <Button Id="addSamples" FontSize="0.3" Grid.Row="11" Grid.Column="0"
                         Text="+100"/>
-                <Button Id="remSamples" FontSize="0.3" Grid.Row="14" Grid.Column="0"
+                <Button Id="remSamples" FontSize="0.3" Grid.Row="12" Grid.Column="0"
                         Text="-100"/>
+                <Button Id="switchMaterialFg" FontSize="0.3" Grid.Row="13" Text="Foreground: street"/>
+                <Button Id="switchMaterialBg" FontSize="0.3" Grid.Row="14" Text="Background: grass"/>
                 <Button Id="btnRebuildPreview" FontSize="0.3" Grid.Row="15" Grid.Column="0"
                         Text="Rebuild preview"/>
             </Grid>

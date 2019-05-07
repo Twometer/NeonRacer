@@ -87,12 +87,20 @@ public class TrackDesigner extends Screen {
     @BindWidget("lbWidth")
     private Label lbWidth;
 
-    @BindWidget("lbMaterial")
-    private Label lbMaterial;
+    @BindWidget("switchMaterialFg")
+    private Button btnSwitchFg;
+
+    @BindWidget("switchMaterialBg")
+    private Button btnSwitchBg;
 
     @BindWidget("btnAddEntity")
     private Button btnAddEntity;
+
     private Mode mode = Mode.None;
+
+    private String bgMaterial = "grass";
+
+    private String fgMaterial = "street";
 
     @Override
     public void initialize(RenderContext renderContext) {
@@ -107,14 +115,15 @@ public class TrackDesigner extends Screen {
     @EventHandler("btnSave")
     public void onSave(ClickEvent event) {
         System.out.printf("- samples: %d%n", samples);
+        System.out.println("  background_material: " + bgMaterial);
+        System.out.println("  foreground_material: " + fgMaterial);
         System.out.println("  path:");
         for (Node node : nodes) {
             DecimalFormat format = new DecimalFormat("#.##");
-            System.out.printf("    - {x: %s, y: %s, w: %s, mat: \"%s\"}%n",
+            System.out.printf("    - {x: %s, y: %s, w: %s}%n",
                     format.format(node.getPosition().x),
                     format.format(node.getPosition().y),
-                    format.format(node.getTrackWidth()),
-                    node.getMaterial().getId());
+                    format.format(node.getTrackWidth()));
         }
     }
 
@@ -208,21 +217,39 @@ public class TrackDesigner extends Screen {
         rebuild();
     }
 
-    @EventHandler("switchMaterial")
-    public void onSwitchMat(ClickEvent event) {
+    @EventHandler("switchMaterialFg")
+    public void onSwitchMatFg(ClickEvent event) {
         Material[] mat = gameContext.getDataManager().getMaterials();
         Material nextMaterial = null;
 
         for (int i = 0; i < mat.length; i++) {
-            if (selectedNode.getMaterial().getId().equalsIgnoreCase(mat[i].getId())) {
+            if (fgMaterial.equalsIgnoreCase(mat[i].getId())) {
                 nextMaterial = mat[(i + 1) % mat.length];
                 break;
             }
         }
         if (nextMaterial == null) return;
 
-        selectedNode.setMaterial(nextMaterial);
-        lbMaterial.setText("Material: " + selectedNode.getMaterial().getId());
+        fgMaterial = nextMaterial.getId();
+        btnSwitchFg.setText("Foreground: " + fgMaterial);
+        rebuild();
+    }
+
+    @EventHandler("switchMaterialBg")
+    public void onSwitchMatBg(ClickEvent event) {
+        Material[] mat = gameContext.getDataManager().getMaterials();
+        Material nextMaterial = null;
+
+        for (int i = 0; i < mat.length; i++) {
+            if (bgMaterial.equalsIgnoreCase(mat[i].getId())) {
+                nextMaterial = mat[(i + 1) % mat.length];
+                break;
+            }
+        }
+        if (nextMaterial == null) return;
+
+        bgMaterial = nextMaterial.getId();
+        btnSwitchBg.setText("Background: " + bgMaterial);
         rebuild();
     }
 
@@ -258,7 +285,7 @@ public class TrackDesigner extends Screen {
     }
 
     private void rebuild() {
-        Track track = new Track("", "", "", "", "grass", nodes, null, samples);
+        Track track = new Track("", "", "", "", bgMaterial, fgMaterial, nodes, null, samples);
         track.initialize(gameContext);
 
         gameContext.getGameState().setCurrentTrack(track);
@@ -277,7 +304,6 @@ public class TrackDesigner extends Screen {
                 selectedNode = node;
                 nodePositionLabel.setText("Position: " + node.getPosition().toString(NumberFormat.getIntegerInstance()));
                 lbWidth.setText("Width: " + node.getTrackWidth());
-                lbMaterial.setText("Material: " + node.getMaterial().getId());
                 return;
             }
         }
@@ -285,8 +311,7 @@ public class TrackDesigner extends Screen {
         // Add a node at mouse position
         switch (mode) {
             case CreatingNodes:
-                Node node = new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 8.0f, "street");
-                node.initialize(gameContext);
+                Node node = new Node((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y), 8.0f);
                 nodes.add(node);
                 if (nodes.size() > 2)
                     rebuild();
@@ -331,8 +356,6 @@ public class TrackDesigner extends Screen {
 
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);
-
-
     }
 
     private void startRenderLoop() {

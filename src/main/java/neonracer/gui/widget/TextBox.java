@@ -8,7 +8,6 @@ import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE;
 
@@ -62,3 +61,4 @@ public class TextBox extends Widget {
     }
 
 }
+

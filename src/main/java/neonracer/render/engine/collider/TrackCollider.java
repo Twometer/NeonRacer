@@ -42,6 +42,6 @@ public class TrackCollider implements ICollider<Track, TrackColliderResult> {
         float radius = width / 2;
 
         float closestDistance = (float) Math.sqrt(closestDistanceSquared);
-        return new TrackColliderResult(closestDistance <= radius, node.getMaterial());
+        return new TrackColliderResult(closestDistance <= radius, track.getForegroundMaterial());
     }
 }
