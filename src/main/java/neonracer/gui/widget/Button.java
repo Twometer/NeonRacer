@@ -1,6 +1,7 @@
 package neonracer.gui.widget;
 
 import neonracer.gui.font.FontRenderer;
+import neonracer.gui.util.Animator;
 import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
@@ -24,7 +25,7 @@ public class Button extends Widget {
         this.text = text;
     }
 
-    private float opacity;
+    private Animator opacityAnimator = new Animator(0.05f, 0.0f, 1.0f);
 
     @Override
     public void initialize(RenderContext renderContext) {
@@ -36,17 +37,13 @@ public class Button extends Widget {
     public void draw(RenderContext renderContext, RenderPass renderPass) {
         FontRenderer fontRenderer = getFontRenderer(renderContext);
 
-        boolean hover = isMouseHover();
-        if (hover && opacity < 1.0f)
-            opacity += 0.05f;
-        else if (!hover && opacity > 0.0f)
-            opacity -= 0.05f;
+        opacityAnimator.update(isMouseHover());
 
         BACKGROUND.w = renderPass == RenderPass.COLOR ? 1.0f : 0.2f;
         renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), BACKGROUND);
 
-        if (renderPass == RenderPass.GLOW && opacity > 0) {
-            GLOW.w = opacity;
+        if (renderPass == RenderPass.GLOW && opacityAnimator.getValue() > 0) {
+            GLOW.w = opacityAnimator.getValue();
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), GLOW);
         }
         float width = fontRenderer.getStringWidth(text, getFontSize());

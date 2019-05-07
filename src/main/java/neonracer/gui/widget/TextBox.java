@@ -3,7 +3,9 @@ package neonracer.gui.widget;
 import neonracer.gui.events.CharInputEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.font.FontRenderer;
+import neonracer.gui.util.Animator;
 import neonracer.gui.util.Color;
+import neonracer.gui.util.Size;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
@@ -22,6 +24,10 @@ public class TextBox extends Widget {
 
     private boolean lastPressed;
 
+    private float cursorOpacity;
+
+    private Animator glowAnimator = new Animator(0.4f, 5.0f, 8.0f);
+
     public String getText() {
         return text;
     }
@@ -38,14 +44,23 @@ public class TextBox extends Widget {
 
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
+        glowAnimator.update(isMouseHover());
+
         if (renderPass == RenderPass.COLOR) {
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), BACKGROUND);
-            fontRenderer.draw(text, getX(), getY() + 2, getFontSize(), getFontColor().toVector(1.0f));
         } else if (renderPass == RenderPass.GLOW) {
-            float glowRadius = isMouseHover() ? 10 : 5;
-            renderContext.getPrimitiveRenderer().drawRect(getX() - glowRadius, getY() - glowRadius, getWidth() + glowRadius * 2, getHeight() + glowRadius * 2, GLOW);
+            renderContext.getPrimitiveRenderer().drawRect(getX() - glowAnimator.getValue(), getY() - glowAnimator.getValue(), getWidth() + glowAnimator.getValue() * 2, getHeight() + glowAnimator.getValue() * 2, GLOW);
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), Color.BLACK.toVector());
         }
+
+        cursorOpacity += 0.03f;
+
+
+        // Draw centered text
+        Size textSize = fontRenderer.drawCentered(getText(), getX() + getWidth() / 2, getY() + getHeight() / 2, getFontSize(), getFontColor().toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
+
+        // Draw a cursor
+        renderContext.getPrimitiveRenderer().drawRect(getX() + getWidth() / 2f + textSize.getWidth() / 2f, getY() + 8, 1.0f, getHeight() - 16, getFontColor().toVector((float) Math.abs(Math.sin(cursorOpacity))));
 
         if (renderContext.getGameContext().getGameWindow().isKeyPressed(GLFW_KEY_BACKSPACE) && !text.isEmpty()) {
             if (!lastPressed) text = text.substring(0, text.length() - 1);

@@ -1,6 +1,7 @@
 package neonracer.gui.font;
 
 import neonracer.core.GameContext;
+import neonracer.gui.util.Size;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.mesh.MeshBuilder;
 import neonracer.render.engine.mesh.Rectangle;
@@ -46,6 +47,14 @@ public class FontRenderer {
 
     public void draw(String text, float x, float y, float fontSize) {
         draw(text, x, y, fontSize, new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
+    }
+
+    public Size drawCentered(String text, float x, float y, float fontSize, Vector4f color) {
+        if (text.isEmpty()) return new Size(0, 0);
+        float width = getStringWidth(text, fontSize);
+        float height = getStringHeight(text, fontSize);
+        draw(text, x - width / 2f, y - height / 2f, fontSize, color);
+        return new Size((int) width, (int) height);
     }
 
     public void draw(String text, float x, float y, float fontSize, Vector4f color) {
