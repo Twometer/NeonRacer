@@ -20,6 +20,7 @@ public class GuiManager {
     }
 
     public void show(Screen screen) {
+        screen.setParent(this);
         if (!screen.isLoaded()) {
             ScreenLoader.loadScreen(screen);
             screen.initialize(renderContext);
