@@ -1,0 +1,15 @@
+<Screen Background="textures/background.png">
+
+    <Grid Margin="50">
+        <Grid.RowDefinitions>
+            <RowDefinition>*</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>*</RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>*</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ProgressBar Margin="10" Value="75" Grid.Row="1" HorizontalAlignment="Center" Height="15" Width="350"/>
+    </Grid>
+
+</Screen>
