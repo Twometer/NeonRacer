@@ -90,8 +90,8 @@ public class Tire {
     }
 
     void updateDrive(KeyboardState keyboardState,boolean breaking) {
-//        if(breaking)
-//            return;
+        if(breaking)
+            return;
         float currentForce = 0;
         if (keyboardState.isForward())
             currentForce = forwardForce;

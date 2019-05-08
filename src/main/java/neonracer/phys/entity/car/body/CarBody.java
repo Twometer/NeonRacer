@@ -62,7 +62,7 @@ public class CarBody {
     public boolean checkBreak(KeyboardState kbs)
     {
         relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
-        if((kbs.isForward()&&(relativeVelocity.y<0.1))||(kbs.isReverse()&&(relativeVelocity.y>-0.1)))
+        if((kbs.isForward()&&(relativeVelocity.y<-0.1))||(kbs.isReverse()&&(relativeVelocity.y>0.1)))
             return true;
         return false;
 
