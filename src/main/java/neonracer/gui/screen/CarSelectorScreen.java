@@ -121,6 +121,7 @@ public class CarSelectorScreen extends Screen {
         // TODO position entity correctly
 
         context.getClient().send(Entity.Create.newBuilder()
+                .setType(playerEntity.getCar().getId())
                 .setEntityId(playerEntity.getEntityId())
                 .setX(playerEntity.getPosition().x)
                 .setY(playerEntity.getPosition().y)

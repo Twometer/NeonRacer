@@ -135,7 +135,6 @@ public class Client implements MessageHandler {
         EventBus.getDefault().post(createEntity);
         neonracer.model.entity.Entity entity = null;
 
-
         switch (createEntity.getType()) {
             case "rocketcar":
             case "sportscar":

@@ -53,6 +53,8 @@ public class GameContext {
         dataManager.load(this);
         if (physicsEngine != null) physicsEngine.initialize(this);
         gameState.initialize(this);
+
+        client.initialize(this);
     }
 
     public void destroy() {
