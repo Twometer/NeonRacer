@@ -27,8 +27,11 @@ public class Tire {
     private Material currentMaterial;
     private Body body;
 
-    private Vec2 currentFriction;
-    private Vec2 currentDrive;
+    private Vec2 velocity = new Vec2(0,0);
+    private Vec2 relativeVelocity = new Vec2(0,0);
+    private Vec2 currentFriction = new Vec2(0,0);
+    private Vec2 currentRelativeFriction = new Vec2(0,0);
+    private Vec2 currentDrive = new Vec2(0,0);
 
     public Tire(GameContext gameContext, World world, float maxForwardSpeed, float maxReverseSpeed, float maxDriveForce, float maxLateralImpulse) {
         this.gameContext = gameContext;
@@ -46,7 +49,7 @@ public class Tire {
         body.setUserData(this);
     }
 
-    private Vec2 getLateralVelocity() {
+    /*private Vec2 getLateralVelocity() {
         Vec2 currentRightNormal = body.getWorldVector(new Vec2(1, 0));
         return currentRightNormal.mul(Vec2.dot(currentRightNormal, body.getLinearVelocity()));
     }
@@ -54,10 +57,22 @@ public class Tire {
     private Vec2 getForwardVelocity() {
         Vec2 currentForwardNormal = body.getWorldVector(new Vec2(0, 1));
         return currentForwardNormal.mul(Vec2.dot(currentForwardNormal, body.getLinearVelocity()));
-    }
+    }*/
 
     public Vec2 getCurrentDrive() {
         return currentDrive;
+    }
+
+    public Vec2 getVelocity() {
+        return velocity;
+    }
+
+    public Vec2 getRelativeVelocity() {
+        return relativeVelocity;
+    }
+
+    public Vec2 getCurrentRelativeFriction() {
+        return currentRelativeFriction;
     }
 
     /*void updateFriction() {
@@ -83,9 +98,23 @@ public class Tire {
         body.applyForce(currentFriction, body.getWorldCenter());
     }*/
 
+    void updateFriction()
+    {
+        if(body.getLinearVelocity().length()>0.01f) {
+            float rollCoefficient = -0.1f;
+            float tractionCoefficient = -2f;
+            velocity = body.getLinearVelocityFromWorldPoint(MathHelper.nullVector);
+            relativeVelocity = MathHelper.rotateVec2(velocity, -body.getAngle());
+            currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient;
+            currentRelativeFriction.y = Math.signum(relativeVelocity.y) * rollCoefficient;
+            currentFriction = MathHelper.rotateVec2(currentRelativeFriction, body.getAngle());
+            body.applyForce(currentFriction, body.getWorldCenter());
+        }
+    }
+
     void updateDrive(KeyboardState keyboardState) {
-        int forwardForce = 10;
-        int reverseForce = -5;
+        int forwardForce = 20;
+        int reverseForce = -10;
         int currentForce = 0;
         if (keyboardState.isForward())
             currentForce = forwardForce;

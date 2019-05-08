@@ -30,4 +30,10 @@ public class MathHelper {
         return vec;
     }
 
+    public static Vec2 rotateVec2(Vec2 vec, float a)
+    {
+        Vec2 out = new Vec2((float) ((vec.x * Math.cos(a)) - (vec.y * Math.sin(a))),(float) ((vec.x * Math.sin(a)) + (vec.y * Math.cos(a))));
+        return out;
+    }
+
 }

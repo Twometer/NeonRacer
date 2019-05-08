@@ -1,6 +1,7 @@
 package neonracer.phys.entity.car.body;
 
 import neonracer.phys.entity.car.Tire;
+import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.common.Vec2;
@@ -17,7 +18,8 @@ public class CarBody {
 
     private RevoluteJoint rightJoint;
 
-    private Vec2 lastDrag = new Vec2(0,0);
+    private Vec2 currentDrag = new Vec2(0,0);
+    private Vec2 velocity = new Vec2(0,0);
 
     CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint) {
         this.body = body;
@@ -42,12 +44,15 @@ public class CarBody {
         return rightJoint;
     }
 
-    public Vec2 getLastDrag() { return lastDrag; }
+    public Vec2 getCurrentDrag() { return currentDrag; }
+
+    public Vec2 getVelocity() { return body.getLinearVelocity(); }
 
     public void updateAirResistance() {
         float airResistance = -0.5f;
-        lastDrag = body.getLinearVelocity().mul(airResistance);
-        body.applyForce(lastDrag, body.getWorldCenter());
+        velocity = getVelocity();
+        currentDrag = velocity.mul(airResistance*velocity.length());
+        body.applyForce(currentDrag, body.getWorldCenter());
     }
 
 }
