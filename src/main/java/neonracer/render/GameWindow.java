@@ -1,9 +1,16 @@
 package neonracer.render;
 
+import neonracer.render.gl.GlLoader;
+import neonracer.resource.ResourceLoader;
+import neonracer.util.Log;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -31,6 +38,8 @@ public class GameWindow {
     private SizeChangedListener sizeChangedListener;
 
     private MouseScrollListener mouseScrollListener;
+
+    private CharInputListener charInputListener;
 
     public GameWindow(int width, int height, String title) {
         this.width = width;
@@ -67,6 +76,11 @@ public class GameWindow {
         glfwSetScrollCallback(window, (window, xoffset, yoffset) -> {
             if (mouseScrollListener != null)
                 mouseScrollListener.onMouseScroll((float) xoffset, (float) yoffset);
+        });
+
+        glfwSetCharCallback(window, (window, codepoint) -> {
+            if (charInputListener != null)
+                charInputListener.onChar((char) codepoint);
         });
 
         glfwMakeContextCurrent(window);
@@ -124,6 +138,33 @@ public class GameWindow {
         return (scaleX + scaleY) / 2;
     }
 
+    /**
+     * Sets the window's taskbar icon
+     *
+     * @param resourcePath The resouce path to the icon file
+     */
+    public void setIcon(String resourcePath) {
+        try {
+            BufferedImage image = ResourceLoader.loadImage(resourcePath);
+            ByteBuffer buffer = GlLoader.loadPixels(image);
+
+            GLFWImage.Buffer icons = GLFWImage.malloc(1);
+            icons.position(0)
+                    .width(image.getWidth())
+                    .height(image.getHeight())
+                    .pixels(buffer);
+            glfwSetWindowIcon(window, icons);
+            icons.free();
+        } catch (IOException e) {
+            Log.e("Could not set icon", e);
+        }
+    }
+
+    /**
+     * Get the current position of the mouse cursor relative to the top left corner of the frame
+     *
+     * @return The current position of the mouse cursor
+     */
     public Vector2f getCursorPosition() {
         double[] xPos = new double[1];
         double[] yPos = new double[1];
@@ -131,10 +172,22 @@ public class GameWindow {
         return new Vector2f((float) xPos[0], (float) yPos[0]);
     }
 
+    /**
+     * Check if a mouse button is pressed
+     *
+     * @param mouseButton The GLFW constant of the mouse button to check
+     * @return Whether the button is pressed
+     */
     public boolean isMouseButtonPressed(int mouseButton) {
         return glfwGetMouseButton(window, mouseButton) == GLFW_PRESS;
     }
 
+    /**
+     * Check if a key button is pressed
+     *
+     * @param key The GLFW constant of the key to check
+     * @return Whether the key is pressed
+     */
     public boolean isKeyPressed(int key) {
         return glfwGetKey(window, key) == GLFW_PRESS;
     }
@@ -145,6 +198,10 @@ public class GameWindow {
 
     public void setMouseScrollListener(MouseScrollListener mouseScrollListener) {
         this.mouseScrollListener = mouseScrollListener;
+    }
+
+    void setCharInputListener(CharInputListener charInputListener) {
+        this.charInputListener = charInputListener;
     }
 
     private void setSize(int width, int height) {
@@ -159,6 +216,10 @@ public class GameWindow {
 
     public interface MouseScrollListener {
         void onMouseScroll(float x, float y);
+    }
+
+    public interface CharInputListener {
+        void onChar(char chr);
     }
 
 }

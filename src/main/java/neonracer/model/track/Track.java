@@ -34,10 +34,15 @@ public class Track implements IData {
 
     private Texture thumbnail;
 
-    @JsonProperty("base_material")
-    private String baseMaterialId;
+    @JsonProperty("background_material")
+    private String backgroundMaterialId;
 
-    private Material baseMaterial;
+    private Material backgroundMaterial;
+
+    @JsonProperty("foreground_material")
+    private String foregroundMaterialId;
+
+    private Material foregroundMaterial;
 
     @JsonProperty
     private int samples;
@@ -55,12 +60,13 @@ public class Track implements IData {
     public Track() {
     }
 
-    public Track(String id, String name, String description, String thumbnailPath, String baseMaterialId, List<Node> path, List<Entity> entities, int samples) {
+    public Track(String id, String name, String description, String thumbnailPath, String backgroundMaterialId, String foregroundMaterialId, List<Node> path, List<Entity> entities, int samples) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.thumbnailPath = thumbnailPath;
-        this.baseMaterialId = baseMaterialId;
+        this.backgroundMaterialId = backgroundMaterialId;
+        this.foregroundMaterialId = foregroundMaterialId;
         this.path = path;
         this.entities = entities;
         this.samples = samples;
@@ -70,9 +76,9 @@ public class Track implements IData {
     public void initialize(GameContext context) {
         if (thumbnailPath != null && !thumbnailPath.isEmpty())
             thumbnail = context.getTextureProvider().getTexture(thumbnailPath);
-        baseMaterial = context.getDataManager().getMaterial(baseMaterialId);
-        for (Node node : path)
-            node.initialize(context);
+
+        backgroundMaterial = context.getDataManager().getMaterial(backgroundMaterialId);
+        foregroundMaterial = context.getDataManager().getMaterial(foregroundMaterialId);
 
         IDefBuilder<Track, TrackDef> defBuilder = DefBuilderFactory.createTrackDefBuilder();
         this.trackDef = defBuilder.build(this);
@@ -96,8 +102,12 @@ public class Track implements IData {
         return thumbnail;
     }
 
-    public Material getBaseMaterial() {
-        return baseMaterial;
+    public Material getBackgroundMaterial() {
+        return backgroundMaterial;
+    }
+
+    public Material getForegroundMaterial() {
+        return foregroundMaterial;
     }
 
     public int getSamples() {

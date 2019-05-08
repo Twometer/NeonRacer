@@ -23,7 +23,7 @@ public class EntityRenderer implements IRenderer {
 
     @Override
     public void setup(RenderContext renderContext, GameContext gameContext) {
-        entityShader = new EntityShader();
+        entityShader = renderContext.getShader(EntityShader.class);
 
         MeshBuilder meshBuilder = new MeshBuilder(6);
         meshBuilder.putRectVertices(new Rectangle(0, 0, 1, 1));
@@ -38,6 +38,8 @@ public class EntityRenderer implements IRenderer {
         entityShader.bind();
         entityShader.setProjectionMatrix(renderContext.getWorldMatrix());
         for (Entity entity : entities) {
+            if (entity.getGlowTexture() == null && renderPass == RenderPass.GLOW) // There may be entities that do not have a glow texture
+                continue;
             Texture texture = renderPass == RenderPass.GLOW ? entity.getGlowTexture() : entity.getColorTexture();
             texture.bind();
             float width = entity.getWidth();

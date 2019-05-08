@@ -58,7 +58,7 @@ public class Tire {
         TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
 
         if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
-        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBaseMaterial();
+        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
 
         body.applyAngularImpulse(currentMaterial.getTraction() * 0.1f * body.getInertia() * -body.getAngularVelocity());
 

@@ -1,10 +1,13 @@
 package neonracer.gui.screen;
 
+import neonracer.gui.GuiManager;
 import neonracer.gui.widget.base.Container;
 import neonracer.gui.widget.base.Widget;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.gl.core.Texture;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Screen extends Container {
 
@@ -12,12 +15,19 @@ public abstract class Screen extends Container {
 
     private String background;
 
+    GuiManager parent;
+    private boolean loaded;
+
     public String getBackground() {
         return background;
     }
 
     public void setBackground(String background) {
         this.background = background;
+    }
+
+    public void setParent(GuiManager parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -29,10 +39,14 @@ public abstract class Screen extends Container {
 
     @Override
     public final void draw(RenderContext renderContext, RenderPass renderPass) {
-        if (renderPass == RenderPass.COLOR && backgroundTexture != null) {
-            backgroundTexture.bind();
-            renderContext.getPrimitiveRenderer().drawTexturedRect(getX(), getY(), getWidth(), getHeight());
-            backgroundTexture.unbind();
+        if (backgroundTexture != null) {
+            if (renderPass == RenderPass.COLOR) {
+                backgroundTexture.bind();
+                renderContext.getPrimitiveRenderer().drawTexturedRect(getX(), getY(), getWidth(), getHeight());
+                backgroundTexture.unbind();
+            } else {
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            }
         }
         singleWidget().draw(renderContext, renderPass);
     }
@@ -52,4 +66,11 @@ public abstract class Screen extends Container {
         return children.get(0);
     }
 
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
 }

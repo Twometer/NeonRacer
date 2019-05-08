@@ -29,9 +29,9 @@ public class PostProcessing {
     public PostProcessing(GameContext gameContext) {
         this.fboManager = new FboManager();
         this.gameWindow = gameContext.getGameWindow();
-        this.hGaussShader = new HGaussShader();
-        this.vGaussShader = new VGaussShader();
-        this.mixShader = new MixShader();
+        this.hGaussShader = gameContext.getShaderProvider().getShader(HGaussShader.class);
+        this.vGaussShader = gameContext.getShaderProvider().getShader(VGaussShader.class);
+        this.mixShader = gameContext.getShaderProvider().getShader(MixShader.class);
         initFramebuffers(gameWindow.getWidth(), gameWindow.getHeight());
     }
 

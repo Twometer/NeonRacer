@@ -9,7 +9,8 @@ public class MainScreen extends Screen {
 
     @EventHandler("BtnStartRace")
     public void onStartRace(ClickEvent event) {
-        System.out.println("Starting race");
+        parent.close(this);
+        parent.show(new CarSelectorScreen());
     }
 
 }
