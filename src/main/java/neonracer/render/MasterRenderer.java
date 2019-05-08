@@ -7,7 +7,6 @@ import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.TickEvent;
 import neonracer.gui.screen.ConnectScreen;
 import neonracer.gui.screen.IngameScreen;
-import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
@@ -77,11 +76,6 @@ public class MasterRenderer {
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
-
-        for (int i = 0; i < 30; i += 2) {
-            EntityCar e = new EntityCar(i, i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[i % 3]);
-            gameContext.getGameState().addEntity(e);
-        }
 
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);

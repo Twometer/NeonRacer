@@ -4,8 +4,8 @@ import neonracer.model.entity.Entity;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameState {
 
@@ -15,7 +15,7 @@ public class GameState {
 
     private EntityCar playerEntity;
 
-    private List<Entity> entities = new ArrayList<>();
+    private List<Entity> entities = new CopyOnWriteArrayList<>();
 
     public EntityCar getPlayerEntity() {
         return playerEntity;

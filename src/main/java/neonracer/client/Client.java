@@ -2,6 +2,7 @@ package neonracer.client;
 
 import com.google.protobuf.AbstractMessage;
 import neonracer.core.GameContext;
+import neonracer.model.entity.EntityCar;
 import neonracer.network.MessageHandler;
 import neonracer.network.NetworkChannel;
 import neonracer.network.proto.Entity;
@@ -9,10 +10,13 @@ import neonracer.network.proto.Login;
 import neonracer.network.proto.Race;
 import neonracer.util.BuildInfo;
 import org.greenrobot.eventbus.EventBus;
+import org.joml.Vector2f;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client implements MessageHandler {
 
@@ -107,6 +111,13 @@ public class Client implements MessageHandler {
     @Override
     public void handle(Race.Leave leaveRace) {
         EventBus.getDefault().post(leaveRace);
+        List<neonracer.model.entity.Entity> removeEntities = new ArrayList<>();
+        for (neonracer.model.entity.Entity entity : gameContext.getGameState().getEntities()) {
+            if (entity.getEntityId() >> 32 == leaveRace.getClientId()) {
+                removeEntities.add(entity);
+            }
+        }
+        gameContext.getGameState().getEntities().removeAll(removeEntities);
     }
 
     @Override
@@ -122,16 +133,46 @@ public class Client implements MessageHandler {
     @Override
     public void handle(Entity.Create createEntity) {
         EventBus.getDefault().post(createEntity);
+        neonracer.model.entity.Entity entity = null;
+
+
+        switch (createEntity.getType()) {
+            case "rocketcar":
+            case "sportscar":
+            case "kart":
+                entity = new EntityCar(createEntity.getEntityId(), createEntity.getX(), createEntity.getY(), createEntity.getRotation(), gameContext.getDataManager().getCar(createEntity.getType()));
+                break;
+            case "rocket":
+                // TODO
+                break;
+        }
+
+        if (entity != null)
+            gameContext.getGameState().getEntities().add(entity);
     }
 
     @Override
     public void handle(Entity.Update updateEntity) {
         EventBus.getDefault().post(updateEntity);
+
+        for (neonracer.model.entity.Entity entity : gameContext.getGameState().getEntities()) {
+            if (entity instanceof EntityCar && entity.getEntityId() == updateEntity.getEntityId()) {
+                EntityCar car = (EntityCar) entity;
+                car.getCarStats().setLapsPassed(updateEntity.getLapsPassed());
+                car.setPosition(new Vector2f(updateEntity.getX(), updateEntity.getY()));
+                car.setRotation(updateEntity.getRotation());
+            }
+        }
     }
 
     @Override
     public void handle(Entity.Delete deleteEntity) {
         EventBus.getDefault().post(deleteEntity);
+        for (neonracer.model.entity.Entity entity : gameContext.getGameState().getEntities())
+            if (entity.getEntityId() == deleteEntity.getEntityId()) {
+                gameContext.getGameState().getEntities().remove(entity);
+                break;
+            }
     }
 
 }
