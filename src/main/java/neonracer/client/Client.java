@@ -36,6 +36,7 @@ public class Client implements MessageHandler {
             startReceiveLoop();
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
