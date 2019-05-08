@@ -73,7 +73,7 @@ public class MasterRenderer {
         gameWindow.setCharInputListener(chr -> guiManager.raiseEvent(new CharInputEvent(chr)));
 
         renderContext.initialize();
-        renderContext.getCamera().setZoomFactor(0.02f);
+        renderContext.getCamera().setZoomFactor(0.016f);
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
