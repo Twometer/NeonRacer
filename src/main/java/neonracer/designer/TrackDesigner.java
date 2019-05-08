@@ -158,13 +158,22 @@ public class TrackDesigner extends Screen {
         for (Entity temp : entities) {
             if (temp instanceof EntityStatic) {
                 EntityStatic entity = (EntityStatic) temp;
-                System.out.printf("    - {type: \"%s\", x: %s, y: %s, r: %s, params: {color_texture: \"%s\", glow_texture: \"%s\"}}%n",
+
+                StringBuilder params = new StringBuilder();
+
+                boolean first = true;
+                for (Map.Entry<String, String> param : entity.getParams().entrySet()) {
+                    if (!first) params.append(", ");
+                    else first = false;
+                    params.append(param.getKey()).append(": \"").append(param.getValue()).append("\"");
+                }
+
+                System.out.printf("    - {type: \"%s\", x: %s, y: %s, r: %s, params: {%s}}%n",
                         entity.getType(),
                         format.format(entity.getPosition().x),
                         format.format(entity.getPosition().y),
                         format.format(entity.getRotation()),
-                        entity.getColorTexturePath(),
-                        entity.getGlowTexturePath());
+                        params.toString());
             } else {
                 System.out.println("Cannot serialize entity type " + temp.getType());
             }
