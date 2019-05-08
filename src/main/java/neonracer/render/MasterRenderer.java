@@ -14,6 +14,7 @@ import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
+import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.util.Log;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -35,7 +36,7 @@ public class MasterRenderer {
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
             new EntityRenderer(),
-            //new DebugRenderer()
+            new DebugRenderer()
     };
 
     public MasterRenderer(GameContext context) {
@@ -90,7 +91,7 @@ public class MasterRenderer {
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);
 
-        guiManager.show(new IngameScreen());
+        //guiManager.show(new IngameScreen());
         guiManager.show(new MainScreen());
 
         gameContext.getTimer().reset();

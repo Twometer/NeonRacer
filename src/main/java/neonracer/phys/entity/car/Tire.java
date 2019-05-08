@@ -5,6 +5,7 @@ import neonracer.gui.input.KeyboardState;
 import neonracer.model.track.Material;
 import neonracer.phys.Box2dHelper;
 import neonracer.render.engine.collider.TrackColliderResult;
+import neonracer.util.MathHelper;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -25,6 +26,9 @@ public class Tire {
     private float maxLateralImpulse;
     private Material currentMaterial;
     private Body body;
+
+    private Vec2 currentFriction;
+    private Vec2 currentDrive;
 
     public Tire(GameContext gameContext, World world, float maxForwardSpeed, float maxReverseSpeed, float maxDriveForce, float maxLateralImpulse) {
         this.gameContext = gameContext;
@@ -52,11 +56,12 @@ public class Tire {
         return currentForwardNormal.mul(Vec2.dot(currentForwardNormal, body.getLinearVelocity()));
     }
 
-    void updateFriction() {
-        // Load traction and drag here
-        float frictionValueRoll = -0.25f;
-        float frictionValue = -12.25f;
+    public Vec2 getCurrentDrive() {
+        return currentDrive;
+    }
 
+    /*void updateFriction() {
+        // Load traction and drag here
         Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
         TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
 
@@ -71,12 +76,31 @@ public class Tire {
         if (currentForwardNormal.length() < 0.02)
             return;
 
-        Vec2 dragForce = new Vec2(Math.signum(getForwardVelocity().x) * frictionValueRoll, Math.signum(getLateralVelocity().y) * frictionValue);
-        dragForce = dragForce.mul(currentMaterial.getDrag());
-        body.applyForce(dragForce, body.getWorldCenter());
-    }
+        float currentForwardSpeed = currentForwardNormal.normalize();
+        float dragForceMagnitude = -0.25f * currentForwardSpeed;
+        dragForceMagnitude *= currentMaterial.getDrag();
+        currentFriction = currentForwardNormal.mul(dragForceMagnitude).mul(currentMaterial.getTraction());
+        body.applyForce(currentFriction, body.getWorldCenter());
+    }*/
 
     void updateDrive(KeyboardState keyboardState) {
+        int forwardForce = 10;
+        int reverseForce = -5;
+        int currentForce = 0;
+        if (keyboardState.isForward())
+            currentForce = forwardForce;
+        else if (keyboardState.isReverse())
+            currentForce = reverseForce;
+        currentDrive = MathHelper.angleToUnitVec2(body.getAngle()).mul(currentForce);
+        body.applyForce(currentDrive, body.getWorldCenter());
+    }
+
+    void updateDrive(float currentForce) {
+        currentDrive = MathHelper.angleToUnitVec2(body.getAngle()).mul(currentForce);
+        body.applyForce(currentDrive, body.getWorldCenter());
+    }
+
+    /*void updateDrive(KeyboardState keyboardState) {
         float desiredSpeed = 0;
         if (keyboardState.isForward())
             desiredSpeed = maxForwardSpeed;
@@ -119,7 +143,7 @@ public class Tire {
 
 
         body.applyLinearImpulse(impulse.mul(currentMaterial.getTraction()), body.getWorldCenter());
-    }
+    }*/
 
     public Body getBody() {
         return body;

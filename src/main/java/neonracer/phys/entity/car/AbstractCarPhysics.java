@@ -4,9 +4,11 @@ import neonracer.core.GameContext;
 import neonracer.phys.Box2dHelper;
 import neonracer.phys.entity.EntityPhysics;
 import neonracer.phys.entity.car.body.CarBody;
+import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.joml.Vector2f;
+import org.jbox2d.common.Vec2;
 
 import java.util.List;
 
@@ -38,5 +40,14 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
         return body.getAngle();
     }
 
+    public Vec2 getVelocity(){
+        Vec2 vel = body.getLinearVelocity();
+        if(vel == null)
+            return MathHelper.nullVector;
+        return vel;
+    }
 
+    public List<Tire> getTires(){return tires;}
+
+    public CarBody getCarBody() { return carBody; }
 }
