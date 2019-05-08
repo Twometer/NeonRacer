@@ -9,7 +9,6 @@ import neonracer.gui.screen.ConnectScreen;
 import neonracer.gui.screen.IngameScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
-import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.EntityRenderer;
@@ -78,10 +77,6 @@ public class MasterRenderer {
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
-        EntityCar playerEntity = new EntityCar(0, 0.0f, 0.0f, 0.0f, gameContext.getDataManager().getCar("kart"));
-        playerEntity.setPhysics(CarPhysicsFactory.createDriveable(gameContext, playerEntity));
-        gameContext.getGameState().setPlayerEntity(playerEntity);
-        gameContext.getGameState().addEntity(playerEntity);
 
         for (int i = 0; i < 30; i += 2) {
             EntityCar e = new EntityCar(i, i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[i % 3]);
@@ -123,6 +118,7 @@ public class MasterRenderer {
     }
 
     private static final TickEvent TICK_EVENT = new TickEvent();
+
     private void tick() {
         GameWindow gameWindow = gameContext.getGameWindow();
         gameContext.getKeyboardState().update(gameWindow);
@@ -130,7 +126,8 @@ public class MasterRenderer {
 
         gameContext.getPhysicsEngine().onTick();
 
-        renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
+        if (gameContext.getGameState().getPlayerEntity() != null)
+            renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
 
         guiManager.raiseEvent(TICK_EVENT);
     }

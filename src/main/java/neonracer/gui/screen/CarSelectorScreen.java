@@ -1,12 +1,18 @@
 package neonracer.gui.screen;
 
 import neonracer.gui.annotation.BindWidget;
+import neonracer.gui.annotation.EventHandler;
 import neonracer.gui.annotation.LayoutFile;
+import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.events.TickEvent;
+import neonracer.gui.widget.ImageButton;
 import neonracer.gui.widget.Label;
 import neonracer.gui.widget.ProgressBar;
+import neonracer.model.entity.EntityCar;
+import neonracer.network.proto.Entity;
 import neonracer.network.proto.Race;
+import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.RenderContext;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,11 +24,65 @@ public class CarSelectorScreen extends Screen {
 
     private long startMs = 0;
 
+    private static final String[] AVAILABLE_CARS = new String[]{
+            "kart",
+            "sportscar",
+            "rocketcar"
+    };
+    private String selectedCar = "";
+
     @BindWidget("lbState")
     private Label lbState;
+    @BindWidget("kart")
+    private ImageButton kart;
+
+    @BindWidget("sportscar")
+    private ImageButton sportscar;
+
+    @BindWidget("rocketcar")
+    private ImageButton rocketcar;
+
+    @BindWidget("lbDescription")
+    private Label lbDescription;
 
     @BindWidget("pbState")
     private ProgressBar pbState;
+
+    @EventHandler("kart")
+    public void onSelectKart(ClickEvent event) {
+        clearSelection();
+        kart.setSelected(true);
+        selectedCar = "kart";
+        updateDesc();
+    }
+
+    @EventHandler("sportscar")
+    public void onSelectSportscar(ClickEvent event) {
+        clearSelection();
+        sportscar.setSelected(true);
+        selectedCar = "sportscar";
+        updateDesc();
+    }
+
+    @EventHandler("rocketcar")
+    public void onSelectRocketcar(ClickEvent event) {
+        clearSelection();
+        rocketcar.setSelected(true);
+        selectedCar = "rocketcar";
+        updateDesc();
+    }
+
+    private void clearSelection() {
+        kart.setSelected(false);
+        sportscar.setSelected(false);
+        rocketcar.setSelected(false);
+    }
+
+    private void updateDesc() {
+        String desc = context.getDataManager().getCar(selectedCar).getDescription();
+        if (desc != null)
+            lbDescription.setText(desc);
+    }
 
     @Override
     public void initialize(RenderContext renderContext) {
@@ -38,11 +98,33 @@ public class CarSelectorScreen extends Screen {
                 lbState.setText("Warte auf Spieler...");
                 pbState.setValue(100);
             } else {
-                long remaining = System.currentTimeMillis() - startMs;
-                lbState.setText("Noch " + (remaining / 1000) + " Sekunden");
-                pbState.setValue((int) (((float) remaining / totalWaitMs) * 100));
+                long remaining = startMs - System.currentTimeMillis();
+                if (remaining <= 0) {
+                    parent.close(this);
+                    EventBus.getDefault().unregister(this);
+                    startRace();
+                } else {
+                    lbState.setText("Noch " + (remaining / 1000) + " Sekunden");
+                    pbState.setValue((int) (((float) remaining / totalWaitMs) * 100));
+                }
             }
         }
+    }
+
+    private void startRace() {
+        if (selectedCar.isEmpty()) selectedCar = AVAILABLE_CARS[(int) (Math.random() * AVAILABLE_CARS.length)];
+        EntityCar playerEntity = new EntityCar(context.getClient().newEntityId(), 0.0f, 0.0f, 0.0f, context.getDataManager().getCar(selectedCar));
+        playerEntity.setPhysics(CarPhysicsFactory.createDriveable(context, playerEntity));
+        context.getGameState().setPlayerEntity(playerEntity);
+        context.getGameState().addEntity(playerEntity);
+
+        // TODO position entity correctly
+
+        context.getClient().send(Entity.Create.newBuilder()
+                .setEntityId(playerEntity.getEntityId())
+                .setX(playerEntity.getPosition().x)
+                .setY(playerEntity.getPosition().y)
+                .setRotation(playerEntity.getRotation()).build());
     }
 
     @Subscribe
@@ -50,8 +132,6 @@ public class CarSelectorScreen extends Screen {
         if (start.getElapsedMilliseconds() < 0) {
             totalWaitMs = -start.getElapsedMilliseconds();
             startMs = System.currentTimeMillis() + totalWaitMs;
-        } else {
-            parent.close(this);
         }
     }
 

@@ -24,6 +24,10 @@ public class Client implements MessageHandler {
 
     private boolean connected;
 
+    private int clientId;
+
+    private int entityCounter;
+
     public void initialize(GameContext gameContext) {
         this.gameContext = gameContext;
     }
@@ -43,7 +47,8 @@ public class Client implements MessageHandler {
 
     public void disconnect() {
         try {
-            socket.close();
+            if (socket != null)
+                socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,6 +79,10 @@ public class Client implements MessageHandler {
         }
     }
 
+    public long newEntityId() {
+        return (long) clientId << 32 | (long) entityCounter++;
+    }
+
     @Override
     public void handle(Login.LoginRequest loginRequest) {
         throw new UnsupportedOperationException("Client does not handle login requests");
@@ -82,6 +91,7 @@ public class Client implements MessageHandler {
     @Override
     public void handle(Login.LoginResponse loginResponse) {
         EventBus.getDefault().post(loginResponse);
+        clientId = loginResponse.getClientId();
     }
 
     @Override

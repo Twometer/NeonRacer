@@ -26,7 +26,7 @@ public abstract class Entity {
 
     private static final float SCALE_FACTOR = 150.f;
 
-    int entityId;
+    long entityId;
 
     private String type;
 
@@ -43,7 +43,7 @@ public abstract class Entity {
         this.rotation = rotation;
     }
 
-    public int getEntityId() {
+    public long getEntityId() {
         return entityId;
     }
 

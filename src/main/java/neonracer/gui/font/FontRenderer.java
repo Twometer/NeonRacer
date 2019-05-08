@@ -80,6 +80,7 @@ public class FontRenderer {
         float height = 0;
         for (char c : string.toCharArray()) {
             Glyph glyph = fontFace.getGlyph(c);
+            if (glyph == null) continue;
             float glyphHeight = (glyph.getHeight() + glyph.getyOffset()) * fontSize;
             if (height < glyphHeight)
                 height = glyphHeight;
@@ -92,6 +93,7 @@ public class FontRenderer {
         float cursor = 0;
         for (char c : string.toCharArray()) {
             Glyph glyph = fontFace.getGlyph(c);
+            if (glyph == null) continue;
             cursor += (glyph.getAdvance() - 15) * fontSize;
         }
         return cursor;

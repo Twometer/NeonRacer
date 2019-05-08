@@ -9,7 +9,7 @@ public class EntityCar extends Entity {
 
     private Car car;
 
-    public EntityCar(int entityId, float x, float y, float rotation, Car car) {
+    public EntityCar(long entityId, float x, float y, float rotation, Car car) {
         super("car", x, y, rotation, null);
         this.entityId = entityId;
         this.car = car;
