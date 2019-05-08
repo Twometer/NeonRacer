@@ -79,8 +79,8 @@
                 <Button Id="btnDeleteEntity" FontColor="1,0,0" FontSize="0.3" Grid.Row="11" Grid.Column="0"
                         Text="Delete entity"/>
                 <Label Id="lbRot" FontSize="0.3" Grid.Row="12" Text="Rotation: -"/>
-                <Button Id="rotIncr" FontSize="0.3" Grid.Row="13" Text="+1"/>
-                <Button Id="rotDecr" FontSize="0.3" Grid.Row="14" Text="-1"/>
+                <Button Id="rotIncr" FontSize="0.3" Grid.Row="13" Text="+2"/>
+                <Button Id="rotDecr" FontSize="0.3" Grid.Row="14" Text="-2"/>
 
 
                 <Label Id="lbSamples" Text="Samples: 100" Grid.Row="16" Grid.Column="0"

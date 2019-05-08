@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -74,6 +75,8 @@ public class TrackDesigner extends Screen {
             new TrackRenderer(),
             new EntityRenderer()
     };
+
+    private DecimalFormat format = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
 
     private List<Entity> entities = new ArrayList<>();
 
@@ -143,11 +146,25 @@ public class TrackDesigner extends Screen {
         System.out.println("  foreground_material: " + fgMaterial);
         System.out.println("  path:");
         for (Node node : nodes) {
-            DecimalFormat format = new DecimalFormat("#.##");
             System.out.printf("    - {x: %s, y: %s, w: %s}%n",
                     format.format(node.getPosition().x),
                     format.format(node.getPosition().y),
                     format.format(node.getTrackWidth()));
+        }
+        System.out.println("  entities:");
+        for (Entity temp : entities) {
+            if (temp instanceof EntityStatic) {
+                EntityStatic entity = (EntityStatic) temp;
+                System.out.printf("    - {type: \"%s\", x: %s, y: %s, r: %s, params: {color_texture: \"%s\", glow_texture: \"%s\"}}%n",
+                        entity.getType(),
+                        format.format(entity.getPosition().x),
+                        format.format(entity.getPosition().y),
+                        format.format(entity.getRotation()),
+                        entity.getColorTexturePath(),
+                        entity.getGlowTexturePath());
+            } else {
+                System.out.println("Cannot serialize entity type " + temp.getType());
+            }
         }
     }
 
@@ -321,16 +338,16 @@ public class TrackDesigner extends Screen {
     @EventHandler("rotIncr")
     public void rotIncr(ClickEvent event) {
         if (selectedEntity != null) {
-            selectedEntity.setRotation((float) (selectedEntity.getRotation() + Math.toRadians(1)));
-            lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+            selectedEntity.setRotation((float) (selectedEntity.getRotation() + Math.toRadians(2)));
+            lbRot.setText("Rotation: " + format.format(Math.toDegrees(selectedEntity.getRotation())));
         }
     }
 
     @EventHandler("rotDecr")
     public void rotDecr(ClickEvent event) {
         if (selectedEntity != null) {
-            selectedEntity.setRotation((float) (selectedEntity.getRotation() - Math.toRadians(1)));
-            lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+            selectedEntity.setRotation((float) (selectedEntity.getRotation() - Math.toRadians(2)));
+            lbRot.setText("Rotation: " + format.format(Math.toDegrees(selectedEntity.getRotation())));
         }
     }
 

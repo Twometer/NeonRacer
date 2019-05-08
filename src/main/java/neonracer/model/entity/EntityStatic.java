@@ -41,9 +41,17 @@ public class EntityStatic extends Entity {
         return colorTexture;
     }
 
+    public String getColorTexturePath() {
+        return colorTexturePath;
+    }
+
     @Override
     public Texture getGlowTexture() {
         return glowTexture;
+    }
+
+    public String getGlowTexturePath() {
+        return glowTexturePath;
     }
 
 }
