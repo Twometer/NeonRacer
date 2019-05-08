@@ -11,6 +11,9 @@ import neonracer.model.entity.EntityCar;
 @LayoutFile("guis/ingame.xml")
 public class IngameScreen extends Screen {
 
+    @BindWidget("lbLap")
+    private Label lbLap;
+
     @BindWidget("lbPlacement")
     private Label lbPlacement;
 
@@ -27,6 +30,7 @@ public class IngameScreen extends Screen {
                     totalCars++;
             placement.append(totalCars);
             lbPlacement.setText(placement.toString());
+            lbLap.setText(String.valueOf(context.getGameState().getPlayerEntity().getCarStats().getLapsPassed()));
         }
     }
 

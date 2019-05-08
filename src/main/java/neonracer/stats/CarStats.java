@@ -6,6 +6,8 @@ public class CarStats {
 
     private int lapsPassed;
 
+    private boolean passedHalfway = true;
+
     public int getPlace() {
         return place;
     }
@@ -20,5 +22,13 @@ public class CarStats {
 
     public void setLapsPassed(int lapsPassed) {
         this.lapsPassed = lapsPassed;
+    }
+
+    public boolean isPassedHalfway() {
+        return passedHalfway;
+    }
+
+    public void setPassedHalfway(boolean passedHalfway) {
+        this.passedHalfway = passedHalfway;
     }
 }

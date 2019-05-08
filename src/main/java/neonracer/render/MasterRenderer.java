@@ -5,7 +5,6 @@ import neonracer.gui.GuiManager;
 import neonracer.gui.events.CharInputEvent;
 import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.TickEvent;
-import neonracer.gui.screen.ConnectScreen;
 import neonracer.gui.screen.IngameScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
@@ -87,7 +86,7 @@ public class MasterRenderer {
             renderer.setup(renderContext, gameContext);
 
         guiManager.show(new IngameScreen());
-        guiManager.show(new ConnectScreen());
+        // guiManager.show(new ConnectScreen());
 
         gameContext.getTimer().reset();
 

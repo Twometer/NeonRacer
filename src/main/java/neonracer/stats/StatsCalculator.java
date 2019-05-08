@@ -24,6 +24,15 @@ public class StatsCalculator {
             if (entity instanceof EntityCar) {
                 CarStats stats = ((EntityCar) entity).getCarStats();
                 float position = trackCollider.collides(entity.getPosition()).getClosestT();
+
+                if (position < 0.05 && stats.isPassedHalfway()) {
+                    stats.setLapsPassed(stats.getLapsPassed() + 1);
+                    stats.setPassedHalfway(false);
+                }
+                if (Math.abs(position - 0.5f) < 0.05 && !stats.isPassedHalfway()) {
+                    stats.setPassedHalfway(true);
+                }
+
                 scoreboard.put(stats, position);
             }
         }

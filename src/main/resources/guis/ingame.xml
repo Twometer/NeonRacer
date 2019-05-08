@@ -4,6 +4,7 @@
         <Grid.RowDefinitions>
             <RowDefinition>Auto</RowDefinition>
             <RowDefinition>*</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition>Auto</ColumnDefinition>
@@ -12,6 +13,10 @@
 
         <Border Grid.Row="0" Grid.Column="0">
             <Label Id="lbPlacement" Margin="25" Text="-/-"/>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0">
+            <Label Id="lbLap" Margin="0" Text="Lap: 0" FontSize="0.5"/>
         </Border>
 
     </Grid>
