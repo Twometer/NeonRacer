@@ -121,6 +121,9 @@ public class TrackDesigner extends Screen {
     @BindWidget("lbRot")
     private Label lbRot;
 
+    @BindWidget("btnRepositionEntity")
+    private Button btnRepositionEntity;
+
     private Entity selectedEntity;
 
     private Mode mode = Mode.None;
@@ -209,7 +212,7 @@ public class TrackDesigner extends Screen {
     public void onRepositionNode(ClickEvent event) {
         if (selectedNode == null)
             return;
-        toggleMode(Mode.Repositioning);
+        toggleMode(Mode.RepositioningNode);
     }
 
     @EventHandler("addSamples")
@@ -296,9 +299,8 @@ public class TrackDesigner extends Screen {
 
     @EventHandler("btnAddEntity")
     public void onAddEntities(ClickEvent event) throws ClassNotFoundException {
-
         if (mode == Mode.CreatingEntities) {
-            mode = Mode.None;
+            setMode(Mode.None);
             return;
         }
 
@@ -355,8 +357,14 @@ public class TrackDesigner extends Screen {
     public void delEntity(ClickEvent event) {
         if (selectedEntity != null) {
             entities.remove(selectedEntity);
-            System.out.println("Deleted entity");
             rebuild();
+        }
+    }
+
+    @EventHandler("btnRepositionEntity")
+    public void onRepositionEntity(ClickEvent event) {
+        if (selectedEntity != null) {
+            toggleMode(Mode.RepositioningEntity);
         }
     }
 
@@ -368,10 +376,15 @@ public class TrackDesigner extends Screen {
     }
 
     private void setMode(Mode mode) {
-        if (mode == Mode.Repositioning)
+        if (mode == Mode.RepositioningNode)
             repositionButton.setFontColor(Color.GREEN);
         else
             repositionButton.setFontColor(Color.BLUE);
+
+        if (mode == Mode.RepositioningEntity)
+            btnRepositionEntity.setFontColor(Color.GREEN);
+        else
+            btnRepositionEntity.setFontColor(Color.BLUE);
 
         if (mode == Mode.CreatingNodes)
             btnAddNode.setFontColor(Color.GREEN);
@@ -382,6 +395,7 @@ public class TrackDesigner extends Screen {
             btnAddEntity.setFontColor(Color.GREEN);
         else
             btnAddEntity.setFontColor(Color.WHITE);
+
 
         this.mode = mode;
     }
@@ -428,10 +442,16 @@ public class TrackDesigner extends Screen {
                 if (nodes.size() > 2)
                     rebuild();
                 break;
-            case Repositioning:
+            case RepositioningNode:
                 if (selectedNode == null) return;
                 selectedNode.getPosition().x = (int) Math.floor(unprojected.x);
                 selectedNode.getPosition().y = (int) Math.floor(unprojected.y);
+                rebuild();
+                break;
+            case RepositioningEntity:
+                if (selectedEntity == null) return;
+                selectedEntity.getPosition().x = unprojected.x;
+                selectedEntity.getPosition().y = unprojected.y;
                 rebuild();
                 break;
             case CreatingEntities:
@@ -566,7 +586,8 @@ public class TrackDesigner extends Screen {
 
     enum Mode {
         None,
-        Repositioning,
+        RepositioningNode,
+        RepositioningEntity,
         CreatingNodes,
         CreatingEntities
     }
