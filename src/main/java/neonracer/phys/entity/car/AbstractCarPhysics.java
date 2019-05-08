@@ -3,6 +3,7 @@ package neonracer.phys.entity.car;
 import neonracer.core.GameContext;
 import neonracer.phys.Box2dHelper;
 import neonracer.phys.entity.EntityPhysics;
+import neonracer.phys.entity.car.body.CarBody;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.joml.Vector2f;
@@ -15,11 +16,13 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
     List<Tire> tires;
     RevoluteJoint flJoint;
     RevoluteJoint frJoint;
+    CarBody carBody;
     private Body body;
 
-    AbstractCarPhysics(GameContext gameContext, Body body, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
+    AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
         this.gameContext = gameContext;
-        this.body = body;
+        this.carBody = carBody;
+        this.body = carBody.getBody();
         this.tires = tires;
         this.flJoint = flJoint;
         this.frJoint = frJoint;

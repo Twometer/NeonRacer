@@ -54,6 +54,9 @@ public class Tire {
 
     void updateFriction() {
         // Load traction and drag here
+        float frictionValueRoll = -0.25f;
+        float frictionValue = -12.25f;
+
         Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
         TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
 
@@ -68,10 +71,9 @@ public class Tire {
         if (currentForwardNormal.length() < 0.02)
             return;
 
-        float currentForwardSpeed = currentForwardNormal.normalize();
-        float dragForceMagnitude = -0.25f * currentForwardSpeed;
-        dragForceMagnitude *= currentMaterial.getDrag();
-        body.applyForce(currentForwardNormal.mul(dragForceMagnitude).mul(currentMaterial.getTraction()), body.getWorldCenter());
+        Vec2 dragForce = new Vec2(Math.signum(getForwardVelocity().x) * frictionValueRoll, Math.signum(getLateralVelocity().y) * frictionValue);
+        dragForce = dragForce.mul(currentMaterial.getDrag());
+        body.applyForce(dragForce, body.getWorldCenter());
     }
 
     void updateDrive(KeyboardState keyboardState) {

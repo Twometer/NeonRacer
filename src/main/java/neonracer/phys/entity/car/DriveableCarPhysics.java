@@ -2,16 +2,16 @@ package neonracer.phys.entity.car;
 
 import neonracer.core.GameContext;
 import neonracer.gui.input.KeyboardState;
+import neonracer.phys.entity.car.body.CarBody;
 import neonracer.util.MathHelper;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 
 import java.util.List;
 
 public class DriveableCarPhysics extends AbstractCarPhysics {
 
-    DriveableCarPhysics(GameContext gameContext, Body body, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
-        super(gameContext, body, tires, flJoint, frJoint);
+    DriveableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
+        super(gameContext, carBody, tires, flJoint, frJoint);
     }
 
     @Override
@@ -21,6 +21,7 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
             tire.updateFriction();
             tire.updateDrive(keyboardState);
         }
+        carBody.updateAirResistance();
         float lockAngle = (float) Math.toRadians(35);
         float turnSpeedPerSec = (float) Math.toRadians(320);//from lock to lock in 0.25 sec
         float turnPerTimeStep = turnSpeedPerSec / 60.0f;

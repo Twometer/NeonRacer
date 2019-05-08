@@ -1,15 +1,15 @@
 package neonracer.phys.entity.car;
 
 import neonracer.core.GameContext;
-import org.jbox2d.dynamics.Body;
+import neonracer.phys.entity.car.body.CarBody;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 
 import java.util.List;
 
 public class StaticCarPhysics extends AbstractCarPhysics {
 
-    StaticCarPhysics(GameContext gameContext, Body body, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
-        super(gameContext, body, tires, flJoint, frJoint);
+    StaticCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
+        super(gameContext, carBody, tires, flJoint, frJoint);
     }
 
     @Override
@@ -18,6 +18,7 @@ public class StaticCarPhysics extends AbstractCarPhysics {
             tire.updateFriction();
             tire.updateDrive(0.0f);
         }
+        carBody.updateAirResistance();
     }
 
 }

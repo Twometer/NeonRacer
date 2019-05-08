@@ -39,4 +39,9 @@ public class CarBody {
         return rightJoint;
     }
 
+    public void updateAirResistance() {
+        float airResistance = -1f;
+        body.applyForce(body.getLinearVelocity().mul(airResistance), body.getWorldCenter());
+    }
+
 }
