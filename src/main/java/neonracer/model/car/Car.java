@@ -51,6 +51,21 @@ public class Car implements IData {
 
     private Ability primaryAbility;
 
+    @JsonProperty("drag_coefficient")
+    private float dragCoefficient;
+
+    @JsonProperty("roll_coefficient")
+    private float rollCoefficient;
+
+    @JsonProperty("traction_coefficient")
+    private float tractionCoefficient;
+
+    @JsonProperty("forward_force")
+    private float forwardForce;
+
+    @JsonProperty("reverse_force")
+    private float reverseForce;
+
     @Override
     public void initialize(GameContext context) {
         colorTexture = context.getTextureProvider().getTexture(colorTexturePath);
@@ -99,5 +114,23 @@ public class Car implements IData {
 
     public Ability getPrimaryAbility() {
         return primaryAbility;
+    }
+
+    public float getDragCoefficient() { return dragCoefficient; }
+
+    public float getRollCoefficient() {
+        return rollCoefficient;
+    }
+
+    public float getTractionCoefficient() {
+        return tractionCoefficient;
+    }
+
+    public float getForwardForce() {
+        return forwardForce;
+    }
+
+    public float getReverseForce() {
+        return reverseForce;
     }
 }

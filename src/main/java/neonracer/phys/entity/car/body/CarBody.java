@@ -19,15 +19,18 @@ public class CarBody {
 
     private RevoluteJoint rightJoint;
 
+    public float dragCoefficient;
+
     private Vec2 currentDrag = new Vec2(0,0);
     private Vec2 velocity = new Vec2(0,0);
     private Vec2 relativeVelocity = new Vec2(0,0);
 
-    CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint) {
+    CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint, float dragCoefficient) {
         this.body = body;
         this.tires = tires;
         this.leftJoint = leftJoint;
         this.rightJoint = rightJoint;
+        this.dragCoefficient = dragCoefficient;
     }
 
     public Body getBody() {
@@ -51,9 +54,8 @@ public class CarBody {
     public Vec2 getVelocity() { return body.getLinearVelocity(); }
 
     public void updateAirResistance() {
-        float airResistance = -0.5f;
         velocity = getVelocity();
-        currentDrag = velocity.mul(airResistance*velocity.length());
+        currentDrag = velocity.mul(dragCoefficient*velocity.length());
         body.applyForce(currentDrag, body.getWorldCenter());
     }
 

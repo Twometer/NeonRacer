@@ -22,10 +22,10 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
         breaking = carBody.checkBreak(keyboardState);
         for (Tire tire : tires) {
             tire.updateFriction(carBody.getVelocity(),breaking);
-            tire.updateDrive(keyboardState);
+            tire.updateDrive(keyboardState,breaking);
         }
         carBody.updateAirResistance();
-        float lockAngle = (float) Math.toRadians(35);
+        float lockAngle = (float) Math.toRadians(35);           //possible variables?
         float turnSpeedPerSec = (float) Math.toRadians(320);//from lock to lock in 0.25 sec
         float turnPerTimeStep = turnSpeedPerSec / 60.0f;
         float desiredAngle = 0;

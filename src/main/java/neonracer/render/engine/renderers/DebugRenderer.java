@@ -56,6 +56,7 @@ public class DebugRenderer implements IRenderer {
 //        text.add("tire3rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(2).getBody().getAngle()));
 //        text.add("tire4rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(3).getBody().getAngle()));
         text.add("tire4mat=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getMat());
+        text.add("tire4mat=" + ((DriveableCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getCarBody().dragCoefficient);
         for (String string : text)
         {
             fontRenderer.draw(string,0.0f, lh * text.indexOf(string), 0.3f);

@@ -21,7 +21,7 @@ public class Tire {
     private GameContext gameContext;
 
     private float rollCoefficient = -0.75f;
-    private float tractionCoefficient = -5f;
+    private float tractionCoefficient = -10f;
     private float forwardForce = 20;
     private float reverseForce = -10;
     private Material currentMaterial;
@@ -51,12 +51,14 @@ public class Tire {
 
     void updateFriction(Vec2 velocity)
     {
-        this.velocity = velocity;
-        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
-        currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMat();
-        currentRelativeFriction.y = Math.signum(relativeVelocity.y) * rollCoefficient * getMat();
-        currentFriction = MathHelper.rotateVec2(currentRelativeFriction, body.getAngle());
-        body.applyForce(currentFriction, body.getWorldCenter());
+        // Load traction here
+        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
+        TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
+
+        if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
+        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
+
+        updateFriction(false);
     }
 
     void updateFriction(Vec2 velocity, boolean breaking)
@@ -69,6 +71,12 @@ public class Tire {
         else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
 
         this.velocity = velocity;
+
+        updateFriction(breaking);
+    }
+
+    void updateFriction(boolean breaking)
+    {
         relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
         currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMat();
         if(breaking)
@@ -79,7 +87,9 @@ public class Tire {
         body.applyForce(currentFriction, body.getWorldCenter());
     }
 
-    void updateDrive(KeyboardState keyboardState) {
+    void updateDrive(KeyboardState keyboardState,boolean breaking) {
+        if(!breaking)
+            return;
         float currentForce = 0;
         if (keyboardState.isForward())
             currentForce = forwardForce;
