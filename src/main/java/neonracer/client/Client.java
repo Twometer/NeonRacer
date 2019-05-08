@@ -7,6 +7,7 @@ import neonracer.network.proto.Entity;
 import neonracer.network.proto.Login;
 import neonracer.network.proto.Race;
 import neonracer.util.BuildInfo;
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -54,51 +55,52 @@ public class Client implements MessageHandler {
 
     @Override
     public void handle(Login.LoginRequest loginRequest) {
-
+        throw new UnsupportedOperationException("Client does not handle login requests");
     }
 
     @Override
     public void handle(Login.LoginResponse loginResponse) {
-
+        EventBus.getDefault().post(loginResponse);
     }
 
     @Override
     public void handle(Race.Prepare prepareRace) {
-
+        EventBus.getDefault().post(prepareRace);
     }
 
     @Override
     public void handle(Race.Join joinRace) {
-
+        EventBus.getDefault().post(joinRace);
     }
 
     @Override
     public void handle(Race.Leave leaveRace) {
-
+        EventBus.getDefault().post(leaveRace);
     }
 
     @Override
     public void handle(Race.Start startRace) {
-
+        EventBus.getDefault().post(startRace);
     }
 
     @Override
     public void handle(Race.Finish finishRace) {
-
+        EventBus.getDefault().post(finishRace);
     }
 
     @Override
     public void handle(Entity.Create createEntity) {
-
+        EventBus.getDefault().post(createEntity);
     }
 
     @Override
     public void handle(Entity.Update updateEntity) {
-
+        EventBus.getDefault().post(updateEntity);
     }
 
     @Override
     public void handle(Entity.Delete deleteEntity) {
-
+        EventBus.getDefault().post(deleteEntity);
     }
+
 }
