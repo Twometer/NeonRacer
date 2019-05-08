@@ -30,9 +30,10 @@ public class GameContextFactory {
         ShaderProvider shaderProvider = new ShaderProvider();
         DataManager dataManager = new DataManager();
         GameState gameState = new GameState();
+        PhysicsEngine physicsEngine = new PhysicsEngine();
         MouseState mouseState = new MouseState();
         KeyboardState keyboardState = new KeyboardState();
-        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, null, null, mouseState, keyboardState);
+        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, null, mouseState, keyboardState);
     }
 
 }
