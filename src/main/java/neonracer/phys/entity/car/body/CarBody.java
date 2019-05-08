@@ -1,5 +1,6 @@
 package neonracer.phys.entity.car.body;
 
+import neonracer.gui.input.KeyboardState;
 import neonracer.phys.entity.car.Tire;
 import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.Body;
@@ -20,6 +21,7 @@ public class CarBody {
 
     private Vec2 currentDrag = new Vec2(0,0);
     private Vec2 velocity = new Vec2(0,0);
+    private Vec2 relativeVelocity = new Vec2(0,0);
 
     CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint) {
         this.body = body;
@@ -53,6 +55,15 @@ public class CarBody {
         velocity = getVelocity();
         currentDrag = velocity.mul(airResistance*velocity.length());
         body.applyForce(currentDrag, body.getWorldCenter());
+    }
+
+    public boolean checkBreak(KeyboardState kbs)
+    {
+        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
+        if((kbs.isForward()&&(relativeVelocity.y<0.1))||(kbs.isReverse()&&(relativeVelocity.y>-0.1)))
+            return true;
+        return false;
+
     }
 
 }

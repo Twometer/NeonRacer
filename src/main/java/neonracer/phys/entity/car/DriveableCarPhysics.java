@@ -10,6 +10,8 @@ import java.util.List;
 
 public class DriveableCarPhysics extends AbstractCarPhysics {
 
+    public boolean breaking = false;
+
     DriveableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
         super(gameContext, carBody, tires, flJoint, frJoint);
     }
@@ -17,8 +19,9 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
     @Override
     public void update() {
         KeyboardState keyboardState = gameContext.getKeyboardState();
+        breaking = carBody.checkBreak(keyboardState);
         for (Tire tire : tires) {
-            tire.updateFriction(carBody.getVelocity());
+            tire.updateFriction(carBody.getVelocity(),breaking);
             tire.updateDrive(keyboardState);
         }
         carBody.updateAirResistance();

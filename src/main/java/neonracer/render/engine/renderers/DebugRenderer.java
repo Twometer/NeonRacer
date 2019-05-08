@@ -4,6 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
 import neonracer.phys.entity.car.AbstractCarPhysics;
+import neonracer.phys.entity.car.DriveableCarPhysics;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import neonracer.util.BuildInfo;
@@ -34,6 +35,7 @@ public class DebugRenderer implements IRenderer {
         text.add("pos=" + renderContext.getCamera().getCenterPoint().toString(NumberFormat.getInstance()));
         text.add("rot=" + renderContext.getCamera().getRotation());
         text.add("track=" + gameContext.getGameState().getCurrentTrack().getId());
+        text.add("breaking=" + ((DriveableCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).breaking);
         text.add("carrot=" + MathHelper.modAngle(gameContext.getGameState().getPlayerEntity().getPhysics().getRotation()));
         text.add("carvela=" + MathHelper.vec2ToAngle(gameContext.getGameState().getPlayerEntity().getPhysics().getVelocity()));
 //        text.add("carvelx=" + gameContext.getGameState().getPlayerEntity().getPhysics().getVelocity().x);
@@ -53,6 +55,7 @@ public class DebugRenderer implements IRenderer {
 //        text.add("tire2rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(1).getBody().getAngle()));
 //        text.add("tire3rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(2).getBody().getAngle()));
 //        text.add("tire4rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(3).getBody().getAngle()));
+       text.add("tire4mat=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getMat());
         for (String string : text)
         {
             fontRenderer.draw(string,0.0f, lh * text.indexOf(string), 0.3f);
