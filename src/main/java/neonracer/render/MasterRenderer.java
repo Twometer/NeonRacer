@@ -15,6 +15,7 @@ import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
+import neonracer.stats.StatsCalculator;
 import neonracer.util.Log;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -31,6 +32,8 @@ public class MasterRenderer {
 
     private PostProcessing postProcessing;
 
+    private StatsCalculator statsCalculator;
+
     private boolean lastPressed;
 
     private IRenderer[] renderers = new IRenderer[]{
@@ -44,6 +47,7 @@ public class MasterRenderer {
         this.gameWindow = gameContext.getGameWindow();
         this.renderContext = new RenderContext(gameContext);
         this.guiManager = new GuiManager(renderContext);
+        this.statsCalculator = new StatsCalculator(gameContext);
     }
 
     public void startLoop() {
@@ -129,7 +133,10 @@ public class MasterRenderer {
 
             EntityCar player = gameContext.getGameState().getPlayerEntity();
             gameContext.getClient().send(Entity.Update.newBuilder().setEntityId(player.getEntityId()).setX(player.getPosition().x).setY(player.getPosition().y).setLapsPassed(player.getCarStats().getLapsPassed()).setRotation(player.getRotation()).build());
+
+            statsCalculator.update();
         }
+
     }
 
     private void handleControls() {
