@@ -6,6 +6,8 @@ import neonracer.network.proto.Entity;
 import neonracer.network.proto.Login;
 import neonracer.network.proto.Race;
 
+import java.io.IOException;
+
 public class Message {
 
     private static final Message[] messages = {
@@ -41,12 +43,12 @@ public class Message {
         this.parser = parser;
     }
 
-    void handle(byte[] buffer, MessageHandler handler) throws InvalidProtocolBufferException {
+    void handle(byte[] buffer, MessageHandler handler) throws IOException {
         parser.invoke(buffer, handler);
     }
 
     private interface Parser {
-        void invoke(byte[] buffer, MessageHandler handler) throws InvalidProtocolBufferException;
+        void invoke(byte[] buffer, MessageHandler handler) throws IOException;
     }
 
 }
