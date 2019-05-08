@@ -156,7 +156,7 @@ public class TrackDesigner extends Screen {
         }
         System.out.println("  entities:");
         for (Entity temp : entities) {
-            if (temp instanceof EntityStatic) {
+//            if (temp instanceof EntityStatic) {
                 EntityStatic entity = (EntityStatic) temp;
 
                 StringBuilder params = new StringBuilder();
@@ -174,9 +174,9 @@ public class TrackDesigner extends Screen {
                         format.format(entity.getPosition().y),
                         format.format(entity.getRotation()),
                         params.toString());
-            } else {
-                System.out.println("Cannot serialize entity type " + temp.getType());
-            }
+//            } else {
+//                System.out.println("Cannot serialize entity type " + temp.getType());
+//            }
         }
     }
 
