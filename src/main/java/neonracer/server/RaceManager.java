@@ -2,9 +2,8 @@ package neonracer.server;
 
 import neonracer.network.proto.Race;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 class RaceManager {
 
@@ -20,8 +19,8 @@ class RaceManager {
 
     RaceManager(GameServer parent) {
         this.parent = parent;
-        participants = Collections.synchronizedList(new LinkedList<>());
-        entities = Collections.synchronizedList(new LinkedList<>());
+        participants = new CopyOnWriteArrayList<>();
+        entities = new CopyOnWriteArrayList<>();
         new Thread(this::notifyPrepare).start();
         // TODO kick all clients after a specific race timeout
     }

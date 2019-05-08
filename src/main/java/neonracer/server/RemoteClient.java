@@ -37,6 +37,7 @@ class RemoteClient implements MessageHandler, Closeable {
             channel.send(message);
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -70,7 +71,7 @@ class RemoteClient implements MessageHandler, Closeable {
 
         id = parent.getClientIdCounter().incrementAndGet();
         nickname = loginRequest.getNickname();
-        channel.send(Login.LoginResponse.newBuilder().setStatus(Login.LoginStatus.SUCCESS).build());
+        channel.send(Login.LoginResponse.newBuilder().setStatus(Login.LoginStatus.SUCCESS).setClientId(id).build());
 
         System.out.println(nickname + " logged in");
 
