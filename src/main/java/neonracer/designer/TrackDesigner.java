@@ -194,6 +194,7 @@ public class TrackDesigner extends Screen {
                     track.initialize(gameContext);
                     gameContext.getGameState().setCurrentTrack(track);
                     nodes = gameContext.getGameState().getCurrentTrack().getPath();
+                    entities = gameContext.getGameState().getCurrentTrack().getEntities();
                     return;
                 }
             }
