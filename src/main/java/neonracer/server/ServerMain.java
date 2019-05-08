@@ -19,6 +19,9 @@ public class ServerMain {
         keyboard.nextLine();
 
         listener.close();
+        for (RemoteClient client : server.getClients()) {
+            client.close();
+        }
     }
 
 }

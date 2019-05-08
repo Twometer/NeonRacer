@@ -112,6 +112,7 @@ class RemoteClient implements MessageHandler, Closeable {
         if (race.isOpen()) {
             race.getParticipants().add(this);
             parent.sendExcept(Race.Join.newBuilder(joinRace).setClientId(id).setNickname(nickname).build(), this);
+            System.out.println(nickname + " joined the upcoming race");
         } else {
             // Client cannot join anymore, notify with Race.Leave message
             send(Race.Leave.newBuilder().setClientId(id).build());
@@ -131,6 +132,10 @@ class RemoteClient implements MessageHandler, Closeable {
             if (found) {
                 Race.Leave message = Race.Leave.newBuilder().setClientId(id).build();
                 parent.sendExcept(message, this);
+            }
+            // Delete race when all clients have left
+            if (race.getParticipants().isEmpty()) {
+                parent.setRace(null);
             }
         }
     }

@@ -29,6 +29,7 @@ class RaceManager {
     private void notifyPrepare() {
         Race.Prepare message = Race.Prepare.newBuilder().setRemainingMilliseconds(LOBBY_TIMEOUT).build();
         parent.sendExcept(message, null);
+        System.out.println("New race in preparation. Lobby will close in " + LOBBY_TIMEOUT + "ms...");
         try {
             Thread.sleep(LOBBY_TIMEOUT);
         } catch (InterruptedException e) {
@@ -41,6 +42,7 @@ class RaceManager {
         Race.Start message = Race.Start.newBuilder().setElapsedMilliseconds(-START_TIMEOUT).setLapCount(LAP_COUNT).build();
         parent.sendExcept(message, null);
         open = false;
+        System.out.println("Lobby closed. Race begins in " + START_TIMEOUT + "ms...");
     }
 
     List<RemoteClient> getParticipants() {

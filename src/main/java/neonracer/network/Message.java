@@ -1,7 +1,6 @@
 package neonracer.network;
 
 import com.google.protobuf.AbstractMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
 import neonracer.network.proto.Entity;
 import neonracer.network.proto.Login;
 import neonracer.network.proto.Race;
