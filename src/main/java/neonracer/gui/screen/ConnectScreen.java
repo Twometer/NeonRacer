@@ -44,7 +44,7 @@ public class ConnectScreen extends Screen {
         new Thread(() -> {
             boolean connected = context.getClient().connect(ip);
             if (!connected) {
-                JOptionPane.showMessageDialog(null, "Could not connect to the server.");
+                JOptionPane.showMessageDialog(null, "Verbindung zum Server konnte nicht hergestellt werden.");
                 btnConnect.setText("Verbinden");
                 connecting = false;
             } else {

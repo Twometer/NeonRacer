@@ -41,9 +41,17 @@ public class Client implements MessageHandler {
         }
     }
 
+    public void disconnect() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void startReceiveLoop() {
         connected = true;
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             while (connected) {
                 try {
                     networkChannel.read(this);
@@ -52,7 +60,9 @@ public class Client implements MessageHandler {
                     break;
                 }
             }
-        }).start();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void send(AbstractMessage message) {

@@ -33,8 +33,9 @@
                          VerticalAlignment="Center"
                          Src="textures/rocketcar.png" Width="150" Height="150"/>
         </Grid>
-        <ProgressBar Margin="20" Value="75" Grid.Row="2" HorizontalAlignment="Center" Height="15" Width="550"/>
-        <Label Margin="40" Text="Noch 10 Sekunden" Grid.Row="3" HorizontalAlignment="Center"/>
+        <ProgressBar Id="pbState" Margin="20" Value="100" Grid.Row="2" HorizontalAlignment="Center" Height="15"
+                     Width="550"/>
+        <Label Id="lbState" Margin="40" Text="Warte auf weitere Spieler" Grid.Row="3" HorizontalAlignment="Center"/>
     </Grid>
 
 </Screen>

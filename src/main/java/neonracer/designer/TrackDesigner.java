@@ -126,16 +126,6 @@ public class TrackDesigner extends Screen {
 
     private String fgMaterial = "street";
 
-    @Override
-    public void initialize(RenderContext renderContext) {
-        super.initialize(renderContext);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-    }
-
     @EventHandler("btnSave")
     public void onSave(ClickEvent event) {
         System.out.printf("- samples: %d%n", samples);

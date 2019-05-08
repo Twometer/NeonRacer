@@ -57,6 +57,7 @@ public class GameContext {
 
     public void destroy() {
         gameWindow.destroy();
+        client.disconnect();
     }
 
     public GameWindow getGameWindow() {

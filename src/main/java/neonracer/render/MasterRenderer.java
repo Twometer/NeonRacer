@@ -4,6 +4,7 @@ import neonracer.core.GameContext;
 import neonracer.gui.GuiManager;
 import neonracer.gui.events.CharInputEvent;
 import neonracer.gui.events.ClickEvent;
+import neonracer.gui.events.TickEvent;
 import neonracer.gui.screen.ConnectScreen;
 import neonracer.gui.screen.IngameScreen;
 import neonracer.model.entity.EntityCar;
@@ -121,6 +122,7 @@ public class MasterRenderer {
         handleControls();
     }
 
+    private static final TickEvent TICK_EVENT = new TickEvent();
     private void tick() {
         GameWindow gameWindow = gameContext.getGameWindow();
         gameContext.getKeyboardState().update(gameWindow);
@@ -129,6 +131,8 @@ public class MasterRenderer {
         gameContext.getPhysicsEngine().onTick();
 
         renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
+
+        guiManager.raiseEvent(TICK_EVENT);
     }
 
     private void handleControls() {
