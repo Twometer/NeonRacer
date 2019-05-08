@@ -370,6 +370,7 @@ public class TrackDesigner extends Screen {
     }
 
     private void rebuild() {
+        gameContext.getGameState().getEntities().clear();
         Track track = new Track("", "", "", "", bgMaterial, fgMaterial, nodes, entities, samples);
         track.initialize(gameContext);
 
