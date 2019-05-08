@@ -58,7 +58,7 @@ class RemoteClient implements MessageHandler, Closeable {
     @Override
     public void handle(Login.LoginRequest loginRequest) throws IOException {
         for (RemoteClient client : parent.getClients()) {
-            if (client.nickname.equalsIgnoreCase(loginRequest.getNickname())) {
+            if (client.nickname != null && client.nickname.equalsIgnoreCase(loginRequest.getNickname())) {
                 channel.send(Login.LoginResponse.newBuilder().setStatus(Login.LoginStatus.NICKNAME_TAKEN).build());
                 return;
             }
