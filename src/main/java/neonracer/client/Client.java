@@ -1,5 +1,6 @@
 package neonracer.client;
 
+import com.google.protobuf.AbstractMessage;
 import neonracer.core.GameContext;
 import neonracer.network.MessageHandler;
 import neonracer.network.NetworkChannel;
@@ -51,6 +52,15 @@ public class Client implements MessageHandler {
                 }
             }
         }).start();
+    }
+
+    public void send(AbstractMessage message) {
+        try {
+            networkChannel.send(message);
+        } catch (IOException e) {
+            connected = false;
+            e.printStackTrace();
+        }
     }
 
     @Override
