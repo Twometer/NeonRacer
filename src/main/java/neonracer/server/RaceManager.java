@@ -16,7 +16,7 @@ class RaceManager {
     private final List<RemoteClient> participants;
     private final List<Entity> entities;
 
-    private boolean open;
+    private boolean open = true;
 
     RaceManager(GameServer parent) {
         this.parent = parent;

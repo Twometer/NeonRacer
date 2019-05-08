@@ -44,13 +44,15 @@ class RemoteClient implements MessageHandler, Closeable {
     void run() {
         try {
             while (true) {
-                channel.read(this);
+                if (!channel.read(this))
+                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         leaveRace();
-        parent.getClients().remove(this);
+        if (!parent.getClients().remove(this))
+            System.out.println("Failed to remove disconnected client from client list.");
     }
 
     @Override

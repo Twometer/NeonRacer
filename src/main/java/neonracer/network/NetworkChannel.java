@@ -10,22 +10,19 @@ import java.net.Socket;
 
 public class NetworkChannel implements Closeable {
 
-    private static byte readByte(InputStream stream) throws IOException {
-        int value = stream.read();
-        if (value == -1) throw new IOException("End of stream");
-        return (byte) value;
-    }
-
     private final Socket socket;
 
     public NetworkChannel(Socket socket) {
         this.socket = socket;
     }
 
-    public void read(MessageHandler handler) throws IOException {
+    public boolean read(MessageHandler handler) throws IOException {
         InputStream stream = socket.getInputStream();
-        byte id = readByte(stream);
-        int length = readByte(stream) | (readByte(stream) << 8);
+        int id = stream.read();
+        if (id == -1) return false;
+        int length0 = stream.read(), length1 = stream.read();
+        if (length0 == -1 || length1 == -1) return false;
+        int length = length0 | (length1 << 8);
         byte[] buffer = new byte[length];
         int received = 0;
         do {
@@ -33,6 +30,7 @@ public class NetworkChannel implements Closeable {
         } while (received < length);
         Message message = Message.get(id);
         message.handle(buffer, handler);
+        return true;
     }
 
     public void send(AbstractMessage message) throws IOException {
