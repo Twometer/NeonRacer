@@ -31,6 +31,8 @@ public class GameState {
 
     public void setCurrentTrack(Track currentTrack) {
         this.currentTrack = currentTrack;
+        for (Entity trackEntity : currentTrack.getEntities())
+            addEntity(trackEntity);
     }
 
     public void initialize(GameContext gameContext) {

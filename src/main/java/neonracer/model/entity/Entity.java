@@ -9,6 +9,8 @@ import neonracer.phys.entity.EntityPhysics;
 import neonracer.render.gl.core.Texture;
 import org.joml.Vector2f;
 
+import java.util.Map;
+
 /**
  * An entity is an object in the world the user
  * can interact with, such as a car they can drive or
@@ -18,11 +20,13 @@ import org.joml.Vector2f;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = EntityItem.class, name = "item"),
-        @JsonSubTypes.Type(value = EntityCar.class, name = "car")}
-)
+        @JsonSubTypes.Type(value = EntityStatic.class, name = "static")
+})
 public abstract class Entity {
 
     private static final float SCALE_FACTOR = 150.f;
+
+    int entityId;
 
     private String type;
 
@@ -33,10 +37,14 @@ public abstract class Entity {
     private EntityPhysics physics;
 
     @JsonCreator
-    Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation) {
+    Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation, @JsonProperty("params") Map<String, String> params) {
         this.type = type;
         this.position = new Vector2f(x, y);
         this.rotation = rotation;
+    }
+
+    public int getEntityId() {
+        return entityId;
     }
 
     public String getType() {
