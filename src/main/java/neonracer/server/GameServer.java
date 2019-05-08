@@ -5,6 +5,7 @@ import neonracer.network.NetworkChannel;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -35,9 +36,11 @@ class GameServer {
     void run() {
         try {
             while (!listener.isClosed()) {
-                RemoteClient client = new RemoteClient(new NetworkChannel(listener.accept()), this);
+                Socket socket = listener.accept();
+                RemoteClient client = new RemoteClient(new NetworkChannel(socket), this);
                 clients.add(client);
                 new Thread(client::run).start();
+                System.out.println("New connection from " + socket.getInetAddress().toString());
             }
         } catch (SocketException e) {
             System.out.println("Shutting down server");
