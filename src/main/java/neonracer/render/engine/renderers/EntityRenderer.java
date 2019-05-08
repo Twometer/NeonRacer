@@ -38,6 +38,8 @@ public class EntityRenderer implements IRenderer {
         entityShader.bind();
         entityShader.setProjectionMatrix(renderContext.getWorldMatrix());
         for (Entity entity : entities) {
+            if (entity.getGlowTexture() == null && renderPass == RenderPass.GLOW) // There may be entities that do not have a glow texture
+                continue;
             Texture texture = renderPass == RenderPass.GLOW ? entity.getGlowTexture() : entity.getColorTexture();
             texture.bind();
             float width = entity.getWidth();

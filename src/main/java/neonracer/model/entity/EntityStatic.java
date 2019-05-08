@@ -31,7 +31,8 @@ public class EntityStatic extends Entity {
     public void onInitialize(GameContext gameContext) {
         super.onInitialize(gameContext);
         colorTexture = gameContext.getTextureProvider().getTexture(colorTexturePath);
-        glowTexture = gameContext.getTextureProvider().getTexture(glowTexturePath);
+        if (glowTexturePath != null && !glowTexturePath.isEmpty())
+            glowTexture = gameContext.getTextureProvider().getTexture(glowTexturePath);
         setPhysics(StaticPhysics.create(this, gameContext));
     }
 
