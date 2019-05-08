@@ -53,6 +53,10 @@ class RemoteClient implements MessageHandler, Closeable {
         leaveRace();
         if (!parent.getClients().remove(this))
             System.out.println("Failed to remove disconnected client from client list.");
+        else if (nickname != null)
+            System.out.println("Client disconnected (" + nickname + ")");
+        else
+            System.out.println("Anonymous client disconnected");
     }
 
     @Override
@@ -66,8 +70,9 @@ class RemoteClient implements MessageHandler, Closeable {
 
         id = parent.getClientIdCounter().incrementAndGet();
         nickname = loginRequest.getNickname();
-        parent.getClients().add(this);
         channel.send(Login.LoginResponse.newBuilder().setStatus(Login.LoginStatus.SUCCESS).build());
+
+        System.out.println(nickname + " logged in");
 
         // Send all entities
         RaceManager race = parent.getRace();
