@@ -11,7 +11,7 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.Row="0" Grid.Column="0">
-            <Label Text="1/10"/>
+            <Label Id="lbPlacement" Margin="25" Text="-/-"/>
         </Border>
 
     </Grid>

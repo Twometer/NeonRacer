@@ -27,11 +27,12 @@ public class Border extends Container {
 
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
+        Widget singleChild = children.get(0);
         if (renderPass == RenderPass.COLOR) {
-            renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), BACKGROUND);
+            renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth() + singleChild.getMargin().getWidth(), getHeight() + singleChild.getMargin().getHeight(), BACKGROUND);
         } else if (renderPass == RenderPass.GLOW) {
-            renderContext.getPrimitiveRenderer().drawRect(getX() - GLOW_RADIUS, getY() - GLOW_RADIUS, getWidth() + GLOW_RADIUS * 2, getHeight() + GLOW_RADIUS * 2, GLOW);
-            renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), Color.BLACK.toVector());
+            renderContext.getPrimitiveRenderer().drawRect(getX() - GLOW_RADIUS, getY() - GLOW_RADIUS, getWidth() + GLOW_RADIUS * 2 + singleChild.getMargin().getWidth(), getHeight() + GLOW_RADIUS * 2 + singleChild.getMargin().getHeight(), GLOW);
+            renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth() + singleChild.getMargin().getWidth(), getHeight() + singleChild.getMargin().getHeight(), Color.BLACK.toVector());
         }
         super.draw(renderContext, renderPass);
     }
