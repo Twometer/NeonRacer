@@ -1,5 +1,6 @@
 package neonracer.core;
 
+import neonracer.client.Client;
 import neonracer.gui.input.KeyboardState;
 import neonracer.gui.input.MouseState;
 import neonracer.phys.PhysicsEngine;
@@ -27,7 +28,9 @@ public class GameContext {
 
     private KeyboardState keyboardState;
 
-    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, MouseState mouseState, KeyboardState keyboardState) {
+    private Client client;
+
+    GameContext(GameWindow gameWindow, TextureProvider textureProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, MouseState mouseState, KeyboardState keyboardState, Client client) {
         this.gameWindow = gameWindow;
         this.textureProvider = textureProvider;
         this.dataManager = dataManager;
@@ -36,6 +39,7 @@ public class GameContext {
         this.timer = timer;
         this.mouseState = mouseState;
         this.keyboardState = keyboardState;
+        this.client = client;
     }
 
     public void initialize() throws IOException {
@@ -81,4 +85,7 @@ public class GameContext {
         return keyboardState;
     }
 
+    public Client getClient() {
+        return client;
+    }
 }

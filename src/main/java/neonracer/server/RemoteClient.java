@@ -11,12 +11,12 @@ import java.net.Socket;
 
 public class RemoteClient implements MessageHandler {
 
-    private static final String cannotHandle = "Server cannot handle LoginResponse message.";
+    private static final String CANNOT_HANDLE = "Server cannot handle LoginResponse message.";
 
     private final Socket socket;
     private final NetworkChannel channel;
 
-    public RemoteClient(Socket socket) {
+    RemoteClient(Socket socket) {
         this.socket = socket;
         this.channel = new NetworkChannel(socket);
     }
@@ -42,12 +42,12 @@ public class RemoteClient implements MessageHandler {
 
     @Override
     public void handle(Login.LoginResponse loginResponse) {
-        throw new IllegalArgumentException(cannotHandle);
+        throw new IllegalArgumentException(CANNOT_HANDLE);
     }
 
     @Override
     public void handle(Race.Prepare prepareRace) {
-        throw new IllegalArgumentException(cannotHandle);
+        throw new IllegalArgumentException(CANNOT_HANDLE);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class RemoteClient implements MessageHandler {
 
     @Override
     public void handle(Race.Start startRace) {
-        throw new IllegalArgumentException(cannotHandle);
+        throw new IllegalArgumentException(CANNOT_HANDLE);
     }
 
     @Override
