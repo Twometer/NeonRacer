@@ -16,7 +16,7 @@ import org.joml.Vector2f;
 
 public class Tire {
 
-    // Ported from http://www.iforce2d.net/src/iforce2d_TopdownCar.h
+    // Bits ported from http://www.iforce2d.net/src/iforce2d_TopdownCar.h
 
     private GameContext gameContext;
 
@@ -61,6 +61,13 @@ public class Tire {
 
     void updateFriction(Vec2 velocity, boolean breaking)
     {
+        // Load traction here
+        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
+        TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
+
+        if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
+        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
+
         this.velocity = velocity;
         relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
         currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMat();
