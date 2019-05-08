@@ -12,3 +12,4 @@
     - {x: 50, y: 0, w: 8}
   entities:
     - {type: "static", x: 0, y: 0, r: 0, params: {color_texture: "textures/rocketcar_4.png", glow_texture: "textures/rocketcar-glow_4.png"}}
+    - {type: "item", x: 0, y: 0, r: 0}

@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -74,6 +75,8 @@ public class TrackDesigner extends Screen {
             new TrackRenderer(),
             new EntityRenderer()
     };
+
+    private DecimalFormat format = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
 
     private List<Entity> entities = new ArrayList<>();
 
@@ -118,6 +121,9 @@ public class TrackDesigner extends Screen {
     @BindWidget("lbRot")
     private Label lbRot;
 
+    @BindWidget("btnRepositionEntity")
+    private Button btnRepositionEntity;
+
     private Entity selectedEntity;
 
     private Mode mode = Mode.None;
@@ -143,11 +149,28 @@ public class TrackDesigner extends Screen {
         System.out.println("  foreground_material: " + fgMaterial);
         System.out.println("  path:");
         for (Node node : nodes) {
-            DecimalFormat format = new DecimalFormat("#.##");
             System.out.printf("    - {x: %s, y: %s, w: %s}%n",
                     format.format(node.getPosition().x),
                     format.format(node.getPosition().y),
                     format.format(node.getTrackWidth()));
+        }
+        System.out.println("  entities:");
+        for (Entity entity : entities) {
+            StringBuilder params = new StringBuilder();
+
+            boolean first = true;
+            for (Map.Entry<String, String> param : entity.getParams().entrySet()) {
+                if (!first) params.append(", ");
+                else first = false;
+                params.append(param.getKey()).append(": \"").append(param.getValue()).append("\"");
+            }
+
+            System.out.printf("    - {type: \"%s\", x: %s, y: %s, r: %s, params: {%s}}%n",
+                    entity.getType(),
+                    format.format(entity.getPosition().x),
+                    format.format(entity.getPosition().y),
+                    format.format(entity.getRotation()),
+                    params.toString());
         }
     }
 
@@ -192,7 +215,7 @@ public class TrackDesigner extends Screen {
     public void onRepositionNode(ClickEvent event) {
         if (selectedNode == null)
             return;
-        toggleMode(Mode.Repositioning);
+        toggleMode(Mode.RepositioningNode);
     }
 
     @EventHandler("addSamples")
@@ -279,9 +302,8 @@ public class TrackDesigner extends Screen {
 
     @EventHandler("btnAddEntity")
     public void onAddEntities(ClickEvent event) throws ClassNotFoundException {
-
         if (mode == Mode.CreatingEntities) {
-            mode = Mode.None;
+            setMode(Mode.None);
             return;
         }
 
@@ -321,16 +343,16 @@ public class TrackDesigner extends Screen {
     @EventHandler("rotIncr")
     public void rotIncr(ClickEvent event) {
         if (selectedEntity != null) {
-            selectedEntity.setRotation((float) (selectedEntity.getRotation() + Math.toRadians(1)));
-            lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+            selectedEntity.setRotation((float) (selectedEntity.getRotation() + Math.toRadians(2)));
+            lbRot.setText("Rotation: " + format.format(Math.toDegrees(selectedEntity.getRotation())));
         }
     }
 
     @EventHandler("rotDecr")
     public void rotDecr(ClickEvent event) {
         if (selectedEntity != null) {
-            selectedEntity.setRotation((float) (selectedEntity.getRotation() - Math.toRadians(1)));
-            lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+            selectedEntity.setRotation((float) (selectedEntity.getRotation() - Math.toRadians(2)));
+            lbRot.setText("Rotation: " + format.format(Math.toDegrees(selectedEntity.getRotation())));
         }
     }
 
@@ -338,8 +360,14 @@ public class TrackDesigner extends Screen {
     public void delEntity(ClickEvent event) {
         if (selectedEntity != null) {
             entities.remove(selectedEntity);
-            System.out.println("Deleted entity");
             rebuild();
+        }
+    }
+
+    @EventHandler("btnRepositionEntity")
+    public void onRepositionEntity(ClickEvent event) {
+        if (selectedEntity != null) {
+            toggleMode(Mode.RepositioningEntity);
         }
     }
 
@@ -351,10 +379,15 @@ public class TrackDesigner extends Screen {
     }
 
     private void setMode(Mode mode) {
-        if (mode == Mode.Repositioning)
+        if (mode == Mode.RepositioningNode)
             repositionButton.setFontColor(Color.GREEN);
         else
             repositionButton.setFontColor(Color.BLUE);
+
+        if (mode == Mode.RepositioningEntity)
+            btnRepositionEntity.setFontColor(Color.GREEN);
+        else
+            btnRepositionEntity.setFontColor(Color.BLUE);
 
         if (mode == Mode.CreatingNodes)
             btnAddNode.setFontColor(Color.GREEN);
@@ -365,6 +398,7 @@ public class TrackDesigner extends Screen {
             btnAddEntity.setFontColor(Color.GREEN);
         else
             btnAddEntity.setFontColor(Color.WHITE);
+
 
         this.mode = mode;
     }
@@ -411,16 +445,27 @@ public class TrackDesigner extends Screen {
                 if (nodes.size() > 2)
                     rebuild();
                 break;
-            case Repositioning:
+            case RepositioningNode:
                 if (selectedNode == null) return;
                 selectedNode.getPosition().x = (int) Math.floor(unprojected.x);
                 selectedNode.getPosition().y = (int) Math.floor(unprojected.y);
                 rebuild();
                 break;
+            case RepositioningEntity:
+                if (selectedEntity == null) return;
+                selectedEntity.getPosition().x = unprojected.x;
+                selectedEntity.getPosition().y = unprojected.y;
+                rebuild();
+                break;
             case CreatingEntities:
                 try {
                     Constructor c = currentEntityClass.getConstructor(String.class, float.class, float.class, float.class, Map.class);
-                    Entity entity = (Entity) c.newInstance("", unprojected.x, unprojected.y, 0f, currentEntityParams);
+                    String type = "";
+                    if (currentEntityClass == EntityStatic.class)
+                        type = "static";
+                    else if (currentEntityClass == EntityItem.class)
+                        type = "item";
+                    Entity entity = (Entity) c.newInstance(type, unprojected.x, unprojected.y, 0f, currentEntityParams);
                     entity.onInitialize(gameContext);
                     entities.add(entity);
                     rebuild();
@@ -549,7 +594,8 @@ public class TrackDesigner extends Screen {
 
     enum Mode {
         None,
-        Repositioning,
+        RepositioningNode,
+        RepositioningEntity,
         CreatingNodes,
         CreatingEntities
     }
