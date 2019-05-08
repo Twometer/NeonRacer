@@ -3,11 +3,13 @@ package neonracer.model.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import neonracer.core.GameContext;
+import neonracer.designer.RegisteredParams;
 import neonracer.phys.entity.item.StaticPhysics;
 import neonracer.render.gl.core.Texture;
 
 import java.util.Map;
 
+@RegisteredParams({"color_texture", "glow_texture"})
 public class EntityStatic extends Entity {
 
     private String colorTexturePath;
@@ -29,7 +31,8 @@ public class EntityStatic extends Entity {
     public void onInitialize(GameContext gameContext) {
         super.onInitialize(gameContext);
         colorTexture = gameContext.getTextureProvider().getTexture(colorTexturePath);
-        glowTexture = gameContext.getTextureProvider().getTexture(glowTexturePath);
+        if (glowTexturePath != null && !glowTexturePath.isEmpty())
+            glowTexture = gameContext.getTextureProvider().getTexture(glowTexturePath);
         setPhysics(StaticPhysics.create(this, gameContext));
     }
 

@@ -15,6 +15,9 @@ import neonracer.gui.screen.Screen;
 import neonracer.gui.util.Color;
 import neonracer.gui.widget.Button;
 import neonracer.gui.widget.Label;
+import neonracer.model.entity.Entity;
+import neonracer.model.entity.EntityItem;
+import neonracer.model.entity.EntityStatic;
 import neonracer.model.track.Material;
 import neonracer.model.track.Node;
 import neonracer.model.track.Track;
@@ -22,6 +25,7 @@ import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
+import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
 import neonracer.render.gl.core.Mesh;
@@ -34,11 +38,11 @@ import org.joml.Vector4f;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -67,8 +71,20 @@ public class TrackDesigner extends Screen {
     private Model crosshairModel;
 
     private IRenderer[] renderers = new IRenderer[]{
-            new TrackRenderer()
+            new TrackRenderer(),
+            new EntityRenderer()
     };
+
+    private List<Entity> entities = new ArrayList<>();
+
+    private Class[] registeredEntities = new Class[]{
+            EntityStatic.class,
+            EntityItem.class
+    };
+
+    private Class currentEntityClass;
+
+    private Map<String, String> currentEntityParams;
 
     private int samples = 100;
 
@@ -95,6 +111,14 @@ public class TrackDesigner extends Screen {
 
     @BindWidget("btnAddEntity")
     private Button btnAddEntity;
+
+    @BindWidget("lbEntityPosition")
+    private Label lbEntityPosition;
+
+    @BindWidget("lbRot")
+    private Label lbRot;
+
+    private Entity selectedEntity;
 
     private Mode mode = Mode.None;
 
@@ -254,8 +278,69 @@ public class TrackDesigner extends Screen {
     }
 
     @EventHandler("btnAddEntity")
-    public void onAddEntities(ClickEvent event) {
-        toggleMode(Mode.CreatingEntities);
+    public void onAddEntities(ClickEvent event) throws ClassNotFoundException {
+
+        if (mode == Mode.CreatingEntities) {
+            mode = Mode.None;
+            return;
+        }
+
+        String s = (String) JOptionPane.showInputDialog(
+                null,
+                "Select which type of entity you want to use",
+                "Add Entity",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                Arrays.stream(registeredEntities).map(Class::getName).toArray(), registeredEntities[0].getName());
+
+        Class clazz = Class.forName(s);
+        RegisteredParams a = (RegisteredParams) clazz.getAnnotation(RegisteredParams.class);
+        if (a == null) return;
+        String[] params = a.value();
+
+        JTextField[] fields = new JTextField[params.length];
+
+        JPanel panel = new JPanel();
+        for (int i = 0; i < params.length; i++) {
+            panel.add(new JLabel(params[i] + ": "));
+            JTextField tf = new JTextField(15);
+            fields[i] = tf;
+            panel.add(tf);
+        }
+        int result = JOptionPane.showConfirmDialog(null, panel, "Enter required parameters", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            currentEntityClass = clazz;
+            currentEntityParams = new HashMap<>();
+            for (int i = 0; i < params.length; i++) {
+                currentEntityParams.put(params[i], fields[i].getText());
+            }
+            toggleMode(Mode.CreatingEntities);
+        }
+    }
+
+    @EventHandler("rotIncr")
+    public void rotIncr(ClickEvent event) {
+        if (selectedEntity != null) {
+            selectedEntity.setRotation((float) (selectedEntity.getRotation() + Math.toRadians(1)));
+            lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+        }
+    }
+
+    @EventHandler("rotDecr")
+    public void rotDecr(ClickEvent event) {
+        if (selectedEntity != null) {
+            selectedEntity.setRotation((float) (selectedEntity.getRotation() - Math.toRadians(1)));
+            lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+        }
+    }
+
+    @EventHandler("btnDeleteEntity")
+    public void delEntity(ClickEvent event) {
+        if (selectedEntity != null) {
+            entities.remove(selectedEntity);
+            System.out.println("Deleted entity");
+            rebuild();
+        }
     }
 
     private void toggleMode(Mode mode) {
@@ -285,7 +370,8 @@ public class TrackDesigner extends Screen {
     }
 
     private void rebuild() {
-        Track track = new Track("", "", "", "", bgMaterial, fgMaterial, nodes, null, samples);
+        gameContext.getGameState().getEntities().clear();
+        Track track = new Track("", "", "", "", bgMaterial, fgMaterial, nodes, entities, samples);
         track.initialize(gameContext);
 
         gameContext.getGameState().setCurrentTrack(track);
@@ -308,6 +394,15 @@ public class TrackDesigner extends Screen {
             }
         }
 
+        for (Entity entity : entities) {
+            if (unprojected.x > entity.getPosition().x && unprojected.y > entity.getPosition().y && unprojected.x < entity.getPosition().x + entity.getWidth() && unprojected.y < entity.getPosition().y + entity.getHeight()) {
+                selectedEntity = entity;
+                lbRot.setText("Rotation: " + Math.toDegrees(selectedEntity.getRotation()));
+                lbEntityPosition.setText(selectedEntity.getPosition().toString(NumberFormat.getNumberInstance()));
+                break;
+            }
+        }
+
         // Add a node at mouse position
         switch (mode) {
             case CreatingNodes:
@@ -322,6 +417,17 @@ public class TrackDesigner extends Screen {
                 selectedNode.getPosition().y = (int) Math.floor(unprojected.y);
                 rebuild();
                 break;
+            case CreatingEntities:
+                try {
+                    Constructor c = currentEntityClass.getConstructor(String.class, float.class, float.class, float.class, Map.class);
+                    Entity entity = (Entity) c.newInstance("", unprojected.x, unprojected.y, 0f, currentEntityParams);
+                    entity.onInitialize(gameContext);
+                    entities.add(entity);
+                    rebuild();
+                    break;
+                } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
