@@ -460,7 +460,12 @@ public class TrackDesigner extends Screen {
             case CreatingEntities:
                 try {
                     Constructor c = currentEntityClass.getConstructor(String.class, float.class, float.class, float.class, Map.class);
-                    Entity entity = (Entity) c.newInstance("", unprojected.x, unprojected.y, 0f, currentEntityParams);
+                    String type = "";
+                    if (currentEntityClass == EntityStatic.class)
+                        type = "static";
+                    else if (currentEntityClass == EntityItem.class)
+                        type = "item";
+                    Entity entity = (Entity) c.newInstance(type, unprojected.x, unprojected.y, 0f, currentEntityParams);
                     entity.onInitialize(gameContext);
                     entities.add(entity);
                     rebuild();
