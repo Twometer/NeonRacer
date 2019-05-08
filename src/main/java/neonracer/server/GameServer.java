@@ -37,7 +37,7 @@ class GameServer {
             while (!listener.isClosed()) {
                 RemoteClient client = new RemoteClient(new NetworkChannel(listener.accept()), this);
                 clients.add(client);
-                client.start();
+                new Thread(client::run).start();
             }
         } catch (SocketException e) {
             System.out.println("Shutting down server");

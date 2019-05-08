@@ -28,10 +28,6 @@ class RemoteClient implements MessageHandler, Closeable {
         return id;
     }
 
-    void start() {
-        new Thread(this::run).start();
-    }
-
     void send(AbstractMessage message) throws IOException {
         channel.send(message);
     }
@@ -53,6 +49,8 @@ class RemoteClient implements MessageHandler, Closeable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        leaveRace();
+        parent.getClients().remove(this);
     }
 
     @Override
@@ -85,7 +83,6 @@ class RemoteClient implements MessageHandler, Closeable {
                         .build());
             }
         }
-
     }
 
     @Override
@@ -100,19 +97,32 @@ class RemoteClient implements MessageHandler, Closeable {
 
     @Override
     public void handle(Race.Join joinRace) throws IOException {
-        // TODO Create new race or add player to existing one
-        Race.Join message = Race.Join.newBuilder(joinRace).setClientId(id).setNickname(nickname).build();
-        parent.sendExcept(message, this);
+        RaceManager race = parent.getRace();
+        if (race == null) {
+            race = new RaceManager(parent);
+            parent.setRace(race);
+        }
+        if (race.isOpen()) {
+            race.getParticipants().add(this);
+            parent.sendExcept(Race.Join.newBuilder(joinRace).setClientId(id).setNickname(nickname).build(), this);
+        } else {
+            // Client cannot join anymore, notify with Race.Leave message
+            send(Race.Leave.newBuilder().setClientId(id).build());
+        }
     }
 
     @Override
     public void handle(Race.Leave leaveRace) {
+        leaveRace();
+    }
+
+    private void leaveRace() {
         RaceManager race = parent.getRace();
         if (race != null) {
             boolean found = race.getParticipants().remove(this);
             race.getEntities().removeIf(entity -> entity.getOwnerId() == id);
             if (found) {
-                Race.Leave message = Race.Leave.newBuilder(leaveRace).setClientId(id).build();
+                Race.Leave message = Race.Leave.newBuilder().setClientId(id).build();
                 parent.sendExcept(message, this);
             }
         }
@@ -125,7 +135,19 @@ class RemoteClient implements MessageHandler, Closeable {
 
     @Override
     public void handle(Race.Finish finishRace) {
-        // TODO Implement race deletion when all clients have left
+        RaceManager race = parent.getRace();
+        if (race != null) {
+            boolean found = race.getParticipants().remove(this);
+            race.getEntities().removeIf(entity -> entity.getOwnerId() == id);
+            if (found) {
+                Race.Finish message = Race.Finish.newBuilder(finishRace).setClientId(id).build();
+                parent.sendExcept(message, this);
+            }
+            // Delete race when all clients have left
+            if (race.getParticipants().isEmpty()) {
+                parent.setRace(null);
+            }
+        }
     }
 
     @Override
