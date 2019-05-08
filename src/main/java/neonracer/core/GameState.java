@@ -47,4 +47,9 @@ public class GameState {
     public List<Entity> getEntities() {
         return entities;
     }
+
+    public boolean isRacing() {
+        return playerEntity != null;
+    }
+
 }

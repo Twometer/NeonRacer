@@ -7,7 +7,9 @@ import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.TickEvent;
 import neonracer.gui.screen.ConnectScreen;
 import neonracer.gui.screen.IngameScreen;
+import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
+import neonracer.network.proto.Entity;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.EntityRenderer;
@@ -120,10 +122,14 @@ public class MasterRenderer {
 
         gameContext.getPhysicsEngine().onTick();
 
-        if (gameContext.getGameState().getPlayerEntity() != null)
+        guiManager.raiseEvent(TICK_EVENT);
+
+        if (gameContext.getGameState().isRacing()) {
             renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
 
-        guiManager.raiseEvent(TICK_EVENT);
+            EntityCar player = gameContext.getGameState().getPlayerEntity();
+            gameContext.getClient().send(Entity.Update.newBuilder().setEntityId(player.getEntityId()).setX(player.getPosition().x).setY(player.getPosition().y).setLapsPassed(player.getCarStats().getLapsPassed()).setRotation(player.getRotation()).build());
+        }
     }
 
     private void handleControls() {

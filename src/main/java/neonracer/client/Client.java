@@ -155,14 +155,13 @@ public class Client implements MessageHandler {
     public void handle(Entity.Update updateEntity) {
         EventBus.getDefault().post(updateEntity);
 
-        for (neonracer.model.entity.Entity entity : gameContext.getGameState().getEntities()) {
+        for (neonracer.model.entity.Entity entity : gameContext.getGameState().getEntities())
             if (entity instanceof EntityCar && entity.getEntityId() == updateEntity.getEntityId()) {
                 EntityCar car = (EntityCar) entity;
                 car.getCarStats().setLapsPassed(updateEntity.getLapsPassed());
                 car.setPosition(new Vector2f(updateEntity.getX(), updateEntity.getY()));
                 car.setRotation(updateEntity.getRotation());
             }
-        }
     }
 
     @Override
