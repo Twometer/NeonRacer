@@ -98,17 +98,21 @@ public class Tire {
         body.applyForce(currentFriction, body.getWorldCenter());
     }*/
 
-    void updateFriction()
+    void updateFriction(Vec2 velocity)
     {
-        if(body.getLinearVelocity().length()>0.01f) {
-            float rollCoefficient = -0.1f;
-            float tractionCoefficient = -2f;
-            velocity = body.getLinearVelocityFromWorldPoint(MathHelper.nullVector);
-            relativeVelocity = MathHelper.rotateVec2(velocity, -body.getAngle());
+        if(body.getLinearVelocity().length()>0.05f) {
+            float rollCoefficient = -0.75f;
+            float tractionCoefficient = -5f;
+            this.velocity = velocity;
+            relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
             currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient;
             currentRelativeFriction.y = Math.signum(relativeVelocity.y) * rollCoefficient;
             currentFriction = MathHelper.rotateVec2(currentRelativeFriction, body.getAngle());
             body.applyForce(currentFriction, body.getWorldCenter());
+        }else
+        {
+            currentFriction = MathHelper.nullVector;
+            currentRelativeFriction = MathHelper.nullVector;
         }
     }
 

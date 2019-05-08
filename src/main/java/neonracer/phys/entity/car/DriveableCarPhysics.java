@@ -18,7 +18,7 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
     public void update() {
         KeyboardState keyboardState = gameContext.getKeyboardState();
         for (Tire tire : tires) {
-            tire.updateFriction();
+            tire.updateFriction(carBody.getVelocity());
             tire.updateDrive(keyboardState);
         }
         carBody.updateAirResistance();
