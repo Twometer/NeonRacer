@@ -53,19 +53,17 @@ public class CarBody {
 
     public Vec2 getVelocity() { return body.getLinearVelocity(); }
 
-    public void updateAirResistance() {
+    public void update()
+    {
         velocity = getVelocity();
+        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
         currentDrag = velocity.mul(dragCoefficient*velocity.length());
         body.applyForce(currentDrag, body.getWorldCenter());
     }
 
     public boolean checkBreak(KeyboardState kbs)
     {
-        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
-        if((kbs.isForward()&&(relativeVelocity.y<-0.1))||(kbs.isReverse()&&(relativeVelocity.y>0.1)))
-            return true;
-        return false;
-
+        return((kbs.isForward()&&(relativeVelocity.y<-0.1))||(kbs.isReverse()&&(relativeVelocity.y>0.1)));
     }
 
 }

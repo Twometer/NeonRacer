@@ -118,19 +118,11 @@ public class Car implements IData {
 
     public float getDragCoefficient() { return dragCoefficient; }
 
-    public float getRollCoefficient() {
-        return rollCoefficient;
-    }
+    public float getRollCoefficient() { return rollCoefficient; }
 
-    public float getTractionCoefficient() {
-        return tractionCoefficient;
-    }
+    public float getTractionCoefficient() { return tractionCoefficient; }
 
-    public float getForwardForce() {
-        return forwardForce;
-    }
+    public float getForwardForce() { return forwardForce; }
 
-    public float getReverseForce() {
-        return reverseForce;
-    }
+    public float getReverseForce() { return reverseForce; }
 }

@@ -49,39 +49,33 @@ public class Tire {
         body.setUserData(this);
     }
 
-    void updateFriction( boolean breaking)
+    public void update(KeyboardState keyboardState,boolean breaking)
     {
-        // Load traction here
-        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
+        velocity = body.getLinearVelocity();                                            //updating Velocity
+        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
+
+        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());                      //loading Material
         TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
 
         if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
         else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
 
-        velocity = body.getLinearVelocity();
-
-        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
-        currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMat();
+        currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMat(); //calculating and applying friction
         if(breaking)
             currentRelativeFriction.y = Math.signum(relativeVelocity.y) * tractionCoefficient * getMat();
         else
             currentRelativeFriction.y = Math.signum(relativeVelocity.y) * rollCoefficient * getMat();
         currentFriction = MathHelper.rotateVec2(currentRelativeFriction, body.getAngle());
         body.applyForce(currentFriction, body.getWorldCenter());
-    }
 
-    void updateDrive(KeyboardState keyboardState,boolean breaking) {
-        if(breaking)
+        if(breaking||(keyboardState==null))                                         //calculating and applying drive
             return;
         float currentForce = 0;
         if (keyboardState.isForward())
             currentForce = forwardForce;
         else if (keyboardState.isReverse())
             currentForce = reverseForce;
-        updateDrive(currentForce);
-    }
 
-    void updateDrive(float currentForce) {
         currentDrive = MathHelper.angleToUnitVec2(body.getAngle()).mul(currentForce);
         body.applyForce(currentDrive, body.getWorldCenter());
     }

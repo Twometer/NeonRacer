@@ -14,11 +14,10 @@ public class StaticCarPhysics extends AbstractCarPhysics {
 
     @Override
     public void update() {
+        carBody.update();
         for (Tire tire : tires) {
-            tire.updateFriction(false);
-            tire.updateDrive(0.0f);
+            tire.update(null,false);
         }
-        carBody.updateAirResistance();
     }
 
 }

@@ -84,7 +84,6 @@ public class CarBodyBuilder {
     }
 
     private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef) {
-        float maxDriveForce = front ? car.getMaxFrontForce() : car.getMaxBackForce();
         Tire tire = new Tire(gameContext, world, car.getRollCoefficient(), car.getTractionCoefficient(), car.getForwardForce(), car.getReverseForce());
         jointDef.bodyB = tire.getBody();
         jointDef.localAnchorA.set(x, y);
