@@ -31,26 +31,6 @@ public class Car implements IData {
 
     private Texture glowTexture;
 
-    @JsonProperty("max_forward_speed")
-    private float maxForwardSpeed;
-
-    @JsonProperty("max_reverse_speed")
-    private float maxReverseSpeed;
-
-    @JsonProperty("max_force_front")
-    private float maxFrontForce;
-
-    @JsonProperty("max_force_back")
-    private float maxBackForce;
-
-    @JsonProperty("max_lateral_force")
-    private float maxLateralForce;
-
-    @JsonProperty("primary_ability")
-    private String primaryAbilityId;
-
-    private Ability primaryAbility;
-
     @JsonProperty("drag_coefficient")
     private float dragCoefficient;
 
@@ -90,30 +70,6 @@ public class Car implements IData {
 
     public Texture getGlowTexture() {
         return glowTexture;
-    }
-
-    public float getMaxForwardSpeed() {
-        return maxForwardSpeed;
-    }
-
-    public float getMaxReverseSpeed() {
-        return maxReverseSpeed;
-    }
-
-    public float getMaxFrontForce() {
-        return maxFrontForce;
-    }
-
-    public float getMaxBackForce() {
-        return maxBackForce;
-    }
-
-    public float getMaxLateralForce() {
-        return maxLateralForce;
-    }
-
-    public Ability getPrimaryAbility() {
-        return primaryAbility;
     }
 
     public float getDragCoefficient() { return dragCoefficient; }
