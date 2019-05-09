@@ -3,6 +3,7 @@ package neonracer.render.engine.renderers;
 import neonracer.core.GameContext;
 import neonracer.gui.font.FontFamily;
 import neonracer.gui.font.FontRenderer;
+import neonracer.gui.util.Color;
 import neonracer.phys.entity.car.AbstractCarPhysics;
 import neonracer.phys.entity.car.DriveableCarPhysics;
 import neonracer.render.RenderContext;
@@ -42,24 +43,24 @@ public class DebugRenderer implements IRenderer {
         text.add("carvely=" + gameContext.getGameState().getPlayerEntity().getPhysics().getVelocity().y);
         text.add("cardragx=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getCarBody().getCurrentDrag().x);
         text.add("cardragy=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getCarBody().getCurrentDrag().y);
-//        text.add("tire1rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getBody().getAngle()));
+        //text.add("tire1rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getBody().getAngle()));
         text.add("tire1velx=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getVelocity().x);
         text.add("tire1vely=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getVelocity().y);
-//        text.add("tire1vela=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getVelocity()));
+        //text.add("tire1vela=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getVelocity()));
         text.add("tire1relvelx=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getRelativeVelocity().x);
         text.add("tire1relvely=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getRelativeVelocity().y);
-//        text.add("tire1relvela=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getRelativeVelocity()));
+        //text.add("tire1relvela=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getRelativeVelocity()));
         text.add("tire1relfrix=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getCurrentRelativeFriction().x);
         text.add("tire1relfriy=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getCurrentRelativeFriction().y);
-//        text.add("tire1relfria=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getCurrentRelativeFriction()));
-//        text.add("tire2rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(1).getBody().getAngle()));
-//        text.add("tire3rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(2).getBody().getAngle()));
-//        text.add("tire4rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(3).getBody().getAngle()));
+        //text.add("tire1relfria=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getCurrentRelativeFriction()));
+        //text.add("tire2rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(1).getBody().getAngle()));
+        //text.add("tire3rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(2).getBody().getAngle()));
+        //text.add("tire4rot=" + MathHelper.modAngle(((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(3).getBody().getAngle()));
         text.add("tire4mat=" + ((AbstractCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getTires().get(0).getMat());
         text.add("tire4mat=" + ((DriveableCarPhysics) gameContext.getGameState().getPlayerEntity().getPhysics()).getCarBody().dragCoefficient);
         for (String string : text)
         {
-            fontRenderer.draw(string,0.0f, lh * text.indexOf(string), 0.3f);
+            fontRenderer.draw(string,0.0f, lh * text.indexOf(string), 0.3f, Color.BLUE.toVector());
         }
         frames++;
         if (System.currentTimeMillis() - lastReset > 1000) {

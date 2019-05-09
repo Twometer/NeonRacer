@@ -46,7 +46,7 @@ public class FontRenderer {
     }
 
     public void draw(String text, float x, float y, float fontSize) {
-        draw(text, x, y, fontSize, new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+        draw(text, x, y, fontSize, new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
     }
 
     public Size drawCentered(String text, float x, float y, float fontSize, Vector4f color) {
