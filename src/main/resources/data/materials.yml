@@ -12,3 +12,8 @@
   texture: "textures/street.png"
   traction: 1.2
   drag: 27
+
+- id: "concrete"
+  texture: "textures/concrete.png"
+  traction: 0.4
+  drag: 40
