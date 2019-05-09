@@ -36,11 +36,14 @@ public abstract class Entity {
 
     private EntityPhysics physics;
 
+    private Map<String, String> params;
+
     @JsonCreator
     Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation, @JsonProperty("params") Map<String, String> params) {
         this.type = type;
         this.position = new Vector2f(x, y);
         this.rotation = rotation;
+        this.params = params;
     }
 
     public long getEntityId() {
@@ -97,4 +100,7 @@ public abstract class Entity {
         return getColorTexture().getHeight() / SCALE_FACTOR;
     }
 
+    public Map<String, String> getParams() {
+        return params;
+    }
 }
