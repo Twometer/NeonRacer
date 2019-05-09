@@ -16,12 +16,12 @@ import java.util.List;
 
 public class CarBodyBuilder {
 
-    public static CarBody build(GameContext context, EntityCar car) {
+    public static CarBody build(GameContext context, EntityCar car, BodyType type) {
         List<Tire> tires = new ArrayList<>();
         World world = context.getPhysicsEngine().getWorld();
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DYNAMIC;
+        bodyDef.type = type;
         bodyDef.position.set(Box2dHelper.toVec2(car.getPosition()));
         bodyDef.angle = car.getRotation();
 
