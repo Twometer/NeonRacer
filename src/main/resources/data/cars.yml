@@ -3,28 +3,28 @@
   desc: "Das Kart ist die kleinste und wendigste Rennmaschine."
   color_texture: "textures/kart.png"
   glow_texture: "textures/kart-glow.png"
-  drag_coefficient: -0.5
-  roll_coefficient: -0.75
-  traction_coefficient: -10
-  forward_force: 20
+  drag_coefficient: -0.4
+  roll_coefficient: -0.5
+  traction_coefficient: -12
+  forward_force: 32
   reverse_force: -10
 - id: "rocketcar"
   name: "Raketenauto"
   desc: "Das Raketenauto ist wahnsinnig schnell, dafür aber auch sehr groß."
   color_texture: "textures/rocketcar.png"
   glow_texture: "textures/rocketcar-glow.png"
-  drag_coefficient: -0.5
-  roll_coefficient: -0.75
-  traction_coefficient: -10
-  forward_force: 20
-  reverse_force: -10
+  drag_coefficient: -0.4
+  roll_coefficient: -0.55
+  traction_coefficient: -38
+  forward_force: 30
+  reverse_force: -20
 - id: "sportscar"
   name: "Sportwagen"
   desc: "Der Sportwagen bietet eine Balance zwischen Kurvenlage und Geschwindigkeit"
   color_texture: "textures/sportscar.png"
   glow_texture: "textures/sportscar-glow.png"
-  drag_coefficient: -0.5
-  roll_coefficient: -0.75
-  traction_coefficient: -10
-  forward_force: 20
-  reverse_force: -10
+  drag_coefficient: -0.4
+  roll_coefficient: -0.4
+  traction_coefficient: -30
+  forward_force: 24
+  reverse_force: -15
