@@ -2,7 +2,10 @@ package neonracer.server;
 
 import neonracer.network.proto.Race;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 class RaceManager {
@@ -38,8 +41,17 @@ class RaceManager {
     }
 
     private void notifyStart() {
-        Race.Start message = Race.Start.newBuilder().setElapsedMilliseconds(-START_TIMEOUT).setLapCount(LAP_COUNT).build();
-        parent.sendExcept(message, null);
+        Race.Start template = Race.Start.newBuilder().setElapsedMilliseconds(-START_TIMEOUT).setLapCount(LAP_COUNT).build();
+        List<Integer> positions = new ArrayList<>();
+        for (int i = 0; i < participants.size(); i++) {
+            positions.add(i);
+        }
+        Collections.shuffle(positions, new Random());
+        for (int i = 0; i < participants.size(); i++) {
+            Race.Start message = Race.Start.newBuilder(template).setPosition(positions.get(i)).build();
+            participants.get(i).trySend(message);
+        }
+        parent.sendExcept(template, null);
         open = false;
         System.out.println("Lobby closed. Race begins in " + START_TIMEOUT + "ms...");
     }

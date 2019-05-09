@@ -14,11 +14,15 @@ import neonracer.network.proto.Entity;
 import neonracer.network.proto.Race;
 import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.RenderContext;
+import neonracer.render.engine.Spline2D;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.joml.Vector2f;
 
 @LayoutFile("guis/cars.xml")
 public class CarSelectorScreen extends Screen {
+
+    private int position;
 
     private long totalWaitMs = 0;
 
@@ -113,12 +117,13 @@ public class CarSelectorScreen extends Screen {
 
     private void startRace() {
         if (selectedCar.isEmpty()) selectedCar = AVAILABLE_CARS[(int) (Math.random() * AVAILABLE_CARS.length)];
+
         EntityCar playerEntity = new EntityCar(context.getClient().newEntityId(), 0.0f, 0.0f, 0.0f, context.getDataManager().getCar(selectedCar));
+        System.out.println("Placing car at position " + position);
+        placeCar(playerEntity, 0.05f * position);
         playerEntity.setPhysics(CarPhysicsFactory.createDriveable(context, playerEntity));
         context.getGameState().setPlayerEntity(playerEntity);
         context.getGameState().addEntity(playerEntity);
-
-        // TODO position entity correctly
 
         context.getClient().send(Entity.Create.newBuilder()
                 .setType(playerEntity.getCar().getId())
@@ -128,11 +133,25 @@ public class CarSelectorScreen extends Screen {
                 .setRotation(playerEntity.getRotation()).build());
     }
 
+    private void placeCar(EntityCar car, float t) {
+        Spline2D spline = context.getGameState().getCurrentTrack().getTrackDef().getSpline2D();
+        float rotation = getTrackRotation(spline, t);
+        Vector2f position = spline.interpolate(t);
+        car.setRotation(rotation);
+        car.setPosition(position);
+    }
+
+    private float getTrackRotation(Spline2D spline, float t) {
+        Vector2f normal = spline.getNormal(t);
+        return (float) Math.atan2(normal.y, normal.x);
+    }
+
     @Subscribe
     public void onStart(Race.Start start) {
         if (start.getElapsedMilliseconds() < 0) {
             totalWaitMs = -start.getElapsedMilliseconds();
             startMs = System.currentTimeMillis() + totalWaitMs;
+            this.position = start.getPosition();
         }
     }
 

@@ -83,6 +83,10 @@ public class Client implements MessageHandler {
         }
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
     public long newEntityId() {
         return (long) clientId << 32 | (long) entityCounter++;
     }
