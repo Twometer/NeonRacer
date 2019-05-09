@@ -21,16 +21,12 @@ public class IngameScreen extends Screen {
     protected void onEvent(Event event) {
         super.onEvent(event);
         if (event instanceof TickEvent && context.getGameState().getPlayerEntity() != null) {
-            StringBuilder placement = new StringBuilder();
-            placement.append(context.getGameState().getPlayerEntity().getCarStats().getPlace());
-            placement.append("/");
             int totalCars = 0;
             for (Entity entity : context.getGameState().getEntities())
                 if (entity instanceof EntityCar)
                     totalCars++;
-            placement.append(totalCars);
-            lbPlacement.setText(placement.toString());
-            lbLap.setText("Runde: " + context.getGameState().getPlayerEntity().getCarStats().getLapsPassed());
+            lbPlacement.setText(String.format("%d/%d", context.getGameState().getPlayerEntity().getCarStats().getPlace(), totalCars));
+            lbLap.setText(String.format("Runde: %d/%d", context.getGameState().getPlayerEntity().getCarStats().getLapsPassed(), context.getGameState().getCurrentTotalLaps()));
         }
     }
 

@@ -11,6 +11,8 @@ public class GameState {
 
     private GameContext gameContext;
 
+    private int currentTotalLaps;
+
     private Track currentTrack;
 
     private EntityCar playerEntity;
@@ -27,6 +29,14 @@ public class GameState {
 
     public Track getCurrentTrack() {
         return currentTrack;
+    }
+
+    public int getCurrentTotalLaps() {
+        return currentTotalLaps;
+    }
+
+    public void setCurrentTotalLaps(int currentTotalLaps) {
+        this.currentTotalLaps = currentTotalLaps;
     }
 
     public void setCurrentTrack(Track currentTrack) {

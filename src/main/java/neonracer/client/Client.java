@@ -127,6 +127,7 @@ public class Client implements MessageHandler {
     @Override
     public void handle(Race.Start startRace) {
         EventBus.getDefault().post(startRace);
+        gameContext.getGameState().setCurrentTotalLaps(startRace.getLapCount());
     }
 
     @Override

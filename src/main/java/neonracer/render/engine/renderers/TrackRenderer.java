@@ -81,7 +81,7 @@ public class TrackRenderer implements IRenderer {
         Track track = gameContext.getGameState().getCurrentTrack();
         Mesh mesh = new Mesh(4);
         putVertices(track, mesh, 0.0f);
-        putVertices(track, mesh, 0.01f);
+        putVertices(track, mesh, 0.001f);
         Model model = Model.create(mesh, GL_TRIANGLE_STRIP);
         mesh.destroy();
         model.draw();
