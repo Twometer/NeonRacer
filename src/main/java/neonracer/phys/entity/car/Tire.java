@@ -49,7 +49,7 @@ public class Tire {
         body.setUserData(this);
     }
 
-    void updateFriction(Vec2 velocity)
+    void updateFriction( boolean breaking)
     {
         // Load traction here
         Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
@@ -58,27 +58,8 @@ public class Tire {
         if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
         else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
 
-        this.velocity = velocity;
+        velocity = body.getLinearVelocity();
 
-        updateFriction(false);
-    }
-
-    void updateFriction(Vec2 velocity, boolean breaking)
-    {
-        // Load traction here
-        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());
-        TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
-
-        if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
-        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
-
-        this.velocity = velocity;
-
-        updateFriction(breaking);
-    }
-
-    void updateFriction(boolean breaking)
-    {
         relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
         currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMat();
         if(breaking)
