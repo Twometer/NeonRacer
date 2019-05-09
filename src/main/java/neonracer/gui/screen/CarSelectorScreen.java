@@ -148,11 +148,11 @@ public class CarSelectorScreen extends Screen {
         Vector2f position = spline.interpolate(t);
         car.setPosition(position.add(0, car.getHeight() / 2));
 
-        Map<String, String> map = new HashMap<>();
+        /*Map<String, String> map = new HashMap<>();
         map.put("color_texture", "textures/kart_2.png");
         float rotation = getTrackRotation(spline, t);
         EntityStatic entityStatic = new EntityStatic("static", position.x, position.y, rotation, map);
-        context.getGameState().addEntity(entityStatic);
+        context.getGameState().addEntity(entityStatic);*/
 
         //car.setRotation(rotation);
     }
