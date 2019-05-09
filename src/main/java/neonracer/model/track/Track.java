@@ -12,6 +12,7 @@ import neonracer.render.engine.def.TrackDef;
 import neonracer.render.gl.core.Texture;
 import neonracer.resource.IData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,6 +85,9 @@ public class Track implements IData {
         this.trackDef = defBuilder.build(this);
 
         this.collider = ColliderFactory.createTrackCollider(this);
+
+        if (entities == null)
+            entities = new ArrayList<>();
     }
 
     public String getId() {

@@ -2,7 +2,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition>*</RowDefinition>
+            <RowDefinition>0</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
             <RowDefinition>Auto</RowDefinition>
             <RowDefinition>Auto</RowDefinition>
             <RowDefinition>Auto</RowDefinition>
@@ -12,8 +13,12 @@
             <ColumnDefinition>*</ColumnDefinition>
         </Grid.ColumnDefinitions>
         <ImageView Margin="10" Src="textures/logo.png" Grid.Row="1" HorizontalAlignment="Center"/>
-        <TextBox Margin="10" Grid.Row="2" HorizontalAlignment="Center" Width="500" Height="50" FontFamily="Title"/>
-        <Button Margin="30" Grid.Row="3" Text="Verbinden" HorizontalAlignment="Center" FontFamily="Title"
+        <TextBox Id="tbIpAddress" Margin="25" Hint="Server IP" Grid.Row="2" HorizontalAlignment="Center" Width="500"
+                 Height="50" FontFamily="Title"/>
+        <TextBox Id="tbNickname" Margin="25" Hint="Nickname" Grid.Row="3" HorizontalAlignment="Center" Width="500"
+                 Height="50" FontFamily="Title"/>
+        <Button Id="btnConnect" Margin="30" Grid.Row="4" Text="Verbinden" HorizontalAlignment="Center"
+                FontFamily="Title"
                 FontColor="187,255,255" Width="250" FontSize="0.9"/>
     </Grid>
 

@@ -4,16 +4,18 @@ import neonracer.core.GameContext;
 import neonracer.gui.GuiManager;
 import neonracer.gui.events.CharInputEvent;
 import neonracer.gui.events.ClickEvent;
+import neonracer.gui.events.TickEvent;
+import neonracer.gui.screen.ConnectScreen;
 import neonracer.gui.screen.IngameScreen;
-import neonracer.gui.screen.MainScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
-import neonracer.phys.entity.car.CarPhysicsFactory;
+import neonracer.network.proto.Entity;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
+import neonracer.stats.StatsCalculator;
 import neonracer.util.Log;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -30,6 +32,8 @@ public class MasterRenderer {
 
     private PostProcessing postProcessing;
 
+    private StatsCalculator statsCalculator;
+
     private boolean lastPressed;
 
     private IRenderer[] renderers = new IRenderer[]{
@@ -43,6 +47,7 @@ public class MasterRenderer {
         this.gameWindow = gameContext.getGameWindow();
         this.renderContext = new RenderContext(gameContext);
         this.guiManager = new GuiManager(renderContext);
+        this.statsCalculator = new StatsCalculator(gameContext);
     }
 
     public void startLoop() {
@@ -77,21 +82,12 @@ public class MasterRenderer {
 
         Track testTrack = gameContext.getDataManager().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
-        EntityCar playerEntity = new EntityCar(0, 0.0f, 0.0f, 0.0f, gameContext.getDataManager().getCar("kart"));
-        playerEntity.setPhysics(CarPhysicsFactory.createDriveable(gameContext, playerEntity));
-        gameContext.getGameState().setPlayerEntity(playerEntity);
-        gameContext.getGameState().addEntity(playerEntity);
-
-        for (int i = 0; i < 30; i += 2) {
-            EntityCar e = new EntityCar(i, i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[i % 3]);
-            gameContext.getGameState().addEntity(e);
-        }
 
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);
 
         guiManager.show(new IngameScreen());
-        guiManager.show(new MainScreen());
+        guiManager.show(new ConnectScreen());
 
         gameContext.getTimer().reset();
 
@@ -121,6 +117,8 @@ public class MasterRenderer {
         handleControls();
     }
 
+    private static final TickEvent TICK_EVENT = new TickEvent();
+
     private void tick() {
         GameWindow gameWindow = gameContext.getGameWindow();
         gameContext.getKeyboardState().update(gameWindow);
@@ -128,7 +126,17 @@ public class MasterRenderer {
 
         gameContext.getPhysicsEngine().onTick();
 
-        renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
+        guiManager.raiseEvent(TICK_EVENT);
+
+        if (gameContext.getGameState().isRacing()) {
+            renderContext.getCamera().smoothFollow(gameContext.getGameState().getPlayerEntity());
+
+            EntityCar player = gameContext.getGameState().getPlayerEntity();
+            gameContext.getClient().send(Entity.Update.newBuilder().setEntityId(player.getEntityId()).setX(player.getPosition().x).setY(player.getPosition().y).setLapsPassed(player.getCarStats().getLapsPassed()).setRotation(player.getRotation()).build());
+
+            statsCalculator.update();
+        }
+
     }
 
     private void handleControls() {

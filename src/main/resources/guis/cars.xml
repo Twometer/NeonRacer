@@ -6,6 +6,7 @@
             <RowDefinition>*</RowDefinition>
             <RowDefinition>Auto</RowDefinition>
             <RowDefinition>Auto</RowDefinition>
+            <RowDefinition>Auto</RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition>*</ColumnDefinition>
@@ -23,18 +24,23 @@
                 <ColumnDefinition>Auto</ColumnDefinition>
                 <ColumnDefinition>*</ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ImageButton Grid.Row="0" Grid.Column="1" Margin="40" HorizontalAlignment="Center"
+            <ImageButton Id="kart" Grid.Row="0" Grid.Column="1" Margin="40" HorizontalAlignment="Center"
                          VerticalAlignment="Center"
                          Src="textures/kart.png" Width="150" Height="150"/>
-            <ImageButton Grid.Row="0" Grid.Column="2" Margin="40" HorizontalAlignment="Center"
+            <ImageButton Id="sportscar" Grid.Row="0" Grid.Column="2" Margin="40" HorizontalAlignment="Center"
                          VerticalAlignment="Center"
                          Src="textures/sportscar.png" Width="150" Height="150"/>
-            <ImageButton Grid.Row="0" Grid.Column="3" Margin="40" HorizontalAlignment="Center"
+            <ImageButton Id="rocketcar" Grid.Row="0" Grid.Column="3" Margin="40" HorizontalAlignment="Center"
                          VerticalAlignment="Center"
                          Src="textures/rocketcar.png" Width="150" Height="150"/>
         </Grid>
-        <ProgressBar Margin="20" Value="75" Grid.Row="2" HorizontalAlignment="Center" Height="15" Width="550"/>
-        <Label Margin="40" Text="Noch 10 Sekunden" Grid.Row="3" HorizontalAlignment="Center"/>
+        <Label Id="lbDescription" Margin="20"
+               Text="Such dir ein Auto aus, um mehr Informationen darüber angezeigt zu bekommen." Grid.Row="2"
+               HorizontalAlignment="Fill" CenterText="True" FontSize="0.4" FontFamily="Title"/>
+        <ProgressBar Id="pbState" Margin="20" Value="100" Grid.Row="3" HorizontalAlignment="Center" Height="15"
+                     Width="550"/>
+        <Label Id="lbState" Margin="40" Text="Warte auf weitere Spieler" Grid.Row="4" HorizontalAlignment="Fill"
+               CenterText="True"/>
     </Grid>
 
 </Screen>

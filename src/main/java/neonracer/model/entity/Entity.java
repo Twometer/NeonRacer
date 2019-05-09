@@ -26,7 +26,7 @@ public abstract class Entity {
 
     private static final float SCALE_FACTOR = 150.f;
 
-    int entityId;
+    long entityId;
 
     private String type;
 
@@ -38,6 +38,8 @@ public abstract class Entity {
 
     private Map<String, String> params;
 
+    private boolean inFrustum = true;
+
     @JsonCreator
     Entity(@JsonProperty("type") String type, @JsonProperty("x") float x, @JsonProperty("y") float y, @JsonProperty("r") float rotation, @JsonProperty("params") Map<String, String> params) {
         this.type = type;
@@ -46,7 +48,7 @@ public abstract class Entity {
         this.params = params;
     }
 
-    public int getEntityId() {
+    public long getEntityId() {
         return entityId;
     }
 
@@ -74,6 +76,14 @@ public abstract class Entity {
      */
     public void setRotation(float rotation) {
         this.rotation = rotation;
+    }
+
+    public boolean isInFrustum() {
+        return inFrustum;
+    }
+
+    public void setInFrustum(boolean inFrustum) {
+        this.inFrustum = inFrustum;
     }
 
     public abstract Texture getColorTexture();

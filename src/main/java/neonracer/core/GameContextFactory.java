@@ -1,5 +1,6 @@
 package neonracer.core;
 
+import neonracer.client.Client;
 import neonracer.gui.input.KeyboardState;
 import neonracer.gui.input.MouseState;
 import neonracer.phys.PhysicsEngine;
@@ -21,7 +22,8 @@ public class GameContextFactory {
         Timer timer = new Timer(60);
         MouseState mouseState = new MouseState();
         KeyboardState keyboardState = new KeyboardState();
-        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, timer, mouseState, keyboardState);
+        Client client = new Client();
+        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, timer, mouseState, keyboardState, client);
     }
 
     public static GameContext createForDesigner() {
@@ -33,7 +35,7 @@ public class GameContextFactory {
         PhysicsEngine physicsEngine = new PhysicsEngine();
         MouseState mouseState = new MouseState();
         KeyboardState keyboardState = new KeyboardState();
-        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, null, mouseState, keyboardState);
+        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, null, mouseState, keyboardState, null);
     }
 
 }
