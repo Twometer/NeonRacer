@@ -16,6 +16,8 @@ public class StaticPhysics implements EntityPhysics {
 
     private Body body;
 
+    private Fixture fixture;
+
     public StaticPhysics(Entity entity, Body body) {
         this.entity = entity;
         this.body = body;
@@ -35,7 +37,8 @@ public class StaticPhysics implements EntityPhysics {
         fixtureDef.density = 1f;
 
         Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(entity);
         return new StaticPhysics(entity, body);
     }
 
