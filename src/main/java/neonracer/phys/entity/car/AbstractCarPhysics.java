@@ -20,14 +20,17 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
     RevoluteJoint frJoint;
     CarBody carBody;
     private Body body;
+    private final float dragCoefficient;
+    Vec2 relativeVelocity;
 
-    AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint) {
+    AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient) {
         this.gameContext = gameContext;
         this.carBody = carBody;
         this.body = carBody.getBody();
         this.tires = tires;
         this.flJoint = flJoint;
         this.frJoint = frJoint;
+        this.dragCoefficient = dragCoefficient;
     }
 
     @Override
@@ -40,14 +43,25 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
         return body.getAngle();
     }
 
-    public Vec2 getVelocity(){
+    @Override
+    public void update() {
+        relativeVelocity = MathHelper.rotateVec2(getVelocity(), -body.getAngle());
+        Vec2 currentDrag = getVelocity().mul(dragCoefficient * getVelocity().length());
+        body.applyForce(currentDrag, body.getWorldCenter());
+    }
+
+    public Vec2 getVelocity() {
         Vec2 vel = body.getLinearVelocity();
-        if(vel == null)
+        if (vel == null)
             return MathHelper.nullVector;
         return vel;
     }
 
-    public List<Tire> getTires(){return tires;}
+    public List<Tire> getTires() {
+        return tires;
+    }
 
-    public CarBody getCarBody() { return carBody; }
+    public CarBody getCarBody() {
+        return carBody;
+    }
 }

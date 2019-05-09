@@ -1,11 +1,8 @@
 package neonracer.phys.entity.car.body;
 
-import neonracer.gui.input.KeyboardState;
 import neonracer.phys.entity.car.Tire;
-import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
-import org.jbox2d.common.Vec2;
 
 import java.util.List;
 
@@ -19,18 +16,11 @@ public class CarBody {
 
     private RevoluteJoint rightJoint;
 
-    public float dragCoefficient;
-
-    private Vec2 currentDrag = new Vec2(0,0);
-    private Vec2 velocity = new Vec2(0,0);
-    private Vec2 relativeVelocity = new Vec2(0,0);
-
-    CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint, float dragCoefficient) {
+    CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint) {
         this.body = body;
         this.tires = tires;
         this.leftJoint = leftJoint;
         this.rightJoint = rightJoint;
-        this.dragCoefficient = dragCoefficient;
     }
 
     public Body getBody() {
@@ -48,22 +38,4 @@ public class CarBody {
     public RevoluteJoint getRightJoint() {
         return rightJoint;
     }
-
-    public Vec2 getCurrentDrag() { return currentDrag; }
-
-    public Vec2 getVelocity() { return body.getLinearVelocity(); }
-
-    public void update()
-    {
-        velocity = getVelocity();
-        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
-        currentDrag = velocity.mul(dragCoefficient*velocity.length());
-        body.applyForce(currentDrag, body.getWorldCenter());
-    }
-
-    public boolean checkBreak(KeyboardState kbs)
-    {
-        return((kbs.isForward()&&(relativeVelocity.y<-0.1))||(kbs.isReverse()&&(relativeVelocity.y>0.1)));
-    }
-
 }

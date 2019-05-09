@@ -80,7 +80,7 @@ public class CarBodyBuilder {
         RevoluteJoint rightJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontRight);
 
-        return new CarBody(body, tires, leftJoint, rightJoint, carDef.getDragCoefficient());
+        return new CarBody(body, tires, leftJoint, rightJoint);
     }
 
     private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef) {
