@@ -10,14 +10,19 @@ import neonracer.gui.widget.ImageButton;
 import neonracer.gui.widget.Label;
 import neonracer.gui.widget.ProgressBar;
 import neonracer.model.entity.EntityCar;
+import neonracer.model.entity.EntityStatic;
 import neonracer.network.proto.Entity;
 import neonracer.network.proto.Race;
 import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.Spline2D;
+import neonracer.util.Log;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.joml.Vector2f;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @LayoutFile("guis/cars.xml")
 public class CarSelectorScreen extends Screen {
@@ -119,9 +124,13 @@ public class CarSelectorScreen extends Screen {
         if (selectedCar.isEmpty()) selectedCar = AVAILABLE_CARS[(int) (Math.random() * AVAILABLE_CARS.length)];
 
         EntityCar playerEntity = new EntityCar(context.getClient().newEntityId(), 0.0f, 0.0f, 0.0f, context.getDataManager().getCar(selectedCar));
-        System.out.println("Placing car at position " + position);
-        placeCar(playerEntity, 0.05f * position);
+
+        float t = 0.05f * position;
+        Log.i(String.format("Placing car at {pos=%d, t=%s}", position, t));
+        placeCar(playerEntity, t);
+
         playerEntity.setPhysics(CarPhysicsFactory.createDriveable(context, playerEntity));
+
         context.getGameState().setPlayerEntity(playerEntity);
         context.getGameState().addEntity(playerEntity);
 
@@ -135,10 +144,17 @@ public class CarSelectorScreen extends Screen {
 
     private void placeCar(EntityCar car, float t) {
         Spline2D spline = context.getGameState().getCurrentTrack().getTrackDef().getSpline2D();
-        float rotation = getTrackRotation(spline, t);
+
         Vector2f position = spline.interpolate(t);
-        car.setRotation(rotation);
-        car.setPosition(position);
+        car.setPosition(position.add(0, car.getHeight() / 2));
+
+        Map<String, String> map = new HashMap<>();
+        map.put("color_texture", "textures/kart_2.png");
+        float rotation = getTrackRotation(spline, t);
+        EntityStatic entityStatic = new EntityStatic("static", position.x, position.y, rotation, map);
+        context.getGameState().addEntity(entityStatic);
+
+        //car.setRotation(rotation);
     }
 
     private float getTrackRotation(Spline2D spline, float t) {
