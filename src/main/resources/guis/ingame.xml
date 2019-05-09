@@ -16,7 +16,7 @@
         </Border>
 
         <Border Grid.Row="2" Grid.Column="0">
-            <Label Id="lbLap" Margin="0" Text="Lap: 0" FontSize="0.5"/>
+            <Label Id="lbLap" Margin="0" Text="Runde: 0" FontSize="0.5"/>
         </Border>
 
     </Grid>

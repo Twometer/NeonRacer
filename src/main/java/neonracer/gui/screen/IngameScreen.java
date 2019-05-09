@@ -30,7 +30,7 @@ public class IngameScreen extends Screen {
                     totalCars++;
             placement.append(totalCars);
             lbPlacement.setText(placement.toString());
-            lbLap.setText(String.valueOf(context.getGameState().getPlayerEntity().getCarStats().getLapsPassed()));
+            lbLap.setText("Runde: " + context.getGameState().getPlayerEntity().getCarStats().getLapsPassed());
         }
     }
 
