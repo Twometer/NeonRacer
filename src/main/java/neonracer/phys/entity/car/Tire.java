@@ -35,10 +35,10 @@ public class Tire {
 
     public Tire(GameContext gameContext, World world, float rollCoefficient, float tractionCoefficient, float forwardForce, float reverseForce) {
         this.gameContext = gameContext;
-        /*this.rollCoefficient = rollCoefficient;
+        this.rollCoefficient = rollCoefficient;
         this.tractionCoefficient = tractionCoefficient;
         this.forwardForce = forwardForce;
-        this.reverseForce = reverseForce;*/
+        this.reverseForce = reverseForce;
 
         BodyDef def = new BodyDef();
         def.type = BodyType.DYNAMIC;
