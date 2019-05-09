@@ -23,6 +23,7 @@ public class CarBodyBuilder {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(Box2dHelper.toVec2(car.getPosition()));
+        bodyDef.angle = car.getRotation();
 
         PolygonShape shape = new PolygonShape();
 
