@@ -22,6 +22,8 @@ import org.joml.Vector2f;
 @LayoutFile("guis/cars.xml")
 public class CarSelectorScreen extends Screen {
 
+    private int position;
+
     private long totalWaitMs = 0;
 
     private long startMs = 0;
@@ -117,7 +119,8 @@ public class CarSelectorScreen extends Screen {
         if (selectedCar.isEmpty()) selectedCar = AVAILABLE_CARS[(int) (Math.random() * AVAILABLE_CARS.length)];
 
         EntityCar playerEntity = new EntityCar(context.getClient().newEntityId(), 0.0f, 0.0f, 0.0f, context.getDataManager().getCar(selectedCar));
-        placeCar(playerEntity, 0.05f * context.getClient().getClientId());
+        System.out.println("Placing car at position " + position);
+        placeCar(playerEntity, 0.05f * position);
         playerEntity.setPhysics(CarPhysicsFactory.createDriveable(context, playerEntity));
         context.getGameState().setPlayerEntity(playerEntity);
         context.getGameState().addEntity(playerEntity);
@@ -148,6 +151,7 @@ public class CarSelectorScreen extends Screen {
         if (start.getElapsedMilliseconds() < 0) {
             totalWaitMs = -start.getElapsedMilliseconds();
             startMs = System.currentTimeMillis() + totalWaitMs;
+            this.position = start.getPosition();
         }
     }
 
