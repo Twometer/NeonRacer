@@ -83,10 +83,10 @@ public class MasterRenderer {
         gameContext.getGameState().setPlayerEntity(playerEntity);
         gameContext.getGameState().addEntity(playerEntity);
 
-        for (int i = 0; i < 30; i += 2) {
-            EntityCar e = new EntityCar(i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[i % 3]);
-            gameContext.getGameState().addEntity(e);
-        }
+//        for (int i = 0; i < 30; i += 2) {
+//            EntityCar e = new EntityCar(i, 0.0f, 3.0f, gameContext.getDataManager().getCars()[i % 3]);
+//            gameContext.getGameState().addEntity(e);
+//        }
 
         for (IRenderer renderer : renderers)
             renderer.setup(renderContext, gameContext);

@@ -14,7 +14,7 @@ public class StaticCarPhysics extends AbstractCarPhysics {
 
     @Override
     public void update() {
-        super.update();
+        super.update(false, false);
         for (Tire tire : tires) {
             tire.update(null, false);
         }

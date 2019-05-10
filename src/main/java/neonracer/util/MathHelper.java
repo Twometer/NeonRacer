@@ -32,4 +32,6 @@ public class MathHelper {
         return new Vec2((float) ((vec.x * Math.cos(a)) - (vec.y * Math.sin(a))), (float) ((vec.x * Math.sin(a)) + (vec.y * Math.cos(a))));
     }
 
+    public static void noOp() {}
+
 }

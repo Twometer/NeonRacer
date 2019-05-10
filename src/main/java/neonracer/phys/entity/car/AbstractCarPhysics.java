@@ -5,23 +5,24 @@ import neonracer.phys.Box2dHelper;
 import neonracer.phys.entity.EntityPhysics;
 import neonracer.phys.entity.car.body.CarBody;
 import neonracer.util.MathHelper;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.joml.Vector2f;
-import org.jbox2d.common.Vec2;
 
 import java.util.List;
 
 public abstract class AbstractCarPhysics implements EntityPhysics {
 
+    private final float dragCoefficient;
     protected GameContext gameContext;
     List<Tire> tires;
     RevoluteJoint flJoint;
     RevoluteJoint frJoint;
     CarBody carBody;
-    private Body body;
-    private final float dragCoefficient;
     Vec2 relativeVelocity;
+    Vec2 currentDrag = new Vec2(0, 0);
+    private Body body;
 
     AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient) {
         this.gameContext = gameContext;
@@ -44,9 +45,15 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
     }
 
     @Override
-    public void update() {
+    abstract public void update();
+
+    public void update(boolean driving, boolean breaking) {
+        if (((!driving) || (!breaking)) && (body.getLinearVelocity().length() < (tires.get(0).getCurrentRelativeFriction().length() / gameContext.getTimer().getTicksPerSecond()))) {
+            body.setLinearVelocity(MathHelper.nullVector);
+            body.setAngularVelocity(0);
+        }
         relativeVelocity = MathHelper.rotateVec2(getVelocity(), -body.getAngle());
-        Vec2 currentDrag = getVelocity().mul(dragCoefficient * getVelocity().length());
+        currentDrag = getVelocity().mul(dragCoefficient * getVelocity().length());
         body.applyForce(currentDrag, body.getWorldCenter());
     }
 
@@ -55,6 +62,10 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
         if (vel == null)
             return MathHelper.nullVector;
         return vel;
+    }
+
+    public Vec2 getCurrentDrag() {
+        return currentDrag;
     }
 
     public List<Tire> getTires() {
