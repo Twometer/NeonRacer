@@ -34,6 +34,16 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
         this.dragCoefficient = dragCoefficient;
     }
 
+    AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient, float axleRatio) {
+        this.gameContext = gameContext;
+        this.carBody = carBody;
+        this.body = carBody.getBody();
+        this.tires = tires;
+        this.flJoint = flJoint;
+        this.frJoint = frJoint;
+        this.dragCoefficient = dragCoefficient;
+    }
+
     @Override
     public Vector2f getPosition() {
         return Box2dHelper.toVector2f(body.getPosition());

@@ -46,6 +46,9 @@ public class Car implements IData {
     @JsonProperty("reverse_force")
     private float reverseForce;
 
+    @JsonProperty("axle_ratio")
+    private float axleRatio;
+
     @Override
     public void initialize(GameContext context) {
         colorTexture = context.getTextureProvider().getTexture(colorTexturePath);
@@ -91,4 +94,6 @@ public class Car implements IData {
     public float getReverseForce() {
         return reverseForce;
     }
+
+    public float getAxleRatio() { return axleRatio; }
 }

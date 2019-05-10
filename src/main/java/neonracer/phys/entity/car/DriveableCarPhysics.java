@@ -13,8 +13,8 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
     public boolean breaking = false;
     public boolean driving = false;
 
-    DriveableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient) {
-        super(gameContext, carBody, tires, flJoint, frJoint, dragCoefficient);
+    DriveableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient, float axleRatio) {
+        super(gameContext, carBody, tires, flJoint, frJoint, dragCoefficient, axleRatio);
     }
 
     @Override
