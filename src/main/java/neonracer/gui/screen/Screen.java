@@ -1,5 +1,6 @@
 package neonracer.gui.screen;
 
+import neonracer.core.GameContext;
 import neonracer.gui.GuiManager;
 import neonracer.gui.widget.base.Container;
 import neonracer.gui.widget.base.Widget;
@@ -15,9 +16,11 @@ public abstract class Screen extends Container {
 
     private String background;
 
-    private boolean loaded;
+    GameContext context;
 
     GuiManager parent;
+
+    private boolean loaded;
 
     public String getBackground() {
         return background;
@@ -29,6 +32,10 @@ public abstract class Screen extends Container {
 
     public void setParent(GuiManager parent) {
         this.parent = parent;
+    }
+
+    public void setContext(GameContext context) {
+        this.context = context;
     }
 
     @Override

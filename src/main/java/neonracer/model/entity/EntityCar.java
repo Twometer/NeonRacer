@@ -4,12 +4,15 @@ import neonracer.core.GameContext;
 import neonracer.model.car.Car;
 import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.gl.core.Texture;
+import neonracer.stats.CarStats;
 
 public class EntityCar extends Entity {
 
     private Car car;
 
-    public EntityCar(int entityId, float x, float y, float rotation, Car car) {
+    private CarStats carStats = new CarStats();
+
+    public EntityCar(long entityId, float x, float y, float rotation, Car car) {
         super("car", x, y, rotation, null);
         this.entityId = entityId;
         this.car = car;
@@ -17,6 +20,10 @@ public class EntityCar extends Entity {
 
     public Car getCar() {
         return car;
+    }
+
+    public CarStats getCarStats() {
+        return carStats;
     }
 
     @Override

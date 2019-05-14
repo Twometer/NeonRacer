@@ -12,6 +12,16 @@ public class Label extends Widget {
 
     private String text;
 
+    private boolean centerText;
+
+    public boolean isCenterText() {
+        return centerText;
+    }
+
+    public void setCenterText(boolean centerText) {
+        this.centerText = centerText;
+    }
+
     public String getText() {
         return text;
     }
@@ -29,7 +39,10 @@ public class Label extends Widget {
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
         if (renderPass == RenderPass.COLOR)
-            fontRenderer.draw(text, getX(), getY(), getFontSize(), getFontColor().toVector(1.0f));
+            if (isCenterText())
+                fontRenderer.drawCentered(text, getX() + getWidth() / 2, getY() + getHeight() / 2, getFontSize(), getFontColor().toVector(1.0f));
+            else
+                fontRenderer.draw(text, getX(), getY(), getFontSize(), getFontColor().toVector(1.0f));
     }
 
     @Override

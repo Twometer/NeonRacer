@@ -1,6 +1,7 @@
 package neonracer.phys.entity.item;
 
 import neonracer.core.GameContext;
+import neonracer.model.entity.Entity;
 import neonracer.model.entity.EntityStatic;
 import neonracer.phys.Box2dHelper;
 import neonracer.phys.entity.EntityPhysics;
@@ -11,9 +12,14 @@ import org.joml.Vector2f;
 
 public class StaticPhysics implements EntityPhysics {
 
+    private Entity entity;
+
     private Body body;
 
-    private StaticPhysics(Body body) {
+    private Fixture fixture;
+
+    public StaticPhysics(Entity entity, Body body) {
+        this.entity = entity;
         this.body = body;
     }
 
@@ -22,6 +28,7 @@ public class StaticPhysics implements EntityPhysics {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.STATIC;
         bodyDef.position.set(Box2dHelper.toVec2(entity.getPosition()));
+        bodyDef.angle = entity.getRotation();
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(entity.getWidth() / 2, entity.getHeight() / 2, new Vec2(0f, entity.getHeight() / 2), 0f);
@@ -30,8 +37,9 @@ public class StaticPhysics implements EntityPhysics {
         fixtureDef.density = 1f;
 
         Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
-        return new StaticPhysics(body);
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(entity);
+        return new StaticPhysics(entity, body);
     }
 
     @Override
@@ -41,7 +49,7 @@ public class StaticPhysics implements EntityPhysics {
 
     @Override
     public float getRotation() {
-        return body.getAngle();
+        return entity.getRotation();
     }
 
     @Override

@@ -35,6 +35,7 @@ message Start {
     /* Negative values indicate time until race start to select a car. */
     sint32 elapsedMilliseconds = 1;
     uint32 lapCount = 2;
+    uint32 position = 3;
 }
 
 /* A race ends when all participants have sent this packet. */

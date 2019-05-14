@@ -4,7 +4,8 @@ import neonracer.render.gl.GlLoader;
 import neonracer.resource.ResourceLoader;
 import neonracer.util.Log;
 import org.joml.Vector2f;
-import org.lwjgl.glfw.*;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 
 import java.awt.image.BufferedImage;
