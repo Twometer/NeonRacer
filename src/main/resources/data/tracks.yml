@@ -3,8 +3,8 @@
   desc: "This track is used for testing"
   thumbnail: "textures/test.png"
   samples: 1000
-  background_material: grass
-  foreground_material: street
+  background_material: "street"
+  foreground_material: "concrete"
   path:
         - {x: 77, y: 77, w: 11}
         - {x: 63, y: 48, w: 12}
