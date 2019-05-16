@@ -8,6 +8,7 @@ import org.joml.Vector2f;
 public class Camera {
 
     private static final float ROTATION_SPEED = 0.01f;
+    private static final float CENTER_OFFSET = 5.0f; // Distance from player to center
 
     private GameContext gameContext;
 
@@ -60,9 +61,11 @@ public class Camera {
         float aspectRatio = gameContext.getGameWindow().getHeight() / (float) gameContext.getGameWindow().getWidth();
         float cameraWidth = 1 / zoomFactor;
         float cameraHeight = cameraWidth * aspectRatio;
-        matrix.setOrtho2D(-cameraWidth / 2, +cameraWidth / 2, -cameraHeight / 2, +cameraHeight / 2);
-        matrix = matrix.mul(new Matrix4f().setRotationXYZ(0, 0, -rotation));
-        matrix = matrix.mul(new Matrix4f().setTranslation(-centerPoint.x, -centerPoint.y, 0));
+        float centerX = centerPoint.x + ((float) Math.sin(-rotation)) * CENTER_OFFSET;
+        float centerY = centerPoint.y + ((float) Math.cos(-rotation)) * CENTER_OFFSET;
+        matrix = matrix.setOrtho2D(-cameraWidth / 2, +cameraWidth / 2, -cameraHeight / 2, +cameraHeight / 2)
+                .mul(new Matrix4f().setRotationXYZ(0, 0, -rotation))
+                .mul(new Matrix4f().setTranslation(-centerX, -centerY, 0));
         return matrix;
     }
 
