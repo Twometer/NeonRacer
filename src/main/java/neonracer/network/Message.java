@@ -23,6 +23,8 @@ public class Message {
     };
 
     public static Message get(int id) {
+        if (id >= messages.length)
+            throw new IllegalArgumentException("The message ID must be smaller than " + messages.length);
         return messages[id];
     }
 

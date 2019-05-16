@@ -137,6 +137,7 @@ class RemoteClient implements MessageHandler, Closeable {
             // Delete race when all clients have left
             if (race.getParticipants().isEmpty()) {
                 parent.setRace(null);
+                System.out.println("The current race has been aborted.");
             }
         }
     }
@@ -159,6 +160,7 @@ class RemoteClient implements MessageHandler, Closeable {
             // Delete race when all clients have left
             if (race.getParticipants().isEmpty()) {
                 parent.setRace(null);
+                System.out.println("The current race has been finished.");
             }
         }
     }
