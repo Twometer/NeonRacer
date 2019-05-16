@@ -1,5 +1,7 @@
 package neonracer.core;
 
+import neonracer.client.DebugClient;
+import neonracer.client.NetworkClient;
 import neonracer.gui.input.KeyboardState;
 import neonracer.gui.input.MouseState;
 import neonracer.phys.PhysicsEngine;
@@ -21,7 +23,22 @@ public class GameContextFactory {
         Timer timer = new Timer(60);
         MouseState mouseState = new MouseState();
         KeyboardState keyboardState = new KeyboardState();
-        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, timer, mouseState, keyboardState);
+        NetworkClient client = new NetworkClient();
+        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, timer, mouseState, keyboardState, client, false);
+    }
+
+    public static GameContext createForDebug() {
+        GameWindow gameWindow = new GameWindow(800, 600, BuildInfo.getGameTitle() + " - Debug");
+        TextureProvider textureProvider = new TextureProvider();
+        ShaderProvider shaderProvider = new ShaderProvider();
+        DataManager dataManager = new DataManager();
+        GameState gameState = new GameState();
+        PhysicsEngine physicsEngine = new PhysicsEngine();
+        Timer timer = new Timer(60);
+        MouseState mouseState = new MouseState();
+        KeyboardState keyboardState = new KeyboardState();
+        DebugClient client = new DebugClient();
+        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, timer, mouseState, keyboardState, client, true);
     }
 
     public static GameContext createForDesigner() {
@@ -30,9 +47,10 @@ public class GameContextFactory {
         ShaderProvider shaderProvider = new ShaderProvider();
         DataManager dataManager = new DataManager();
         GameState gameState = new GameState();
+        PhysicsEngine physicsEngine = new PhysicsEngine();
         MouseState mouseState = new MouseState();
         KeyboardState keyboardState = new KeyboardState();
-        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, null, null, mouseState, keyboardState);
+        return new GameContext(gameWindow, textureProvider, shaderProvider, dataManager, gameState, physicsEngine, null, mouseState, keyboardState, null, false);
     }
 
 }

@@ -17,6 +17,8 @@ public class ImageButton extends Widget {
 
     private Texture texture;
 
+    private boolean selected;
+
     private Animator glowAnimator = new Animator(0.4f, 5.0f, 8.0f);
 
     public Texture getTexture() {
@@ -35,6 +37,14 @@ public class ImageButton extends Widget {
         this.src = src;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     @Override
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
@@ -43,7 +53,9 @@ public class ImageButton extends Widget {
 
     @Override
     public void draw(RenderContext renderContext, RenderPass renderPass) {
-        glowAnimator.update(isMouseHover());
+        glowAnimator.update(isMouseHover() || isSelected());
+
+        float multiplier = isSelected() ? 2.0f : 1.0f;
 
         if (renderPass == RenderPass.COLOR) {
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), BACKGROUND);
@@ -53,7 +65,7 @@ public class ImageButton extends Widget {
             renderContext.getPrimitiveRenderer().drawTexturedRect(getX() + getWidth() / 2f - scaledWidth / 2f, getY() + getHeight() / 2f - scaledHeight / 2f, scaledWidth, scaledHeight);
             texture.unbind();
         } else if (renderPass == RenderPass.GLOW) {
-            renderContext.getPrimitiveRenderer().drawRect(getX() - glowAnimator.getValue(), getY() - glowAnimator.getValue(), getWidth() + glowAnimator.getValue() * 2, getHeight() + glowAnimator.getValue() * 2, GLOW);
+            renderContext.getPrimitiveRenderer().drawRect(getX() - glowAnimator.getValue() * multiplier, getY() - glowAnimator.getValue() * multiplier, getWidth() + glowAnimator.getValue() * 2 * multiplier, getHeight() + glowAnimator.getValue() * 2 * multiplier, GLOW);
             renderContext.getPrimitiveRenderer().drawRect(getX(), getY(), getWidth(), getHeight(), Color.BLACK.toVector());
         }
     }

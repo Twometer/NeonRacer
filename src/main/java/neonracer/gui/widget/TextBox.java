@@ -1,6 +1,7 @@
 package neonracer.gui.widget;
 
 import neonracer.gui.events.CharInputEvent;
+import neonracer.gui.events.ClickEvent;
 import neonracer.gui.events.Event;
 import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Animator;
@@ -18,7 +19,11 @@ public class TextBox extends Widget {
     private static final Vector4f BACKGROUND = new Vector4f(0.0f, 0.0509f, 0.1098f, 1.0f);
     private static final Vector4f GLOW = new Vector4f(0.0706f, 0.2314f, 0.5137f, 1.0f);
 
+    private static TextBox focused; // TODO cleanup
+
     private String text = "";
+
+    private String hint = "";
 
     private FontRenderer fontRenderer;
 
@@ -34,6 +39,14 @@ public class TextBox extends Widget {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 
     @Override
@@ -55,14 +68,17 @@ public class TextBox extends Widget {
 
         cursorOpacity += 0.03f;
 
+        if (renderPass == RenderPass.COLOR && text.isEmpty())
+            fontRenderer.drawCentered(getHint(), getX() + getWidth() / 2, getY() + getHeight() / 2, getFontSize(), getFontColor().toVector(0.2f));
 
         // Draw centered text
         Size textSize = fontRenderer.drawCentered(getText(), getX() + getWidth() / 2, getY() + getHeight() / 2, getFontSize(), getFontColor().toVector(renderPass == RenderPass.GLOW ? 0.3f : 1.0f));
 
         // Draw a cursor
-        renderContext.getPrimitiveRenderer().drawRect(getX() + getWidth() / 2f + textSize.getWidth() / 2f, getY() + 8, 1.0f, getHeight() - 16, getFontColor().toVector((float) Math.abs(Math.sin(cursorOpacity))));
+        if (focused == this)
+            renderContext.getPrimitiveRenderer().drawRect(getX() + getWidth() / 2f + textSize.getWidth() / 2f, getY() + 8, 1.0f, getHeight() - 16, getFontColor().toVector((float) Math.abs(Math.sin(cursorOpacity))));
 
-        if (renderContext.getGameContext().getGameWindow().isKeyPressed(GLFW_KEY_BACKSPACE) && !text.isEmpty()) {
+        if (renderContext.getGameContext().getGameWindow().isKeyPressed(GLFW_KEY_BACKSPACE) && !text.isEmpty() && focused == this) {
             if (!lastPressed) text = text.substring(0, text.length() - 1);
             lastPressed = true;
         } else lastPressed = false;
@@ -71,8 +87,10 @@ public class TextBox extends Widget {
     @Override
     protected void onEvent(Event event) {
         super.onEvent(event);
-        if (event instanceof CharInputEvent)
+        if (event instanceof CharInputEvent && focused == this)
             text += ((CharInputEvent) event).getChar();
+        else if (event instanceof ClickEvent)
+            focused = this;
     }
 
 }

@@ -2,8 +2,6 @@ package neonracer.model.track;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import neonracer.core.GameContext;
-import neonracer.resource.IData;
 import org.joml.Vector2f;
 
 /**

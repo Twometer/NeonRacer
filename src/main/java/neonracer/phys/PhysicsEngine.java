@@ -18,9 +18,6 @@ public class PhysicsEngine {
         this.world = new World(new Vec2(0, 0f));
         this.world.setContinuousPhysics(true);
         this.world.setWarmStarting(true);
-        for (Entity entity : gameContext.getGameState().getEntities()) {
-            entity.onInitialize(gameContext);
-        }
     }
 
     public void onTick() {

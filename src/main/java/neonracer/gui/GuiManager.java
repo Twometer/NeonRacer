@@ -6,14 +6,14 @@ import neonracer.gui.screen.Screen;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GuiManager {
 
     private RenderContext renderContext;
 
-    private List<Screen> currentScreens = new ArrayList<>();
+    private List<Screen> currentScreens = new CopyOnWriteArrayList<>();
 
     public GuiManager(RenderContext renderContext) {
         this.renderContext = renderContext;
@@ -21,6 +21,7 @@ public class GuiManager {
 
     public void show(Screen screen) {
         screen.setParent(this);
+        screen.setContext(renderContext.getGameContext());
         if (!screen.isLoaded()) {
             ScreenLoader.loadScreen(screen);
             screen.initialize(renderContext);

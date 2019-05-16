@@ -38,6 +38,13 @@
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
+                    <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>*</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
                     <RowDefinition>Auto</RowDefinition>
@@ -55,26 +62,39 @@
                 <Label Id="lbNodePosition" Text="Position: None" Grid.Row="1" Grid.Column="0"
                        FontSize="0.4"/>
 
-                <Label Text="COMMANDS" Grid.Row="2" Grid.Column="0" FontSize="0.5" Margin="5"/>
+                <Label Text="Commands" Grid.Row="2" Grid.Column="0" FontSize="0.35" Margin="5"/>
                 <Button Id="btnDeleteNode" FontColor="1,0,0" FontSize="0.3" Grid.Row="3" Grid.Column="0"
                         Text="Delete node"/>
-                <Button Id="btnRepositionNode" FontColor="0,0,1" FontSize="0.3" Grid.Row="4" Grid.Column="0"
+                <Button Id="btnRepositionNode" FontColor="0,0,1" FontSize="0.35" Grid.Row="4" Grid.Column="0"
                         Text="Reposition node"/>
 
-                <Label Text="SETTINGS" Grid.Row="5" Grid.Column="0" FontSize="0.5" Margin="5"/>
+                <Label Text="Settings" Grid.Row="5" Grid.Column="0" FontSize="0.5" Margin="5"/>
                 <Label Id="lbWidth" FontSize="0.3" Grid.Row="6" Text="Width: -"/>
                 <Button Id="widthIncr" FontSize="0.3" Grid.Row="7" Text="+1"/>
                 <Button Id="widthDecr" FontSize="0.3" Grid.Row="8" Text="-1"/>
 
-                <Label Id="lbSamples" Text="Samples: 100" Grid.Row="10" Grid.Column="0"
+                <Label Text="Entity properties" Grid.Row="9" Grid.Column="0" FontSize="0.5"
+                       Margin="10"/>
+                <Label Id="lbEntityPosition" Text="Position: None" Grid.Row="10" Grid.Column="0"
+                       FontSize="0.4"/>
+                <Button Id="btnDeleteEntity" FontColor="1,0,0" FontSize="0.3" Grid.Row="11" Grid.Column="0"
+                        Text="Delete entity"/>
+                <Button Id="btnRepositionEntity" FontColor="0,0,1" FontSize="0.35" Grid.Row="12" Grid.Column="0"
+                        Text="Reposition entity"/>
+                <Label Id="lbRot" FontSize="0.3" Grid.Row="13" Text="Rotation: -"/>
+                <Button Id="rotIncr" FontSize="0.3" Grid.Row="14" Text="+2"/>
+                <Button Id="rotDecr" FontSize="0.3" Grid.Row="15" Text="-2"/>
+
+
+                <Label Id="lbSamples" Text="Samples: 100" Grid.Row="17" Grid.Column="0"
                        FontSize="0.3"/>
-                <Button Id="addSamples" FontSize="0.3" Grid.Row="11" Grid.Column="0"
+                <Button Id="addSamples" FontSize="0.3" Grid.Row="18" Grid.Column="0"
                         Text="+100"/>
-                <Button Id="remSamples" FontSize="0.3" Grid.Row="12" Grid.Column="0"
+                <Button Id="remSamples" FontSize="0.3" Grid.Row="19" Grid.Column="0"
                         Text="-100"/>
-                <Button Id="switchMaterialFg" FontSize="0.3" Grid.Row="13" Text="Foreground: street"/>
-                <Button Id="switchMaterialBg" FontSize="0.3" Grid.Row="14" Text="Background: grass"/>
-                <Button Id="btnRebuildPreview" FontSize="0.3" Grid.Row="15" Grid.Column="0"
+                <Button Id="switchMaterialFg" FontSize="0.3" Grid.Row="20" Text="Foreground: street"/>
+                <Button Id="switchMaterialBg" FontSize="0.3" Grid.Row="21" Text="Background: grass"/>
+                <Button Id="btnRebuildPreview" FontSize="0.3" Grid.Row="22" Grid.Column="0"
                         Text="Rebuild preview"/>
             </Grid>
         </Border>
