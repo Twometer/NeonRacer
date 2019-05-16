@@ -12,7 +12,7 @@ public class MainScreen extends Screen {
 
     @EventHandler("btnStartRace")
     public void onStartRace(ClickEvent event) {
-        context.getClient().send(Race.Join.newBuilder().buildPartial());
+        context.getClient().send(Race.Join.newBuilder().build());
         parent.close(this);
         parent.show(new CarSelectorScreen());
     }

@@ -33,7 +33,11 @@ public class GameContext {
 
     private Client client;
 
-    GameContext(GameWindow gameWindow, TextureProvider textureProvider, ShaderProvider shaderProvider, DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine, Timer timer, MouseState mouseState, KeyboardState keyboardState, Client client) {
+    private boolean debugMode;
+
+    GameContext(GameWindow gameWindow, TextureProvider textureProvider, ShaderProvider shaderProvider,
+                DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine,
+                Timer timer, MouseState mouseState, KeyboardState keyboardState, Client client, boolean debugMode) {
         this.gameWindow = gameWindow;
         this.textureProvider = textureProvider;
         this.shaderProvider = shaderProvider;
@@ -44,6 +48,7 @@ public class GameContext {
         this.mouseState = mouseState;
         this.keyboardState = keyboardState;
         this.client = client;
+        this.debugMode = debugMode;
     }
 
     public void initialize() throws IOException {
@@ -54,12 +59,12 @@ public class GameContext {
         if (physicsEngine != null) physicsEngine.initialize(this);
         gameState.initialize(this);
 
-        client.initialize(this);
+        if (client != null) client.initialize(this);
     }
 
     public void destroy() {
         gameWindow.destroy();
-        client.disconnect();
+        if (client != null) client.disconnect();
     }
 
     public GameWindow getGameWindow() {
@@ -100,5 +105,9 @@ public class GameContext {
 
     public Client getClient() {
         return client;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
     }
 }

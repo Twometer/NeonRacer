@@ -10,7 +10,6 @@ import neonracer.gui.widget.ImageButton;
 import neonracer.gui.widget.Label;
 import neonracer.gui.widget.ProgressBar;
 import neonracer.model.entity.EntityCar;
-import neonracer.model.entity.EntityStatic;
 import neonracer.network.proto.Entity;
 import neonracer.network.proto.Race;
 import neonracer.phys.entity.car.CarPhysicsFactory;
@@ -20,9 +19,6 @@ import neonracer.util.Log;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.joml.Vector2f;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @LayoutFile("guis/cars.xml")
 public class CarSelectorScreen extends Screen {
@@ -97,6 +93,8 @@ public class CarSelectorScreen extends Screen {
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
         EventBus.getDefault().register(this);
+
+        if (context.isDebugMode()) startDebug();
     }
 
     @Override
@@ -169,6 +167,12 @@ public class CarSelectorScreen extends Screen {
             startMs = System.currentTimeMillis() + totalWaitMs;
             this.position = start.getPosition();
         }
+    }
+
+    private void startDebug() {
+        totalWaitMs = 10000;
+        startMs = System.currentTimeMillis() + totalWaitMs;
+        this.position = 1;
     }
 
 }
