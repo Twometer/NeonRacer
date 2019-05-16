@@ -58,7 +58,7 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
     abstract public void update();
 
     public void update(boolean driving, boolean breaking) {
-        if (((!driving) || (!breaking)) && (body.getLinearVelocity().length() < (tires.get(0).getCurrentRelativeFriction().length() / gameContext.getTimer().getTicksPerSecond()))) {
+        if (!driving && (body.getLinearVelocity().length() < (tires.get(0).getCurrentRelativeFriction().length() / gameContext.getTimer().getTicksPerSecond()))) {
             body.setLinearVelocity(MathHelper.nullVector);
             body.setAngularVelocity(0);
         }

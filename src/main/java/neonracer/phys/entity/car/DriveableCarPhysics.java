@@ -21,7 +21,7 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
     public void update() {
         KeyboardState keyboardState = gameContext.getKeyboardState();
         breaking = isBreaking(keyboardState);
-        boolean driving = (!breaking) && (keyboardState.isForward() || keyboardState.isReverse());
+        driving = keyboardState.isForward() || keyboardState.isReverse();
         super.update(driving, breaking);
         for (Tire tire : tires) {
             tire.update(keyboardState, breaking);
