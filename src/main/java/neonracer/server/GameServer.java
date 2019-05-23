@@ -50,10 +50,8 @@ class GameServer {
 
     void sendExcept(AbstractMessage message, RemoteClient exclude) {
         for (RemoteClient client : clients) {
-            if (client != exclude) {
-                System.out.println("Sending " + message.toString() + " to " + client.getId());
+            if (client != exclude)
                 client.trySend(message);
-            }
         }
     }
 
