@@ -65,30 +65,29 @@ public class CarBodyBuilder {
 
         Car carDef = car.getCar();
 
-        Tire backLeft = createTire(context, world, carDef, false, -halfWidth, 0.01f, tireJoint, carDef.getAxleRatio());
+        Tire backLeft = createTire(context, world, carDef, false, -halfWidth, 0.01f, tireJoint);
         world.createJoint(tireJoint);
         tires.add(backLeft);
 
-        Tire backRight = createTire(context, world, carDef, false, halfWidth, 0.01f, tireJoint, carDef.getAxleRatio());
+        Tire backRight = createTire(context, world, carDef, false, halfWidth, 0.01f, tireJoint);
         world.createJoint(tireJoint);
         tires.add(backRight);
 
-        Tire frontLeft = createTire(context, world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint, 2 - carDef.getAxleRatio());
+        Tire frontLeft = createTire(context, world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
         RevoluteJoint leftJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontLeft);
 
-        Tire frontRight = createTire(context, world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint, 2 - carDef.getAxleRatio());
+        Tire frontRight = createTire(context, world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
         RevoluteJoint rightJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontRight);
 
         return new CarBody(body, tires, leftJoint, rightJoint);
     }
 
-    private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef, float axleRatio) {
+    private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef) {
         Tire tire = new Tire(gameContext, world, car.getRollCoefficient(), car.getTractionCoefficient(), car.getForwardForce(), car.getReverseForce());
         jointDef.bodyB = tire.getBody();
         jointDef.localAnchorA.set(x, y);
-        tire.setAxleRatio(axleRatio);
         return tire;
     }
 

@@ -19,24 +19,12 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
     List<Tire> tires;
     RevoluteJoint flJoint;
     RevoluteJoint frJoint;
-    CarBody carBody;
     Vec2 relativeVelocity;
-    Vec2 currentDrag = new Vec2(0, 0);
+    private Vec2 currentDrag = new Vec2(0, 0);
     private Body body;
 
     AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient) {
         this.gameContext = gameContext;
-        this.carBody = carBody;
-        this.body = carBody.getBody();
-        this.tires = tires;
-        this.flJoint = flJoint;
-        this.frJoint = frJoint;
-        this.dragCoefficient = dragCoefficient;
-    }
-
-    AbstractCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient, float axleRatio) {
-        this.gameContext = gameContext;
-        this.carBody = carBody;
         this.body = carBody.getBody();
         this.tires = tires;
         this.flJoint = flJoint;
@@ -80,9 +68,5 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
 
     public List<Tire> getTires() {
         return tires;
-    }
-
-    public CarBody getCarBody() {
-        return carBody;
     }
 }

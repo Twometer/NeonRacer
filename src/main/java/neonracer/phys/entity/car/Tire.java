@@ -32,8 +32,6 @@ public class Tire {
     private Vec2 currentRelativeFriction = new Vec2(0, 0);
     private Vec2 currentDrive = new Vec2(0, 0);
 
-    private float axleRatio;
-
     public Tire(GameContext gameContext, World world, float rollCoefficient, float tractionCoefficient, float forwardForce, float reverseForce) {
         this.gameContext = gameContext;
         this.rollCoefficient = rollCoefficient;
@@ -48,10 +46,6 @@ public class Tire {
         shape.setAsBox(0.09f, 0.18f);
         body.createFixture(shape, 1);
         body.setUserData(this);
-    }
-
-    public void setAxleRatio(float axleRatio) {
-        this.axleRatio = axleRatio;
     }
 
     public void update(KeyboardState keyboardState, boolean breaking) {

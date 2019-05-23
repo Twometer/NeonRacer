@@ -8,7 +8,6 @@
   traction_coefficient: -12
   forward_force: 30
   reverse_force: -10
-  axle_ratio: 1         #back portion; front portion = 2-axle_ratio
 - id: "rocketcar"
   name: "Raketenauto"
   desc: "Das Raketenauto ist wahnsinnig schnell, dafür aber auch sehr groß."
@@ -19,7 +18,6 @@
   traction_coefficient: -100
   forward_force: 100
   reverse_force: -20
-  axle_ratio: 1
 - id: "sportscar"
   name: "Sportwagen"
   desc: "Der Sportwagen bietet eine Balance zwischen Kurvenlage und Geschwindigkeit"
@@ -30,4 +28,3 @@
   traction_coefficient: -40
   forward_force: 30
   reverse_force: -15
-  axle_ratio: 1
