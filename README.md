@@ -2,6 +2,15 @@
 
 Die Dokumentation befindet sich im [GitHub Wiki](https://github.com/Twometer/NeonRacer/wiki).
 
+## Spielen
+
+Aktuelle Releases können [hier](https://github.com/Twometer/NeonRacer/releases) heruntergeladen werden. Die `neonracer.jar` Datei kann einfach per Doppelklick ausgeführt werden. Einzige Voraussetzung ist, dass Java installiert ist.
+
+Für komplizierte Anwendungsfälle kann NeonRacer über die Konsole gestartet werden:
+- Client: `java -jar neonracer.jar`
+- Server: `java -cp neonracer.jar neonracer.server.ServerMain`
+- Designer: `java -cp neonracer.jar neonracer.designer.TrackDesignerMain`
+
 ## Konfiguration
 
 Neon Racer wurde mit _IntelliJ Idea_ entwickelt. Zusätzlich sind noch _Git_ und ein _JDK 1.8_ erforderlich.
