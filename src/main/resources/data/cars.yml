@@ -8,6 +8,8 @@
   traction_coefficient: -12
   forward_force: 30
   reverse_force: -10
+  steering_lock_angle: 25
+  steering_angular_velocity: 180
 - id: "rocketcar"
   name: "Raketenauto"
   desc: "Das Raketenauto ist wahnsinnig schnell, dafür aber auch sehr groß."
@@ -18,6 +20,8 @@
   traction_coefficient: -100
   forward_force: 100
   reverse_force: -20
+  steering_lock_angle: 35
+  steering_angular_velocity: 320
 - id: "sportscar"
   name: "Sportwagen"
   desc: "Der Sportwagen bietet eine Balance zwischen Kurvenlage und Geschwindigkeit"
@@ -28,3 +32,5 @@
   traction_coefficient: -40
   forward_force: 30
   reverse_force: -15
+  steering_lock_angle: 35
+  steering_angular_velocity: 320

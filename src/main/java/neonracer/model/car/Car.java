@@ -46,6 +46,12 @@ public class Car implements IData {
     @JsonProperty("reverse_force")
     private float reverseForce;
 
+    @JsonProperty("steering_lock_angle")
+    private float steeringLockAngle;
+
+    @JsonProperty("steering_angular_velocity")
+    private float steeringAngularVelocity;
+
     @Override
     public void initialize(GameContext context) {
         colorTexture = context.getTextureProvider().getTexture(colorTexturePath);
@@ -90,5 +96,19 @@ public class Car implements IData {
 
     public float getReverseForce() {
         return reverseForce;
+    }
+
+    /**
+     * Gets the steering's lock angle in degrees.
+     */
+    public float getSteeringLockAngle() {
+        return steeringLockAngle;
+    }
+
+    /**
+     * Gets the steering's angular velocity in degrees per seconds.
+     */
+    public float getSteeringAngularVelocity() {
+        return steeringAngularVelocity;
     }
 }

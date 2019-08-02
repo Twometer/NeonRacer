@@ -13,8 +13,17 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
     public boolean breaking = false;
     public boolean driving = false;
 
-    DriveableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient) {
+    private float steeringLockAngle;
+    private float steeringAngularVelocity;
+
+    DriveableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires,
+                        RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient,
+                        float steeringLockAngle, float steeringAngularVelocity) {
+
         super(gameContext, carBody, tires, flJoint, frJoint, dragCoefficient);
+
+        this.steeringLockAngle = steeringLockAngle;
+        this.steeringAngularVelocity = steeringAngularVelocity;
     }
 
     @Override
@@ -26,9 +35,9 @@ public class DriveableCarPhysics extends AbstractCarPhysics {
         for (Tire tire : tires) {
             tire.update(keyboardState, breaking);
         }
-        float lockAngle = (float) Math.toRadians(35);           //possible variables?
-        float turnSpeedPerSec = (float) Math.toRadians(320);//from lock to lock in 0.25 sec
-        float turnPerTimeStep = turnSpeedPerSec / 60.0f;
+        float lockAngle = (float) Math.toRadians(steeringLockAngle);
+        float turnAnglePerSec = (float) Math.toRadians(steeringAngularVelocity);
+        float turnPerTimeStep = turnAnglePerSec / gameContext.getTimer().getTicksPerSecond();
         float desiredAngle = 0;
         if (keyboardState.isLeft())
             desiredAngle = lockAngle;

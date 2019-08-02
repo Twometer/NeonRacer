@@ -10,12 +10,14 @@ public class CarPhysicsFactory {
 
     public static AbstractCarPhysics createDriveable(GameContext context, EntityCar car) {
         CarBody body = CarBodyBuilder.build(context, car, BodyType.DYNAMIC);
-        return new DriveableCarPhysics(context, body, body.getTires(), body.getLeftJoint(), body.getRightJoint(), car.getCar().getDragCoefficient());
+        return new DriveableCarPhysics(context, body, body.getTires(), body.getLeftJoint(), body.getRightJoint(),
+                car.getCar().getDragCoefficient(), car.getCar().getSteeringLockAngle(), car.getCar().getSteeringAngularVelocity());
     }
 
     public static AbstractCarPhysics createStatic(GameContext context, EntityCar car) {
         CarBody body = CarBodyBuilder.build(context, car, BodyType.STATIC);
-        return new StaticCarPhysics(context, body, body.getTires(), body.getLeftJoint(), body.getRightJoint(), car.getCar().getDragCoefficient());
+        return new StaticCarPhysics(context, body, body.getTires(), body.getLeftJoint(), body.getRightJoint(),
+                car.getCar().getDragCoefficient());
     }
 
 }
