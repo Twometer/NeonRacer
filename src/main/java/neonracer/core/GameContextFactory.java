@@ -28,7 +28,7 @@ public class GameContextFactory {
     }
 
     public static GameContext createForDebug() {
-        GameWindow gameWindow = new GameWindow(800, 600, BuildInfo.getGameTitle() + " - Debug");
+        GameWindow gameWindow = new GameWindow(1000, 700, BuildInfo.getGameTitle() + " - Debug");
         TextureProvider textureProvider = new TextureProvider();
         ShaderProvider shaderProvider = new ShaderProvider();
         DataManager dataManager = new DataManager();
