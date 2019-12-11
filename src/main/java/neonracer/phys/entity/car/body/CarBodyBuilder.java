@@ -6,6 +6,7 @@ import neonracer.model.entity.EntityCar;
 import neonracer.phys.Box2dHelper;
 import neonracer.phys.entity.car.Tire;
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.MassData;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
@@ -56,6 +57,13 @@ public class CarBodyBuilder {
         body.createFixture(fixtureDef);
         body.setAngularDamping(5);
 
+        //set center of mass
+
+        MassData data = new MassData();
+        body.getMassData(data);
+
+        data.center.set( 0,0);//car.getHeight()*10 , 0 );
+
         RevoluteJointDef tireJoint = new RevoluteJointDef();
         tireJoint.bodyA = body;
         tireJoint.enableLimit = true;
@@ -65,27 +73,27 @@ public class CarBodyBuilder {
 
         Car carDef = car.getCar();
 
-        Tire backLeft = createTire(context, world, carDef, false, -halfWidth, 0.01f, tireJoint);
+        Tire backLeft = createTire(context, world, carDef, false, -halfWidth, 0.01f, tireJoint, "bl");
         world.createJoint(tireJoint);
         tires.add(backLeft);
 
-        Tire backRight = createTire(context, world, carDef, false, halfWidth, 0.01f, tireJoint);
+        Tire backRight = createTire(context, world, carDef, false, halfWidth, 0.01f, tireJoint, "br");
         world.createJoint(tireJoint);
         tires.add(backRight);
 
-        Tire frontLeft = createTire(context, world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
+        Tire frontLeft = createTire(context, world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint, "fl");
         RevoluteJoint leftJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontLeft);
 
-        Tire frontRight = createTire(context, world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
+        Tire frontRight = createTire(context, world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint, "fr");
         RevoluteJoint rightJoint = (RevoluteJoint) world.createJoint(tireJoint);
         tires.add(frontRight);
 
         return new CarBody(body, tires, leftJoint, rightJoint);
     }
 
-    private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef) {
-        Tire tire = new Tire(gameContext, world, car.getRollCoefficient(), car.getTractionCoefficient(), car.getForwardForce(), car.getReverseForce());
+    private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef, String name) {
+        Tire tire = new Tire(gameContext, world, car.getRollCoefficient(), car.getTractionCoefficient(), car.getForwardForce(), car.getReverseForce(), name);
         jointDef.bodyB = tire.getBody();
         jointDef.localAnchorA.set(x, y);
         return tire;

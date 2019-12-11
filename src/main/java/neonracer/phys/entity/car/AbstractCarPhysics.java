@@ -45,14 +45,19 @@ public abstract class AbstractCarPhysics implements EntityPhysics {
     @Override
     abstract public void update();
 
-    public void update(boolean driving, boolean breaking) {
-        if (!driving && (body.getLinearVelocity().length() < (tires.get(0).getCurrentRelativeFriction().length() / gameContext.getTimer().getTicksPerSecond()))) {
-            body.setLinearVelocity(MathHelper.nullVector);
-            body.setAngularVelocity(0);
+    public void update(boolean driving, boolean braking) {
+        if (!driving && (body.getLinearVelocity().length() < (tires.get(0).getCurrentRelativeFriction().length() / gameContext.getTimer().getTicksPerSecond()))) {  //Killing small velocities when not driving
+            body.setLinearVelocity(MathHelper.nullVector);      //Killing linear velocity
+            body.setAngularVelocity(0);                         //Killing angular velocity
+            for (Tire tire : tires) {
+                tire.killVelocity();                            //killing the velocities of all tires
+            }
+
+        }else {
+            relativeVelocity = MathHelper.rotateVec2(getVelocity(), -body.getAngle());              //Updating velocity relative to car rotation(for debugging? possible TODO move to getter method?)
+            currentDrag = getVelocity().mul(dragCoefficient * getVelocity().length()).negate();     //Calculating air drag force on the car
+            body.applyForce(currentDrag, body.getWorldCenter());                                    //Applying drag force
         }
-        relativeVelocity = MathHelper.rotateVec2(getVelocity(), -body.getAngle());
-        currentDrag = getVelocity().mul(dragCoefficient * getVelocity().length());
-        body.applyForce(currentDrag, body.getWorldCenter());
     }
 
     public Vec2 getVelocity() {

@@ -16,8 +16,8 @@ public class NeonRacerMain {
         Log.i("LWJGL Version " + Version.getVersion());
 
         // Create a game context
-        GameContext gameContext = GameContextFactory.createDefault();
-        //GameContext gameContext = GameContextFactory.createForDebug();
+        //GameContext gameContext = GameContextFactory.createDefault();
+        GameContext gameContext = GameContextFactory.createForDebug();
         gameContext.initialize();
 
         // Create the master renderer and start the rendering

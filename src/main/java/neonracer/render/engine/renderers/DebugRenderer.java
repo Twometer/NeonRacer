@@ -6,7 +6,7 @@ import neonracer.gui.font.FontRenderer;
 import neonracer.gui.util.Color;
 import neonracer.model.entity.EntityCar;
 import neonracer.phys.entity.car.AbstractCarPhysics;
-import neonracer.phys.entity.car.DriveableCarPhysics;
+import neonracer.phys.entity.car.DrivableCarPhysics;
 import neonracer.render.RenderContext;
 import neonracer.render.engine.RenderPass;
 import neonracer.util.BuildInfo;
@@ -41,7 +41,7 @@ public class DebugRenderer implements IRenderer {
         if (playerEntity != null)
             addPlayerData(playerEntity, text);
         for (String string : text) {
-            fontRenderer.draw(string, 0.0f, lh * text.indexOf(string), 0.3f, Color.WHITE.toVector());
+            fontRenderer.draw(string, 0.0f, lh * (text.indexOf(string)+10), 0.3f, Color.WHITE.toVector());
         }
         frames++;
         if (System.currentTimeMillis() - lastReset > 1000) {
@@ -56,8 +56,8 @@ public class DebugRenderer implements IRenderer {
     }
 
     private void addPlayerData(EntityCar playerEntity, List<String> text) {
-        text.add("breaking=" + ((DriveableCarPhysics) playerEntity.getPhysics()).breaking);
-        text.add("driving=" + ((DriveableCarPhysics) playerEntity.getPhysics()).driving);
+        text.add("breaking=" + ((DrivableCarPhysics) playerEntity.getPhysics()).braking);
+        text.add("driving=" + ((DrivableCarPhysics) playerEntity.getPhysics()).driving);
         text.add("carrot=" + MathHelper.modAngle(playerEntity.getPhysics().getRotation()));
         text.add("carvela=" + MathHelper.vec2ToAngle(playerEntity.getPhysics().getVelocity()));
         text.add("carvelx=" + playerEntity.getPhysics().getVelocity().x);
@@ -66,7 +66,8 @@ public class DebugRenderer implements IRenderer {
         text.add("carposy=" + playerEntity.getPhysics().getPosition().y);
         text.add("cardragx=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getCurrentDrag().x);
         text.add("cardragy=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getCurrentDrag().y);
-        //text.add("tire1rot=" + MathHelper.modAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getBody().getAngle()));
+        text.add("tire1rot=" + MathHelper.modAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getBody().getAngle()));
+        text.add("tire1avel=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getBody().getAngularVelocity());
         text.add("tire1velx=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getVelocity().x);
         text.add("tire1vely=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getVelocity().y);
         //text.add("tire1vela=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getVelocity()));
@@ -75,11 +76,6 @@ public class DebugRenderer implements IRenderer {
         //text.add("tire1relvela=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getRelativeVelocity()));
         text.add("tire1relfrix=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getCurrentRelativeFriction().x);
         text.add("tire1relfriy=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getCurrentRelativeFriction().y);
-        //text.add("tire1relfria=" + MathHelper.vec2ToAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getCurrentRelativeFriction()));
-        //text.add("tire2rot=" + MathHelper.modAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(1).getBody().getAngle()));
-        //text.add("tire3rot=" + MathHelper.modAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(2).getBody().getAngle()));
-        //text.add("tire4rot=" + MathHelper.modAngle(((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(3).getBody().getAngle()));
-        text.add("tire4mat=" + ((AbstractCarPhysics) playerEntity.getPhysics()).getTires().get(0).getMaterialTraction());
         text.add("drag=" + playerEntity.getCar().getDragCoefficient());
     }
 

@@ -18,6 +18,7 @@ public class Tire {
 
     // Bits ported from http://www.iforce2d.net/src/iforce2d_TopdownCar.h
 
+    private String name;
     private final float rollCoefficient; // = -0.75f;
     private final float tractionCoefficient; // = -10f;
     private final float forwardForce; // = 20;
@@ -26,18 +27,19 @@ public class Tire {
     private Material currentMaterial;
     private Body body;
 
-    private Vec2 velocity = new Vec2(0, 0);
-    private Vec2 relativeVelocity = new Vec2(0, 0);
-    private Vec2 currentFriction = new Vec2(0, 0);
-    private Vec2 currentRelativeFriction = new Vec2(0, 0);
-    private Vec2 currentDrive = new Vec2(0, 0);
+    private Vec2 velocity = new Vec2(0, 0);                 //velocity of tire relative to ground, always equal to body velocity, used only for calculations, not set here
+    private Vec2 relativeVelocity = new Vec2(0, 0);         //velocity of tire relative to car
+    private Vec2 currentFriction = new Vec2(0, 0);          //friction force to be calculated and applied to tire body in update()
+    private Vec2 currentRelativeFriction = new Vec2(0, 0);  //friction force relative to angle of tire to be calculated in update() depending on material
+    private Vec2 currentForce = new Vec2(0, 0);             //drive or brake force relative to ground to be calculated and applied to tire body in update() depending on driving condition
 
-    public Tire(GameContext gameContext, World world, float rollCoefficient, float tractionCoefficient, float forwardForce, float reverseForce) {
+    public Tire(GameContext gameContext, World world, float rollCoefficient, float tractionCoefficient, float forwardForce, float reverseForce, String name) {
         this.gameContext = gameContext;
         this.rollCoefficient = rollCoefficient;
         this.tractionCoefficient = tractionCoefficient;
         this.forwardForce = forwardForce;
         this.reverseForce = reverseForce;
+        this.name = name;
 
         BodyDef def = new BodyDef();
         def.type = BodyType.DYNAMIC;
@@ -48,54 +50,77 @@ public class Tire {
         body.setUserData(this);
     }
 
-    public void update(KeyboardState keyboardState, boolean breaking) {
-        velocity = body.getLinearVelocity();                                            //updating Velocity
-        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());
+    public void update(KeyboardState keyboardState, boolean braking) {
+        velocity = body.getLinearVelocity();                                                                            //updating Velocity
+        relativeVelocity = MathHelper.rotateVec2(this.velocity, -body.getAngle());                                      //Updating relative velocity (for debugging? possible TODO move to getter method?)
 
-        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());                      //loading Material
+        Vector2f vec = Box2dHelper.toVector2f(body.getPosition());                                                      //Loading road material
         TrackColliderResult colliderResult = gameContext.getGameState().getCurrentTrack().getCollider().collides(vec);
 
-        if (colliderResult.isCollided()) currentMaterial = colliderResult.getCurrentMaterial();
-        else currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();
+        if (colliderResult.isCollided())
+            currentMaterial = colliderResult.getCurrentMaterial();                                                      //Evaluating material
+        else
+            currentMaterial = gameContext.getGameState().getCurrentTrack().getBackgroundMaterial();                     //Setting background material as default
 
-        currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMaterialTraction(); //calculating and applying friction
-        if (breaking)
+        currentRelativeFriction.x = Math.signum(relativeVelocity.x) * tractionCoefficient * getMaterialTraction();      //Calculating friction
+
+        if (braking)                                                                                                    //Switching from rolling friction to sliding friction if brakes engaged
             currentRelativeFriction.y = Math.signum(relativeVelocity.y) * tractionCoefficient * getMaterialTraction();
         else
             currentRelativeFriction.y = Math.signum(relativeVelocity.y) * rollCoefficient * getMaterialTraction();
-        currentFriction = MathHelper.rotateVec2(currentRelativeFriction, body.getAngle());
-        if ((body.getLinearVelocity().length() > (2 * currentFriction.length() / gameContext.getTimer().getTicksPerSecond())) || breaking)
+
+        currentFriction = MathHelper.rotateVec2(currentRelativeFriction, body.getAngle());                              //Rotating friction to tire direction
+
+        if ((body.getLinearVelocity().length() > (2 * currentFriction.length() / gameContext.getTimer().getTicksPerSecond())) || braking)
             body.applyForce(currentFriction, body.getWorldCenter());
         else if (keyboardState != null) {
             if (!(keyboardState.isForward() || keyboardState.isReverse())) {
-                body.setLinearVelocity(MathHelper.nullVector);
-                body.setAngularVelocity(0);
+                killVelocity();
             }
         }
 
-        if (breaking || (keyboardState == null))                                         //calculating and applying drive
-            return;
-        float currentForce = 0;
-        if (keyboardState.isForward())
-            currentForce = forwardForce;
-        else if (keyboardState.isReverse())
-            currentForce = reverseForce;
+        float currentForceValue = 0;
 
-        currentDrive = MathHelper.angleToUnitVec2(body.getAngle()).mul(currentForce).mul(getMaterialTraction());
-        body.applyForce(currentDrive, body.getWorldCenter());
+        //calculating and applying drive
+        if (braking || (keyboardState == null))
+            return;
+        if (keyboardState.isForward())
+            currentForceValue = forwardForce;
+        else if (keyboardState.isReverse())
+                currentForceValue = reverseForce;
+
+        currentForce = MathHelper.angleToUnitVec2(body.getAngle()).mul(currentForceValue).mul(getMaterialTraction());
+        body.applyForce(currentForce, body.getWorldCenter());
+    }
+
+    public void killVelocity() {
+        body.setAngularVelocity(0);
+        body.setLinearVelocity( MathHelper.nullVector );
     }
 
     public Body getBody() {
         return body;
     }
 
-    public Vec2 getCurrentDrive() {
-        return currentDrive;
+    public float getForwardForce() {
+        return forwardForce;
     }
+
+    public float getReverseForce() {
+        return reverseForce;
+    }
+
+    public Vec2 getCurrentForce() {
+        return currentForce;
+    }
+
+    public void setVelocity( Vec2 velocity ) { this.velocity = velocity; }
 
     public Vec2 getVelocity() {
         return velocity;
     }
+
+    public void setRelativeVelocity( Vec2 velocity ) { this.relativeVelocity = relativeVelocity; }
 
     public Vec2 getRelativeVelocity() {
         return relativeVelocity;
