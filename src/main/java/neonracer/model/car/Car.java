@@ -37,8 +37,11 @@ public class Car implements IData {
     @JsonProperty("roll_coefficient")
     private float rollCoefficient;
 
-    @JsonProperty("traction_coefficient")
-    private float tractionCoefficient;
+    @JsonProperty("linear_traction")
+    private float linearTraction;
+
+    @JsonProperty("lateral_traction")
+    private float lateralTraction;
 
     @JsonProperty("forward_force")
     private float forwardForce;
@@ -86,8 +89,12 @@ public class Car implements IData {
         return rollCoefficient;
     }
 
-    public float getTractionCoefficient() {
-        return tractionCoefficient;
+    public float getLinearTraction() {
+        return linearTraction;
+    }
+
+    public float getLateralTraction() {
+        return lateralTraction;
     }
 
     public float getForwardForce() {

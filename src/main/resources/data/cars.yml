@@ -4,10 +4,11 @@
   color_texture: "textures/kart.png"
   glow_texture: "textures/kart-glow.png"
   drag_coefficient: 0.3
-  roll_coefficient: -6
-  traction_coefficient: -12
+  roll_coefficient: 6
+  linear_traction: 12
+  lateral_traction: 12
   forward_force: 30
-  reverse_force: -10
+  reverse_force: 10
   steering_lock_angle: 25
   steering_angular_velocity: 180
 - id: "rocketcar"
@@ -16,10 +17,11 @@
   color_texture: "textures/rocketcar.png"
   glow_texture: "textures/rocketcar-glow.png"
   drag_coefficient: 0.3
-  roll_coefficient: -3
-  traction_coefficient: -100
-  forward_force: 100
-  reverse_force: -20
+  roll_coefficient: 3
+  linear_traction: 100
+  lateral_traction: 150
+  forward_force: 80
+  reverse_force: 20
   steering_lock_angle: 35
   steering_angular_velocity: 320
 - id: "sportscar"
@@ -28,9 +30,10 @@
   color_texture: "textures/sportscar.png"
   glow_texture: "textures/sportscar-glow.png"
   drag_coefficient: 0.25
-  roll_coefficient: -0.4
-  traction_coefficient: -40
+  roll_coefficient: 0.4
+  linear_traction: 40
+  lateral_traction: 50
   forward_force: 30
-  reverse_force: -15
+  reverse_force: 15
   steering_lock_angle: 35
   steering_angular_velocity: 320
