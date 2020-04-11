@@ -3,22 +3,29 @@ package neonracer.phys.entity.car;
 import neonracer.core.GameContext;
 import neonracer.gui.input.KeyboardState;
 import neonracer.phys.entity.car.body.CarBody;
+import neonracer.util.MathHelper;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 
 import java.util.List;
 
 public class DrivableCarPhysics extends AbstractCarPhysics {
 
+    private static final float forwardBrakeBoundary = -0.1f;
+    private static final float reverseBrakeBoundary = 0.1f;
+
     public boolean braking = false;
     public boolean driving = false;
 
-    private float forwardBrakeBoundary;
-    private float reverseBrakeBoundary;
+    private float steeringLockAngle;
+    private float steeringAngularVelocity;
 
-    DrivableCarPhysics(GameContext gameContext, CarBody carBody, List<Tire> tires, RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient) {
+    DrivableCarPhysics(GameContext gameContext, CarBody carBody, Tire[] tires,
+                       RevoluteJoint flJoint, RevoluteJoint frJoint, float dragCoefficient,
+                       float steeringLockAngle, float steeringAngularVelocity) {
         super(gameContext, carBody, tires, flJoint, frJoint, dragCoefficient);
-        forwardBrakeBoundary = tires.get(0).getForwardForce() / gameContext.getTimer().getTicksPerSecond();
-        reverseBrakeBoundary = tires.get(0).getReverseForce() / gameContext.getTimer().getTicksPerSecond();
+
+        this.steeringLockAngle = steeringLockAngle;
+        this.steeringAngularVelocity = steeringAngularVelocity;
     }
 
     @Override
@@ -31,9 +38,8 @@ public class DrivableCarPhysics extends AbstractCarPhysics {
             tire.update(keyboardState, braking);
         }
 
-        float lockAngle = (float) Math.toRadians(35);           //possible variables?
-        float turnSpeed = (float) Math.toRadians(320);          //from lock to lock in 0.25 sec
-        float turnTorque = 1000;
+        float lockAngle = (float) Math.toRadians(steeringLockAngle);
+        float turnPerStep = (float) Math.toRadians(steeringAngularVelocity) / gameContext.getTimer().getTicksPerSecond();
         float desiredAngle = 0;
 
         if (keyboardState.isLeft())
@@ -42,34 +48,16 @@ public class DrivableCarPhysics extends AbstractCarPhysics {
             desiredAngle = -lockAngle;
 
         float angleNow = flJoint.getJointAngle();
-        float angleToTurn = desiredAngle - angleNow;
+        float angleToTurn = MathHelper.clamp(desiredAngle - angleNow, -turnPerStep, turnPerStep);
 
-        if (Math.abs(angleToTurn) > 1E-2) {
+        if (Math.abs(angleToTurn) < 1E-4) return;
 
-            flJoint.setMaxMotorTorque(turnTorque);
-            frJoint.setMaxMotorTorque(turnTorque);
-            flJoint.setMotorSpeed(turnSpeed*Math.abs(angleToTurn));
-            frJoint.setMotorSpeed(turnSpeed*Math.abs(angleToTurn));
-
-            if (Math.abs(angleToTurn) < 1E-4) {
-                flJoint.enableMotor(false);
-                frJoint.enableMotor(false);
-            } else {
-                flJoint.enableMotor(true);
-                frJoint.enableMotor(true);
-            }
-
-        } else {
-            flJoint.enableMotor(false);
-            frJoint.enableMotor(false);
-        }
+        float newAngle = angleNow + angleToTurn;
+        flJoint.setLimits(newAngle, newAngle);
+        frJoint.setLimits(newAngle, newAngle);
     }
 
     private boolean isBreaking(KeyboardState kbs) {
         return ((kbs.isForward() && relativeVelocity.y < forwardBrakeBoundary) || (kbs.isReverse() && (relativeVelocity.y > reverseBrakeBoundary)));
-    }
-
-    public float getForwardBrakeBoundary() {
-        return forwardBrakeBoundary;
     }
 }

@@ -10,13 +10,13 @@ public class CarBody {
 
     private Body body;
 
-    private List<Tire> tires;
+    private Tire[] tires;
 
     private RevoluteJoint leftJoint;
 
     private RevoluteJoint rightJoint;
 
-    CarBody(Body body, List<Tire> tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint) {
+    CarBody(Body body, Tire[] tires, RevoluteJoint leftJoint, RevoluteJoint rightJoint) {
         this.body = body;
         this.tires = tires;
         this.leftJoint = leftJoint;
@@ -27,7 +27,7 @@ public class CarBody {
         return body;
     }
 
-    public List<Tire> getTires() {
+    public Tire[] getTires() {
         return tires;
     }
 

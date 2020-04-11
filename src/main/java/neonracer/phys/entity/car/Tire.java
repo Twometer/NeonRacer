@@ -18,7 +18,11 @@ public class Tire {
 
     // Bits ported from http://www.iforce2d.net/src/iforce2d_TopdownCar.h
 
-    private String name;
+    public static final int FRONT_LEFT = 0;
+    public static final int FRONT_RIGHT = 1;
+    public static final int BACK_LEFT = 2;
+    public static final int BACK_RIGHT = 3;
+
     private final float rollCoefficient; // = -0.75f;
     private final float tractionCoefficient; // = -10f;
     private final float forwardForce; // = 20;
@@ -33,13 +37,12 @@ public class Tire {
     private Vec2 currentRelativeFriction = new Vec2(0, 0);  //friction force relative to angle of tire to be calculated in update() depending on material
     private Vec2 currentForce = new Vec2(0, 0);             //drive or brake force relative to ground to be calculated and applied to tire body in update() depending on driving condition
 
-    public Tire(GameContext gameContext, World world, float rollCoefficient, float tractionCoefficient, float forwardForce, float reverseForce, String name) {
+    public Tire(GameContext gameContext, World world, float rollCoefficient, float tractionCoefficient, float forwardForce, float reverseForce) {
         this.gameContext = gameContext;
         this.rollCoefficient = rollCoefficient;
         this.tractionCoefficient = tractionCoefficient;
         this.forwardForce = forwardForce;
         this.reverseForce = reverseForce;
-        this.name = name;
 
         BodyDef def = new BodyDef();
         def.type = BodyType.DYNAMIC;
@@ -87,7 +90,7 @@ public class Tire {
         if (keyboardState.isForward())
             currentForceValue = forwardForce;
         else if (keyboardState.isReverse())
-                currentForceValue = reverseForce;
+            currentForceValue = reverseForce;
 
         currentForce = MathHelper.angleToUnitVec2(body.getAngle()).mul(currentForceValue).mul(getMaterialTraction());
         body.applyForce(currentForce, body.getWorldCenter());
@@ -95,7 +98,7 @@ public class Tire {
 
     public void killVelocity() {
         body.setAngularVelocity(0);
-        body.setLinearVelocity( MathHelper.nullVector );
+        body.setLinearVelocity(MathHelper.nullVector);
     }
 
     public Body getBody() {
@@ -114,13 +117,13 @@ public class Tire {
         return currentForce;
     }
 
-    public void setVelocity( Vec2 velocity ) { this.velocity = velocity; }
+    public void setVelocity(Vec2 velocity) {
+        this.velocity = velocity;
+    }
 
     public Vec2 getVelocity() {
         return velocity;
     }
-
-    public void setRelativeVelocity( Vec2 velocity ) { this.relativeVelocity = relativeVelocity; }
 
     public Vec2 getRelativeVelocity() {
         return relativeVelocity;

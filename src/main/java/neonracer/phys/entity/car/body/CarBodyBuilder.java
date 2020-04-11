@@ -12,13 +12,9 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CarBodyBuilder {
 
     public static CarBody build(GameContext context, EntityCar car, BodyType type) {
-        List<Tire> tires = new ArrayList<>();
         World world = context.getPhysicsEngine().getWorld();
 
         BodyDef bodyDef = new BodyDef();
@@ -61,8 +57,10 @@ public class CarBodyBuilder {
 
         MassData data = new MassData();
         body.getMassData(data);
+        data.center.set(0, 0);//car.getHeight()*10 , 0 );
 
-        data.center.set( 0,0);//car.getHeight()*10 , 0 );
+        Car carDef = car.getCar();
+        Tire[] tires = new Tire[4];
 
         RevoluteJointDef tireJoint = new RevoluteJointDef();
         tireJoint.bodyA = body;
@@ -71,29 +69,27 @@ public class CarBodyBuilder {
         tireJoint.upperAngle = 0;
         tireJoint.localAnchorB.setZero();
 
-        Car carDef = car.getCar();
-
-        Tire backLeft = createTire(context, world, carDef, false, -halfWidth, 0.01f, tireJoint, "bl");
+        Tire backLeft = createTire(context, world, carDef, -halfWidth, 0.01f, tireJoint);
         world.createJoint(tireJoint);
-        tires.add(backLeft);
+        tires[Tire.BACK_LEFT] = backLeft;
 
-        Tire backRight = createTire(context, world, carDef, false, halfWidth, 0.01f, tireJoint, "br");
+        Tire backRight = createTire(context, world, carDef, halfWidth, 0.01f, tireJoint);
         world.createJoint(tireJoint);
-        tires.add(backRight);
+        tires[Tire.BACK_RIGHT] = backRight;
 
-        Tire frontLeft = createTire(context, world, carDef, true, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint, "fl");
+        Tire frontLeft = createTire(context, world, carDef, -halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
         RevoluteJoint leftJoint = (RevoluteJoint) world.createJoint(tireJoint);
-        tires.add(frontLeft);
+        tires[Tire.FRONT_LEFT] = frontLeft;
 
-        Tire frontRight = createTire(context, world, carDef, true, halfWidth, car.getHeight() - 0.18f * 2, tireJoint, "fr");
+        Tire frontRight = createTire(context, world, carDef, halfWidth, car.getHeight() - 0.18f * 2, tireJoint);
         RevoluteJoint rightJoint = (RevoluteJoint) world.createJoint(tireJoint);
-        tires.add(frontRight);
+        tires[Tire.FRONT_RIGHT] = frontRight;
 
         return new CarBody(body, tires, leftJoint, rightJoint);
     }
 
-    private static Tire createTire(GameContext gameContext, World world, Car car, boolean front, float x, float y, RevoluteJointDef jointDef, String name) {
-        Tire tire = new Tire(gameContext, world, car.getRollCoefficient(), car.getTractionCoefficient(), car.getForwardForce(), car.getReverseForce(), name);
+    private static Tire createTire(GameContext gameContext, World world, Car car, float x, float y, RevoluteJointDef jointDef) {
+        Tire tire = new Tire(gameContext, world, car.getRollCoefficient(), car.getTractionCoefficient(), car.getForwardForce(), car.getReverseForce());
         jointDef.bodyB = tire.getBody();
         jointDef.localAnchorA.set(x, y);
         return tire;

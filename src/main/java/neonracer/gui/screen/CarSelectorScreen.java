@@ -170,7 +170,7 @@ public class CarSelectorScreen extends Screen {
     }
 
     private void startDebug() {
-        totalWaitMs = 10000;
+        totalWaitMs = 5000;
         startMs = System.currentTimeMillis() + totalWaitMs;
         this.position = 1;
     }
