@@ -53,6 +53,11 @@ public class StaticPhysics implements EntityPhysics {
     }
 
     @Override
+    public Vec2 getVelocity() {
+        return body.getLinearVelocity();
+    }
+
+    @Override
     public void update() {
 
     }

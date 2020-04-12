@@ -11,11 +11,13 @@ import neonracer.gui.screen.MainScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.network.proto.Entity;
+import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
+import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.stats.StatsCalculator;
 import neonracer.util.Log;
 
@@ -40,7 +42,7 @@ public class MasterRenderer {
     private IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
             new EntityRenderer(),
-            //new DebugRenderer()
+            new DebugRenderer()
     };
 
     public MasterRenderer(GameContext context) {

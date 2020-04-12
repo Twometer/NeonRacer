@@ -31,25 +31,29 @@ public class Car implements IData {
 
     private Texture glowTexture;
 
-    @JsonProperty("max_forward_speed")
-    private float maxForwardSpeed;
+    @JsonProperty("drag_coefficient")
+    private float dragCoefficient;
 
-    @JsonProperty("max_reverse_speed")
-    private float maxReverseSpeed;
+    @JsonProperty("roll_coefficient")
+    private float rollCoefficient;
 
-    @JsonProperty("max_force_front")
-    private float maxFrontForce;
+    @JsonProperty("linear_traction")
+    private float linearTraction;
 
-    @JsonProperty("max_force_back")
-    private float maxBackForce;
+    @JsonProperty("lateral_traction")
+    private float lateralTraction;
 
-    @JsonProperty("max_lateral_force")
-    private float maxLateralForce;
+    @JsonProperty("forward_force")
+    private float forwardForce;
 
-    @JsonProperty("primary_ability")
-    private String primaryAbilityId;
+    @JsonProperty("reverse_force")
+    private float reverseForce;
 
-    private Ability primaryAbility;
+    @JsonProperty("steering_lock_angle")
+    private float steeringLockAngle;
+
+    @JsonProperty("steering_angular_velocity")
+    private float steeringAngularVelocity;
 
     @Override
     public void initialize(GameContext context) {
@@ -77,27 +81,41 @@ public class Car implements IData {
         return glowTexture;
     }
 
-    public float getMaxForwardSpeed() {
-        return maxForwardSpeed;
+    public float getDragCoefficient() {
+        return dragCoefficient;
     }
 
-    public float getMaxReverseSpeed() {
-        return maxReverseSpeed;
+    public float getRollCoefficient() {
+        return rollCoefficient;
     }
 
-    public float getMaxFrontForce() {
-        return maxFrontForce;
+    public float getLinearTraction() {
+        return linearTraction;
     }
 
-    public float getMaxBackForce() {
-        return maxBackForce;
+    public float getLateralTraction() {
+        return lateralTraction;
     }
 
-    public float getMaxLateralForce() {
-        return maxLateralForce;
+    public float getForwardForce() {
+        return forwardForce;
     }
 
-    public Ability getPrimaryAbility() {
-        return primaryAbility;
+    public float getReverseForce() {
+        return reverseForce;
+    }
+
+    /**
+     * Gets the steering's lock angle in degrees.
+     */
+    public float getSteeringLockAngle() {
+        return steeringLockAngle;
+    }
+
+    /**
+     * Gets the steering's angular velocity in degrees per seconds.
+     */
+    public float getSteeringAngularVelocity() {
+        return steeringAngularVelocity;
     }
 }

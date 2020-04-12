@@ -3,31 +3,37 @@
   desc: "Das Kart ist die kleinste und wendigste Rennmaschine."
   color_texture: "textures/kart.png"
   glow_texture: "textures/kart-glow.png"
-  primary_ability: ""
-  max_forward_speed: 70
-  max_reverse_speed: -100
-  max_force_front: 95
-  max_force_back: 95
-  max_lateral_force: 7
+  drag_coefficient: 0.3
+  roll_coefficient: 6
+  linear_traction: 12
+  lateral_traction: 12
+  forward_force: 30
+  reverse_force: 10
+  steering_lock_angle: 25
+  steering_angular_velocity: 180
 - id: "rocketcar"
   name: "Raketenauto"
   desc: "Das Raketenauto ist wahnsinnig schnell, dafür aber auch sehr groß."
   color_texture: "textures/rocketcar.png"
   glow_texture: "textures/rocketcar-glow.png"
-  primary_ability: ""
-  max_forward_speed: 120
-  max_reverse_speed: -100
-  max_force_front: 170
-  max_force_back: 60
-  max_lateral_force: 15
+  drag_coefficient: 0.3
+  roll_coefficient: 3
+  linear_traction: 100
+  lateral_traction: 150
+  forward_force: 80
+  reverse_force: 20
+  steering_lock_angle: 35
+  steering_angular_velocity: 320
 - id: "sportscar"
   name: "Sportwagen"
   desc: "Der Sportwagen bietet eine Balance zwischen Kurvenlage und Geschwindigkeit"
   color_texture: "textures/sportscar.png"
   glow_texture: "textures/sportscar-glow.png"
-  primary_ability: ""
-  max_forward_speed: 75
-  max_reverse_speed: -55
-  max_force_front: 101
-  max_force_back: 101
-  max_lateral_force: 12
+  drag_coefficient: 0.25
+  roll_coefficient: 0.4
+  linear_traction: 40
+  lateral_traction: 50
+  forward_force: 30
+  reverse_force: 15
+  steering_lock_angle: 35
+  steering_angular_velocity: 320
