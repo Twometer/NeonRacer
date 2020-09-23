@@ -11,13 +11,12 @@ import neonracer.gui.screen.MainScreen;
 import neonracer.model.entity.EntityCar;
 import neonracer.model.track.Track;
 import neonracer.network.proto.Entity;
-import neonracer.phys.entity.car.CarPhysicsFactory;
 import neonracer.render.engine.RenderPass;
 import neonracer.render.engine.postproc.PostProcessing;
+import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.render.engine.renderers.EntityRenderer;
 import neonracer.render.engine.renderers.IRenderer;
 import neonracer.render.engine.renderers.TrackRenderer;
-import neonracer.render.engine.renderers.DebugRenderer;
 import neonracer.stats.StatsCalculator;
 import neonracer.util.Log;
 
@@ -25,21 +24,21 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class MasterRenderer {
 
-    private GameContext gameContext;
+    private final GameContext gameContext;
 
-    private RenderContext renderContext;
+    private final RenderContext renderContext;
 
-    private GameWindow gameWindow;
+    private final GameWindow gameWindow;
 
-    private GuiManager guiManager;
+    private final GuiManager guiManager;
 
     private PostProcessing postProcessing;
 
-    private StatsCalculator statsCalculator;
+    private final StatsCalculator statsCalculator;
 
     private boolean lastPressed;
 
-    private IRenderer[] renderers = new IRenderer[]{
+    private final IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
             new EntityRenderer(),
             new DebugRenderer()
@@ -83,7 +82,7 @@ public class MasterRenderer {
         renderContext.initialize();
         renderContext.getCamera().setZoomFactor(0.016f);
 
-        Track testTrack = gameContext.getDataManager().getTrack("test_track");
+        Track testTrack = gameContext.getAssetProvider().getTrack("test_track");
         gameContext.getGameState().setCurrentTrack(testTrack);
 
         for (IRenderer renderer : renderers)

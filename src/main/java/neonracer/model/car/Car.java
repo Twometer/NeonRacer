@@ -3,14 +3,14 @@ package neonracer.model.car;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import neonracer.core.GameContext;
 import neonracer.render.gl.core.Texture;
-import neonracer.resource.IData;
+import neonracer.resource.IAsset;
 
 /**
  * Defines car properties. There are different car
  * models the user can choose from, and each one has
  * different properties.
  */
-public class Car implements IData {
+public class Car implements IAsset {
 
     @JsonProperty
     private String id;

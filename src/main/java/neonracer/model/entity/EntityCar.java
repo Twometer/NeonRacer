@@ -8,14 +8,17 @@ import neonracer.stats.CarStats;
 
 public class EntityCar extends Entity {
 
-    private Car car;
+    private final Car car;
 
-    private CarStats carStats = new CarStats();
+    private final String username;
 
-    public EntityCar(long entityId, float x, float y, float rotation, Car car) {
+    private final CarStats carStats = new CarStats();
+
+    public EntityCar(long entityId, float x, float y, float rotation, Car car, String username) {
         super("car", x, y, rotation, null);
         this.entityId = entityId;
         this.car = car;
+        this.username = username;
     }
 
     public Car getCar() {
@@ -34,6 +37,10 @@ public class EntityCar extends Entity {
     @Override
     public Texture getGlowTexture() {
         return car.getGlowTexture();
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     @Override

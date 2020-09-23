@@ -84,7 +84,7 @@ public class CarSelectorScreen extends Screen {
     }
 
     private void updateDesc() {
-        String desc = context.getDataManager().getCar(selectedCar).getDescription();
+        String desc = context.getAssetProvider().getCar(selectedCar).getDescription();
         if (desc != null)
             lbDescription.setText(desc);
     }
@@ -121,7 +121,7 @@ public class CarSelectorScreen extends Screen {
     private void startRace() {
         if (selectedCar.isEmpty()) selectedCar = AVAILABLE_CARS[(int) (Math.random() * AVAILABLE_CARS.length)];
 
-        EntityCar playerEntity = new EntityCar(context.getClient().newEntityId(), 0.0f, 0.0f, 0.0f, context.getDataManager().getCar(selectedCar));
+        EntityCar playerEntity = new EntityCar(context.getClient().newEntityId(), 0.0f, 0.0f, 0.0f, context.getAssetProvider().getCar(selectedCar), context.getGameState().getUsername());
 
         float t = 0.05f * position;
         Log.i(String.format("Placing car at {pos=%d, t=%s}", position, t));

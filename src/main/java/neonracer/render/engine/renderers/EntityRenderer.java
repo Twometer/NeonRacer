@@ -1,7 +1,10 @@
 package neonracer.render.engine.renderers;
 
 import neonracer.core.GameContext;
+import neonracer.gui.font.FontFamily;
+import neonracer.gui.util.Color;
 import neonracer.model.entity.Entity;
+import neonracer.model.entity.EntityCar;
 import neonracer.model.entity.EntityStatic;
 import neonracer.render.GameWindow;
 import neonracer.render.RenderContext;
@@ -37,7 +40,7 @@ public class EntityRenderer implements IRenderer {
         meshBuilder.destroy();
     }
 
-    private int[] viewport = new int[4];
+    private final int[] viewport = new int[4];
     private AABB frustum;
 
     @Override
@@ -46,27 +49,51 @@ public class EntityRenderer implements IRenderer {
         calculateFrustum(renderContext);
         cullEntities(gameContext, entities);
 
-        entityShader.bind();
-        entityShader.setProjectionMatrix(renderContext.getWorldMatrix());
         for (Entity entity : entities) {
             if (!entity.isInFrustum())
                 continue;
             if (entity.getGlowTexture() == null && renderPass == RenderPass.GLOW) // There may be entities that do not have a glow texture
                 continue;
+
             Texture texture = renderPass == RenderPass.GLOW ? entity.getGlowTexture() : entity.getColorTexture();
             texture.bind();
-            float width = entity.getWidth();
-            float height = entity.getHeight();
-            Matrix4f transformationMatrix = new Matrix4f();
-            transformationMatrix.translate(entity.getPosition().x(), entity.getPosition().y, 0.0f);
-            transformationMatrix.rotate(entity.getRotation(), 0.0f, 0.0f, 1.0f);
-            transformationMatrix.translate(-width / 2, 0, 0.0f);
-            transformationMatrix.scale(width, height, 1.0f);
+
+            Matrix4f transformationMatrix = buildTransformationMatrix(entity);
+
+            entityShader.bind();
+            entityShader.setProjectionMatrix(renderContext.getWorldMatrix());
             entityShader.setTransformationMatrix(transformationMatrix);
+
             rectangle.draw();
             texture.unbind();
+
+            entityShader.unbind();
+
+            if (entity instanceof EntityCar && renderPass == RenderPass.COLOR) {
+                EntityCar car = (EntityCar) entity;
+
+                float stringWidth = renderContext.getFonts().get(FontFamily.Content).getStringWidth(car.getUsername(), 1.0f) * 0.025f;
+
+                Matrix4f mat = new Matrix4f();
+                mat.translate(car.getPosition().x, car.getPosition().y, 0.0f);
+                mat.rotate((float) (renderContext.getCamera().getRotation() + Math.PI), 0, 0, 1);
+                mat.translate(stringWidth / 2 + car.getWidth() / 2, -car.getHeight() - 4, 0);
+                mat.scale(-0.025f, 0.025f, 1.0f);
+
+                renderContext.getFonts().get(FontFamily.Content).draw(car.getUsername(), 0, 0, 1.0f, Color.WHITE.toVector(), renderContext.getWorldMatrix(), mat);
+            }
         }
-        entityShader.unbind();
+    }
+
+    private Matrix4f buildTransformationMatrix(Entity entity) {
+        float width = entity.getWidth();
+        float height = entity.getHeight();
+        Matrix4f transformationMatrix = new Matrix4f();
+        transformationMatrix.translate(entity.getPosition().x(), entity.getPosition().y, 0.0f);
+        transformationMatrix.rotate(entity.getRotation(), 0.0f, 0.0f, 1.0f);
+        transformationMatrix.translate(-width / 2, 0, 0.0f);
+        transformationMatrix.scale(width, height, 1.0f);
+        return transformationMatrix;
     }
 
     private void calculateFrustum(RenderContext renderContext) {

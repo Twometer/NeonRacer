@@ -10,7 +10,7 @@ import neonracer.util.Log;
 
 import java.io.IOException;
 
-public class DataManager {
+public class AssetProvider {
 
     private static final String PATH_MATERIALS = "materials.yml";
     private static final String PATH_TRACKS = "tracks.yml";
@@ -42,8 +42,8 @@ public class DataManager {
         return mapper.readValue(contents, clazz);
     }
 
-    private void initialize(GameContext context, IData[] data) {
-        for (IData dataObj : data)
+    private void initialize(GameContext context, IAsset[] data) {
+        for (IAsset dataObj : data)
             dataObj.initialize(context);
     }
 

@@ -8,6 +8,7 @@ import neonracer.render.engine.mesh.Rectangle;
 import neonracer.render.gl.core.Model;
 import neonracer.render.gl.shaders.FontShader;
 import neonracer.util.Log;
+import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class FontRenderer {
 
     private FontShader fontShader;
 
-    private String fontFaceName;
+    private final String fontFaceName;
 
     private FontFace fontFace;
 
@@ -58,10 +59,15 @@ public class FontRenderer {
     }
 
     public void draw(String text, float x, float y, float fontSize, Vector4f color) {
+        draw(text, x, y, fontSize, color, renderContext.getGuiMatrix(), new Matrix4f());
+    }
+
+    public void draw(String text, float x, float y, float fontSize, Vector4f color, Matrix4f projectionMatrix, Matrix4f transformationMatrix) {
         fontSize *= gameContext.getGameWindow().getScale();
         textModel = build(text, fontSize, x, y);
         fontShader.bind();
-        fontShader.setProjectionMatrix(renderContext.getGuiMatrix());
+        fontShader.setProjectionMatrix(projectionMatrix);
+        fontShader.setTransformationMatrix(transformationMatrix);
         fontShader.setColor(color.x, color.y, color.z, color.w);
         glActiveTexture(GL_TEXTURE0);
         fontFace.getFontTexture().bind();

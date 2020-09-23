@@ -2,22 +2,26 @@ package neonracer.client;
 
 import com.google.protobuf.AbstractMessage;
 import neonracer.core.GameContext;
+import neonracer.model.car.Car;
 import neonracer.model.entity.EntityCar;
 import neonracer.network.NetworkChannel;
 import neonracer.network.proto.Entity;
 import neonracer.network.proto.Login;
 import neonracer.network.proto.Race;
 import neonracer.util.BuildInfo;
+import neonracer.util.IdConversion;
 import org.greenrobot.eventbus.EventBus;
 import org.joml.Vector2f;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkClient implements Client {
+
+    private final Map<Integer, String> connectedUsers = new HashMap<>();
 
     private GameContext gameContext;
 
@@ -110,18 +114,14 @@ public class NetworkClient implements Client {
     @Override
     public void handle(Race.Join joinRace) {
         EventBus.getDefault().post(joinRace);
+        connectedUsers.put(joinRace.getClientId(), joinRace.getNickname());
     }
 
     @Override
     public void handle(Race.Leave leaveRace) {
         EventBus.getDefault().post(leaveRace);
-        List<neonracer.model.entity.Entity> removeEntities = new ArrayList<>();
-        for (neonracer.model.entity.Entity entity : gameContext.getGameState().getEntities()) {
-            if (entity.getEntityId() >> 32 == leaveRace.getClientId()) {
-                removeEntities.add(entity);
-            }
-        }
-        gameContext.getGameState().getEntities().removeAll(removeEntities);
+        connectedUsers.remove(leaveRace.getClientId());
+        gameContext.getGameState().getEntities().removeIf(entity -> IdConversion.toClientId(entity.getEntityId()) == leaveRace.getClientId());
     }
 
     @Override
@@ -144,12 +144,15 @@ public class NetworkClient implements Client {
             case "rocketcar":
             case "sportscar":
             case "kart":
-                entity = new EntityCar(createEntity.getEntityId(), createEntity.getX(), createEntity.getY(), createEntity.getRotation(), gameContext.getDataManager().getCar(createEntity.getType()));
+                Car car = gameContext.getAssetProvider().getCar(createEntity.getType());
+                String user = connectedUsers.get(IdConversion.toClientId(createEntity.getEntityId()));
+                entity = new EntityCar(createEntity.getEntityId(), createEntity.getX(), createEntity.getY(), createEntity.getRotation(), car, user);
                 break;
             case "rocket":
                 // TODO
                 break;
         }
+
 
         if (entity != null)
             gameContext.getGameState().getEntities().add(entity);

@@ -10,8 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 class RaceManager {
 
-    private static final int LOBBY_TIMEOUT = 10000;
-    private static final int START_TIMEOUT = 10000;
+    private static final int LOBBY_TIMEOUT = 1000;
+    private static final int START_TIMEOUT = 1000;
     private static final int LAP_COUNT = 4;
 
     private final GameServer parent;

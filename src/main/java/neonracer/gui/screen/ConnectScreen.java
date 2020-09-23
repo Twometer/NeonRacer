@@ -48,6 +48,7 @@ public class ConnectScreen extends Screen {
                 btnConnect.setText("Verbinden");
                 connecting = false;
             } else {
+                context.getGameState().setUsername(nicknameBox.getText());
                 context.getClient().send(Login.LoginRequest.newBuilder().setNickname(nicknameBox.getText()).build());
             }
         }).start();

@@ -7,41 +7,41 @@ import neonracer.phys.PhysicsEngine;
 import neonracer.render.GameWindow;
 import neonracer.render.gl.ShaderProvider;
 import neonracer.render.gl.TextureProvider;
-import neonracer.resource.DataManager;
+import neonracer.resource.AssetProvider;
 
 import java.io.IOException;
 
 public class GameContext {
 
-    private GameWindow gameWindow;
+    private final GameWindow gameWindow;
 
-    private TextureProvider textureProvider;
+    private final TextureProvider textureProvider;
 
-    private ShaderProvider shaderProvider;
+    private final ShaderProvider shaderProvider;
 
-    private DataManager dataManager;
+    private final AssetProvider assetProvider;
 
-    private PhysicsEngine physicsEngine;
+    private final PhysicsEngine physicsEngine;
 
-    private Timer timer;
+    private final Timer timer;
 
-    private GameState gameState;
+    private final GameState gameState;
 
-    private MouseState mouseState;
+    private final MouseState mouseState;
 
-    private KeyboardState keyboardState;
+    private final KeyboardState keyboardState;
 
-    private Client client;
+    private final Client client;
 
-    private boolean debugMode;
+    private final boolean debugMode;
 
     GameContext(GameWindow gameWindow, TextureProvider textureProvider, ShaderProvider shaderProvider,
-                DataManager dataManager, GameState gameState, PhysicsEngine physicsEngine,
+                AssetProvider assetProvider, GameState gameState, PhysicsEngine physicsEngine,
                 Timer timer, MouseState mouseState, KeyboardState keyboardState, Client client, boolean debugMode) {
         this.gameWindow = gameWindow;
         this.textureProvider = textureProvider;
         this.shaderProvider = shaderProvider;
-        this.dataManager = dataManager;
+        this.assetProvider = assetProvider;
         this.gameState = gameState;
         this.physicsEngine = physicsEngine;
         this.timer = timer;
@@ -55,7 +55,7 @@ public class GameContext {
         gameWindow.create();
         gameWindow.setIcon("icon.png");
 
-        dataManager.load(this);
+        assetProvider.load(this);
         if (physicsEngine != null) physicsEngine.initialize(this);
         gameState.initialize(this);
 
@@ -79,8 +79,8 @@ public class GameContext {
         return shaderProvider;
     }
 
-    public DataManager getDataManager() {
-        return dataManager;
+    public AssetProvider getAssetProvider() {
+        return assetProvider;
     }
 
     public GameState getGameState() {

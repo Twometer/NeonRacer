@@ -17,7 +17,8 @@ public class GameState {
 
     private EntityCar playerEntity;
 
-    private List<Entity> entities = new CopyOnWriteArrayList<>();
+    private final List<Entity> entities = new CopyOnWriteArrayList<>();
+    private String username;
 
     public EntityCar getPlayerEntity() {
         return playerEntity;
@@ -62,4 +63,11 @@ public class GameState {
         return playerEntity != null;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

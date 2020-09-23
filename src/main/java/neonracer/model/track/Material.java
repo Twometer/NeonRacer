@@ -3,13 +3,13 @@ package neonracer.model.track;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import neonracer.core.GameContext;
 import neonracer.render.gl.core.Texture;
-import neonracer.resource.IData;
+import neonracer.resource.IAsset;
 
 /**
  * Track materials. Can be things like dirt,
  * street or grass etc.
  */
-public class Material implements IData {
+public class Material implements IAsset {
 
     @JsonProperty("id")
     private String id;

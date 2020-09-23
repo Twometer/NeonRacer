@@ -10,7 +10,7 @@ import neonracer.render.engine.def.DefBuilderFactory;
 import neonracer.render.engine.def.IDefBuilder;
 import neonracer.render.engine.def.TrackDef;
 import neonracer.render.gl.core.Texture;
-import neonracer.resource.IData;
+import neonracer.resource.IAsset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * Defines a race track using a background material and a
  * path where the track is on.
  */
-public class Track implements IData {
+public class Track implements IAsset {
 
     @JsonProperty
     private String id;
@@ -78,8 +78,8 @@ public class Track implements IData {
         if (thumbnailPath != null && !thumbnailPath.isEmpty())
             thumbnail = context.getTextureProvider().getTexture(thumbnailPath);
 
-        backgroundMaterial = context.getDataManager().getMaterial(backgroundMaterialId);
-        foregroundMaterial = context.getDataManager().getMaterial(foregroundMaterialId);
+        backgroundMaterial = context.getAssetProvider().getMaterial(backgroundMaterialId);
+        foregroundMaterial = context.getAssetProvider().getMaterial(foregroundMaterialId);
 
         IDefBuilder<Track, TrackDef> defBuilder = DefBuilderFactory.createTrackDefBuilder();
         this.trackDef = defBuilder.build(this);

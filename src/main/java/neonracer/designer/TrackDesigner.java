@@ -56,10 +56,10 @@ import static org.lwjgl.opengl.GL11.*;
 @LayoutFile("guis/designer.xml")
 public class TrackDesigner extends Screen {
 
-    private GameContext gameContext = GameContextFactory.createForDesigner();
-    private RenderContext renderContext = new RenderContext(gameContext);
+    private final GameContext gameContext = GameContextFactory.createForDesigner();
+    private final RenderContext renderContext = new RenderContext(gameContext);
 
-    private GuiManager guiManager = new GuiManager(renderContext);
+    private final GuiManager guiManager = new GuiManager(renderContext);
 
     private PostProcessing postProcessing;
 
@@ -71,16 +71,16 @@ public class TrackDesigner extends Screen {
 
     private Model crosshairModel;
 
-    private IRenderer[] renderers = new IRenderer[]{
+    private final IRenderer[] renderers = new IRenderer[]{
             new TrackRenderer(),
             new EntityRenderer()
     };
 
-    private DecimalFormat format = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
+    private final DecimalFormat format = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
 
     private List<Entity> entities = new ArrayList<>();
 
-    private Class[] registeredEntities = new Class[]{
+    private final Class[] registeredEntities = new Class[]{
             EntityStatic.class,
             EntityItem.class
     };
@@ -255,9 +255,11 @@ public class TrackDesigner extends Screen {
         rebuild();
     }
 
+    private final int[] viewport = new int[4];
+
     @EventHandler("switchMaterialFg")
     public void onSwitchMatFg(ClickEvent event) {
-        Material[] mat = gameContext.getDataManager().getMaterials();
+        Material[] mat = gameContext.getAssetProvider().getMaterials();
         Material nextMaterial = null;
 
         for (int i = 0; i < mat.length; i++) {
@@ -270,24 +272,6 @@ public class TrackDesigner extends Screen {
 
         fgMaterial = nextMaterial.getId();
         btnSwitchFg.setText("Foreground: " + fgMaterial);
-        rebuild();
-    }
-
-    @EventHandler("switchMaterialBg")
-    public void onSwitchMatBg(ClickEvent event) {
-        Material[] mat = gameContext.getDataManager().getMaterials();
-        Material nextMaterial = null;
-
-        for (int i = 0; i < mat.length; i++) {
-            if (bgMaterial.equalsIgnoreCase(mat[i].getId())) {
-                nextMaterial = mat[(i + 1) % mat.length];
-                break;
-            }
-        }
-        if (nextMaterial == null) return;
-
-        bgMaterial = nextMaterial.getId();
-        btnSwitchBg.setText("Background: " + bgMaterial);
         rebuild();
     }
 
@@ -469,7 +453,25 @@ public class TrackDesigner extends Screen {
 
     private Vector2f lastMouse;
     private boolean lastPressed;
-    private int[] viewport = new int[4];
+
+    @EventHandler("switchMaterialBg")
+    public void onSwitchMatBg(ClickEvent event) {
+        Material[] mat = gameContext.getAssetProvider().getMaterials();
+        Material nextMaterial = null;
+
+        for (int i = 0; i < mat.length; i++) {
+            if (bgMaterial.equalsIgnoreCase(mat[i].getId())) {
+                nextMaterial = mat[(i + 1) % mat.length];
+                break;
+            }
+        }
+        if (nextMaterial == null) return;
+
+        bgMaterial = nextMaterial.getId();
+        btnSwitchBg.setText("Background: " + bgMaterial);
+        rebuild();
+    }
+
     private Vector2f unprojected;
 
     private void setup() {
