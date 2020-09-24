@@ -33,6 +33,19 @@ public class ConnectScreen extends Screen {
         EventBus.getDefault().register(this);
     }
 
+    @Override
+    public void initialized() {
+        super.initialized();
+
+        if (context.isDebugMode()) {
+            connecting = true;
+            btnConnect.setText("Verbinden...");
+            ipAddressBox.setText("localhost");
+            nicknameBox.setText("Debug");
+            context.getClient().send(Login.LoginRequest.newBuilder().setNickname("Debug").build());
+        }
+    }
+
     @EventHandler("btnConnect")
     public void onConnect(ClickEvent clickEvent) {
         if (connecting)
@@ -48,7 +61,6 @@ public class ConnectScreen extends Screen {
                 btnConnect.setText("Verbinden");
                 connecting = false;
             } else {
-                context.getGameState().setUsername(nicknameBox.getText());
                 context.getClient().send(Login.LoginRequest.newBuilder().setNickname(nicknameBox.getText()).build());
             }
         }).start();
@@ -61,10 +73,9 @@ public class ConnectScreen extends Screen {
             btnConnect.setText("Verbinden");
             connecting = false;
         } else {
+            context.getGameState().setUsername(nicknameBox.getText());
             parent.close(this);
             parent.show(new MainScreen());
         }
     }
-
-
 }

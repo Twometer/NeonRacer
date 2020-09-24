@@ -17,5 +17,12 @@ public class DebugClient extends Client {
 
     @Override
     public void send(AbstractMessage message) {
+        if (message instanceof Login.LoginRequest) {
+            Login.LoginResponse response = Login.LoginResponse.newBuilder().setStatus(Login.LoginStatus.SUCCESS).build();
+            handle(response);
+        } else if (message instanceof Race.Join) {
+            Race.Start start = Race.Start.newBuilder().setElapsedMilliseconds(-3000).setLapCount(2).build();
+            handle(start);
+        }
     }
 }
