@@ -13,15 +13,15 @@ public class Color {
     public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f);
     public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f);
     public static final Color GRAY = new Color(0.66f, 0.66f, 0.66f);
+    public static final Color GLOW = new Color(0.0706f, 0.2314f, 0.5137f);
 
+    private final float r;
 
-    private float r;
+    private final float g;
 
-    private float g;
+    private final float b;
 
-    private float b;
-
-    private Color(float r, float g, float b) {
+    public Color(float r, float g, float b) {
         this.r = r;
         this.g = g;
         this.b = b;
