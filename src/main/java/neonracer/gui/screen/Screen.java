@@ -45,6 +45,9 @@ public abstract class Screen extends Container {
             this.backgroundTexture = renderContext.getGameContext().getTextureProvider().getTexture(background);
     }
 
+    public void initialized() {
+    }
+
     @Override
     public final void draw(RenderContext renderContext, RenderPass renderPass) {
         if (backgroundTexture != null) {

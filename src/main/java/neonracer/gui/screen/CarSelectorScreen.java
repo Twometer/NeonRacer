@@ -93,8 +93,6 @@ public class CarSelectorScreen extends Screen {
     public void initialize(RenderContext renderContext) {
         super.initialize(renderContext);
         EventBus.getDefault().register(this);
-
-        if (context.isDebugMode()) startDebug();
     }
 
     @Override
@@ -168,11 +166,4 @@ public class CarSelectorScreen extends Screen {
             this.position = start.getPosition();
         }
     }
-
-    private void startDebug() {
-        totalWaitMs = 5000;
-        startMs = System.currentTimeMillis() + totalWaitMs;
-        this.position = 1;
-    }
-
 }

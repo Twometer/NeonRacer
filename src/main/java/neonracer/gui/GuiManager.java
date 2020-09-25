@@ -11,9 +11,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GuiManager {
 
-    private RenderContext renderContext;
+    private final RenderContext renderContext;
 
-    private List<Screen> currentScreens = new CopyOnWriteArrayList<>();
+    private final List<Screen> currentScreens = new CopyOnWriteArrayList<>();
 
     public GuiManager(RenderContext renderContext) {
         this.renderContext = renderContext;
@@ -30,6 +30,7 @@ public class GuiManager {
         screen.setHeight(renderContext.getGameContext().getGameWindow().getHeight());
         screen.performLayout();
         currentScreens.add(screen);
+        screen.initialized();
     }
 
     public void close(Screen screen) {
@@ -53,12 +54,4 @@ public class GuiManager {
         for (Screen screen : currentScreens)
             screen.raiseEvent(event);
     }
-
-    public <T extends Screen> T getScreen(Class<T> screenClass) {
-        for (Screen screen : currentScreens)
-            if (screenClass.isInstance(screen))
-                return screenClass.cast(screen);
-        return null;
-    }
-
 }

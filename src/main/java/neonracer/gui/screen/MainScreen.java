@@ -12,9 +12,10 @@ public class MainScreen extends Screen {
 
     @EventHandler("btnStartRace")
     public void onStartRace(ClickEvent event) {
-        context.getClient().send(Race.Join.newBuilder().build());
         parent.close(this);
         parent.show(new CarSelectorScreen());
+        // Send packet after showing new window to bind event handler before receiving a response packet
+        context.getClient().send(Race.Join.newBuilder().build());
     }
 
     @EventHandler("btnExitGame")
