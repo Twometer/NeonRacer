@@ -69,18 +69,21 @@ public class EntityRenderer implements IRenderer {
 
             entityShader.unbind();
 
-            if (entity instanceof EntityCar && renderPass == RenderPass.COLOR) {
+            if (entity instanceof EntityCar) {
                 EntityCar car = (EntityCar) entity;
 
-                float stringWidth = renderContext.getFonts().get(FontFamily.Content).getStringWidth(car.getUsername(), 1.0f) * 0.025f;
+                final float fontSize = 0.025f;
+
+                float stringWidth = renderContext.getFonts().get(FontFamily.Content).getStringWidth(car.getUsername(), 1.0f) * fontSize;
 
                 Matrix4f mat = new Matrix4f();
                 mat.translate(car.getPosition().x, car.getPosition().y, 0.0f);
-                mat.rotate((float) (renderContext.getCamera().getRotation() + Math.PI), 0, 0, 1);
-                mat.translate(stringWidth / 2 + car.getWidth() / 2, -car.getHeight() - 4, 0);
-                mat.scale(-0.025f, 0.025f, 1.0f);
+                mat.rotate((float) (car.getRotation() + Math.PI), 0, 0, 1);
+                mat.translate(stringWidth / 2, -car.getHeight() - 2, 0);
+                mat.scale(-1f, 1f, 1f);
 
-                renderContext.getFonts().get(FontFamily.Content).draw(car.getUsername(), 0, 0, 1.0f, Color.WHITE.toVector(), renderContext.getWorldMatrix(), mat);
+                Color color = new Color(98, 210, 249);
+                renderContext.getFonts().get(FontFamily.Content).draw(car.getUsername(), 0, 0, fontSize, color.toVector(), renderContext.getWorldMatrix(), mat);
             }
         }
     }
@@ -112,13 +115,16 @@ public class EntityRenderer implements IRenderer {
                 bl,
                 br
         };
+        frustum = findEnclosingBox(frustumCorners);
+    }
 
+    private AABB findEnclosingBox(Vector4f[] corners) {
         float minX = Float.MAX_VALUE;
         float minY = Float.MAX_VALUE;
         float maxX = Float.MIN_VALUE;
         float maxY = Float.MIN_VALUE;
 
-        for (Vector4f corner : frustumCorners) {
+        for (Vector4f corner : corners) {
             if (corner.x < minX)
                 minX = corner.x;
             if (corner.y < minY)
@@ -129,7 +135,7 @@ public class EntityRenderer implements IRenderer {
                 maxY = corner.y;
         }
 
-        frustum = new AABB(new Vec2(minX, minY), new Vec2(maxX, maxY));
+        return new AABB(new Vec2(minX, minY), new Vec2(maxX, maxY));
     }
 
     private void cullEntities(GameContext gameContext, List<Entity> entities) {
