@@ -35,6 +35,7 @@ message Start {
     /* Negative values indicate time until race start to select a car. */
     sint32 elapsedMilliseconds = 1;
     uint32 lapCount = 2;
+    /* Zero based start order to calculate initial position */
     uint32 position = 3;
 }
 

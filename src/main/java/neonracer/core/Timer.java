@@ -8,7 +8,7 @@ public class Timer {
 
     private int ticks;
 
-    private float elaspedTime;
+    private float elapsedTime;
 
     private long lastTick = System.currentTimeMillis();
 
@@ -20,13 +20,13 @@ public class Timer {
     public void update() {
         long now = System.currentTimeMillis();
         ticks = (int) ((now - lastTick) / tickTime);
-        elaspedTime = ((now - lastTick) / (float) tickTime) - ticks;
+        elapsedTime = ((now - lastTick) / (float) tickTime) - ticks;
         if (ticks > 0)
             lastTick = now;
     }
 
     public void reset() {
-        this.elaspedTime = 0.0f;
+        this.elapsedTime = 0.0f;
         this.ticks = 0;
         this.lastTick = System.currentTimeMillis();
     }
@@ -36,7 +36,7 @@ public class Timer {
     }
 
     public float getElapsedTime() {
-        return elaspedTime;
+        return elapsedTime;
     }
 
     public int getTicksPerSecond() {
